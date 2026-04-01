@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>超级马里奥</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #5c94fc; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: Arial, sans-serif; }
+        #game { border: 4px solid #000; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        #ui { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); color: white; font-size: 24px; text-shadow: 2px 2px 0 #000; }
+        #instructions { position: absolute; bottom: 20px; color: white; font-size: 14px; text-shadow: 1px 1px 0 #000; }
+    </style>
+</head>
+<body>
+    <div id="ui">分数: <span id="score">0</span></div>
+    <canvas id="game" width="800" height="480"></canvas>
+    <div id="instructions">← → 移动 | 空格 跳跃</div>
+    <script>
+        const canvas = document.getElementById('game');
+        const ctx = canvas.getContext('2d');
+        const scoreEl = document.getElementById('score');
+
+        const GRAVITY = 0.6;
+        const GROUND_Y = 400;
+
+        const keys = { left: false, right: false, jump: false };
+
+        const mario = {
+            x: 100, y: GROUND_Y - 32, width: 28, height: 32,
+            vx: 0, vy: 0, speed: 5, jumpPower: -12,
+            onGround: false, facing: 1, frame: 0
+        };
+
+        const platforms = [
+            { x: 0, y: GROUND_Y, w: 800, h: 80 },
+            { x: 200, y: 320, w: 100, h: 20 },
+            { x: 350, y: 260, w: 80, h: 20 },
+            { x: 500, y: 200, w: 100, h: 20 },
+            { x: 650, y: 300, w: 80, h: 20 }
+        ];
+
+        const enemies = [
+            { x: 400, y: GROUND_Y - 28, w: 28, h: 28, vx: -1, alive: true },
+            { x: 600, y: GROUND_Y - 28, w: 28, h: 28, vx: -1, alive: true }
+        ];
+
+        const coins = [
+            { x: 230, y: 280, r: 10, collected: false },
+            { x: 380, y: 220, r: 10, collected: false },
+            { x: 530, y: 160, r: 10, collected: false },
+            { x: 680, y: 260, r: 10, collected: false }
+        ];
+
+        let score = 0;
+        let gameOver = false;
+
+        document.addEventListener('keydown', e => {
+            if (e.code === 'ArrowLeft') keys.left = true;
+            if (e.code === 'ArrowRight') keys.right = true;
+            if (e.code === 'Space') { keys.jump = true; e.preventDefault(); }
+            if (e.code === 'KeyR' && gameOver) reset();
+        });
+
+        document.addEventListener('keyup', e => {
+            if (e.code === 'ArrowLeft') keys.left = false;
+            if (e.code === 'ArrowRight') keys.right = false;
+            if (e.code === 'Space') keys.jump = false;
+        });
+
+        function reset() {
+            mario.x = 100; mario.y = GROUND_Y - 32; mario.vx = 0; mario.vy = 0;
+            enemies.forEach(e => { e.alive = true; e.x = e.x > 400 ? 400 : 600; });
+            coins.forEach(c => c.collected = false);
+            score = 0; gameOver = false;
+            scoreEl.textContent = score;
+        }
+
+        function update() {
+            if (gameOver) return;
+
+            if (keys.left) { mario.vx = -mario.speed; mario.facing = -1; }
+            else if (keys.right) { mario.vx = mario.speed; mario.facing = 1; }
+            else mario.vx = 0;
+
+            if (keys.jump && mario.onGround) {
+                mario.vy = mario.jumpPower;
+                mario.onGround = false;
+            }
+
+            mario.vy += GRAVITY;
+            mario.x += mario.vx;
+            mario.y += mario.vy;
+
+            if (mario.x < 0) mario.x = 0;
+            if (mario.x > canvas.width - mario.width) mario.x = canvas.width - mario.width;
+
+            mario.onGround = false;
+            for (const p of platforms) {
+                if (mario.x + mario.width > p.x && mario.x < p.x + p.w &&
+                    mario.y + mario.height > p.y && mario.y + mario.height < p.y + p.h + 10 &&
+                    mario.vy >= 0) {
+                    mario.y = p.y - mario.height;
+                    mario.vy = 0;
+                    mario.onGround = true;
+                }
+            }
+
+            for (const e of enemies) {
+                if (!e.alive) continue;
+                e.x += e.vx;
+                if (e.x < 300 || e.x > 700) e.vx *= -1;
+
+                if (mario.x + mario.width > e.x && mario.x < e.x + e.w &&
+                    mario.y + mario.height > e.y && mario.y < e.y + e.h) {
+                    if (mario.vy > 0 && mario.y + mario.height < e.y + e.h / 2) {
+                        e.alive = false;
+                        mario.vy = -6;
+                        score += 100;
+                        scoreEl.textContent = score;
+                    } else {
+                        gameOver = true;
+                    }
+                }
+            }
+
+            for (const c of coins) {
+                if (c.collected) continue;
+                const dx = (mario.x + mario.width / 2) - c.x;
+                const dy = (mario.y + mario.height / 2) - c.y;
+                if (Math.sqrt(dx * dx + dy * dy) < c.r + 20) {
+                    c.collected = true;
+                    score += 50;
+                    scoreEl.textContent = score;
+                }
+            }
+
+            if (mario.y > canvas.height) gameOver = true;
+
+            mario.frame++;
+        }
+
+        function draw() {
+            ctx.fillStyle = '#5c94fc';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#34a853';
+            for (const p of platforms) {
+                ctx.fillRect(p.x, p.y, p.w, p.h);
+                ctx.strokeStyle = '#1e7e34';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(p.x, p.y, p.w, p.h);
+            }
+
+            for (const e of enemies) {
+                if (!e.alive) continue;
+                ctx.fillStyle = '#c0392b';
+                ctx.beginPath();
+                ctx.arc(e.x + e.w / 2, e.y + e.h / 2, e.w / 2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#fff';
+                ctx.beginPath();
+                ctx.arc(e.x + e.w / 2 - 5, e.y + e.h / 2 - 3, 4, 0, Math.PI * 2);
+                ctx.arc(e.x + e.w / 2 + 5, e.y + e.h / 2 - 3, 4, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            for (const c of coins) {
+                if (c.collected) continue;
+                ctx.fillStyle = '#f1c40f';
+                ctx.beginPath();
+                ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#f39c12';
+                ctx.beginPath();
+                ctx.arc(c.x - 3, c.y - 3, 3, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            ctx.fillStyle = '#e74c3c';
+            const mx = mario.x, my = mario.y, mw = mario.width, mh = mario.height;
+            ctx.fillRect(mx + 4, my, mw - 8, mh);
+            ctx.fillStyle = '#f5b7b1';
+            ctx.fillRect(mx + 8, my + 4, 8, 8);
+            ctx.fillStyle = '#2c3e50';
+            const eyeX = mario.facing > 0 ? mx + 16 : mx + 6;
+            ctx.fillRect(eyeX, my + 6, 4, 4);
+            ctx.fillStyle = '#c0392b';
+            ctx.fillRect(mx + 4, my + mh - 6, 6, 6);
+            ctx.fillRect(mx + mw - 10, my + mh - 6, 6, 6);
+
+            if (gameOver) {
+                ctx.fillStyle = 'rgba(0,0,0,0.7)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#fff';
+                ctx.font = '48px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('游戏结束', canvas.width / 2, canvas.height / 2);
+                ctx.font = '24px Arial';
+                ctx.fillText(`最终分数: ${score}`, canvas.width / 2, canvas.height / 2 + 40);
+                ctx.fillText('按 R 重新开始', canvas.width / 2, canvas.height / 2 + 80);
+            }
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        gameLoop();
+    </script>
+</body>
+</html>
