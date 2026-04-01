@@ -1,0 +1,16 @@
+=== Menu Page Test ===
+Started at: 2026-03-30T20:48:33.434Z
+
+[2026-03-30T20:48:33.434Z] 启动浏览器...
+[2026-03-30T20:48:34.757Z] 访问前端地址...
+[2026-03-30T20:48:37.650Z] 执行登录...
+[2026-03-30T20:48:40.813Z] Screenshot saved: /Users/wangxiaoping/fayzedu/novasys/playwright/screenshots/menu-after-login-1774903720733.png
+[2026-03-30T20:48:40.814Z] 访问菜单管理页面...
+[2026-03-30T20:48:44.675Z] Screenshot saved: /Users/wangxiaoping/fayzedu/novasys/playwright/screenshots/menumanagement-1774903724597.png
+[2026-03-30T20:48:44.681Z] === 测试结果 ===
+[2026-03-30T20:48:44.681Z] 表格存在: false
+[2026-03-30T20:48:44.681Z] 数据行存在: false
+[2026-03-30T20:48:44.681Z] 页面404: true
+[2026-03-30T20:48:44.681Z] 控制台错误数: 0
+[2026-03-30T20:48:53.532Z] ERROR: Console: Failed to load resource: net::ERR_QUIC_PROTOCOL_ERROR.QUIC_NETWORK_IDLE_TIMEOUT
+[2026-03-30T20:48:54.359Z] ERROR: Console: Failed to load resource: net::ERR_QUIC_PROTOCOL_ERROR.QUIC_NETWORK_IDLE_TIMEOUT

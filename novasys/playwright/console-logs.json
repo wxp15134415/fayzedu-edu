@@ -1,0 +1,77 @@
+[
+  {
+    "type": "debug",
+    "text": "[vite] connecting...",
+    "time": "2026-03-31T18:44:25.635Z"
+  },
+  {
+    "type": "debug",
+    "text": "[vite] connected.",
+    "time": "2026-03-31T18:44:25.663Z"
+  },
+  {
+    "type": "info",
+    "text": "<Suspense> is an experimental feature and its API will likely change.",
+    "time": "2026-03-31T18:44:25.877Z"
+  },
+  {
+    "type": "log",
+    "text": "🍍 \"app-store\" store installed 🆕",
+    "time": "2026-03-31T18:44:25.884Z"
+  },
+  {
+    "type": "log",
+    "text": "🍍 \"route-store\" store installed 🆕",
+    "time": "2026-03-31T18:44:25.884Z"
+  },
+  {
+    "type": "log",
+    "text": "🍍 \"tab-store\" store installed 🆕",
+    "time": "2026-03-31T18:44:25.884Z"
+  },
+  {
+    "type": "log",
+    "text": "🍍 \"auth-store\" store installed 🆕",
+    "time": "2026-03-31T18:44:25.906Z"
+  },
+  {
+    "type": "debug",
+    "text": "[vite] connecting...",
+    "time": "2026-03-31T18:44:31.333Z"
+  },
+  {
+    "type": "debug",
+    "text": "[vite] connected.",
+    "time": "2026-03-31T18:44:31.339Z"
+  },
+  {
+    "type": "info",
+    "text": "<Suspense> is an experimental feature and its API will likely change.",
+    "time": "2026-03-31T18:44:31.482Z"
+  },
+  {
+    "type": "log",
+    "text": "🍍 \"app-store\" store installed 🆕",
+    "time": "2026-03-31T18:44:31.486Z"
+  },
+  {
+    "type": "log",
+    "text": "🍍 \"route-store\" store installed 🆕",
+    "time": "2026-03-31T18:44:31.486Z"
+  },
+  {
+    "type": "log",
+    "text": "🍍 \"tab-store\" store installed 🆕",
+    "time": "2026-03-31T18:44:31.486Z"
+  },
+  {
+    "type": "log",
+    "text": "🍍 \"auth-store\" store installed 🆕",
+    "time": "2026-03-31T18:44:31.490Z"
+  },
+  {
+    "type": "log",
+    "text": "用户列表: null",
+    "time": "2026-03-31T18:44:31.557Z"
+  }
+]

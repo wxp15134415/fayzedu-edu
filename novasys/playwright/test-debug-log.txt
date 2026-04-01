@@ -1,0 +1,236 @@
+=== Nova Admin Debug Playwright Test ===
+Started at: 2026-03-30T20:24:12.913Z
+
+[2026-03-30T20:24:12.913Z] Starting Nova Admin Debug Playwright Tests
+[2026-03-30T20:24:13.804Z] Browser launched successfully
+[2026-03-30T20:24:13.804Z] 
+=== Testing Login Page with Debug ===
+[2026-03-30T20:24:14.240Z] Navigating to login page...
+[2026-03-30T20:24:14.276Z] Response: 200 - http://localhost:9980/
+[2026-03-30T20:24:14.278Z] Response: 200 - http://localhost:9980/@id/virtual:vue-devtools-path:overlay.js
+[2026-03-30T20:24:14.278Z] Response: 200 - http://localhost:9980/@id/virtual:vue-inspector-path:load.js
+[2026-03-30T20:24:14.281Z] Response: 200 - http://localhost:9980/@vite/client
+[2026-03-30T20:24:14.282Z] Response: 200 - http://localhost:9980/node_modules/.pnpm/@vue+devtools-core@8.1.1_vue@3.5.31_typescript@5.9.3_/node_modules/@vue/devtools-core/dist/index.js?v=d052d7d6
+[2026-03-30T20:24:14.299Z] Response: 200 - http://localhost:9980/src/main.ts
+[2026-03-30T20:24:14.302Z] Response: 200 - http://localhost:9980/@id/virtual:vue-inspector-options
+[2026-03-30T20:24:14.305Z] Response: 200 - http://localhost:9980/node_modules/.pnpm/vite@7.3.1_@types+node@24.12.0_jiti@2.6.1_sass@1.98.0_yaml@2.8.3/node_modules/vite/dist/client/env.mjs
+[2026-03-30T20:24:14.312Z] Response: 200 - http://localhost:9980/node_modules/.pnpm/vite-plugin-vue-inspector@5.4.0_vite@7.3.1_@types+node@24.12.0_jiti@2.6.1_sass@1.98.0_yaml@2.8.3_/node_modules/vite-plugin-vue-inspector/src/Overlay.vue
+[2026-03-30T20:24:14.312Z] Response: 200 - http://localhost:9980/@id/__x00__virtual:vue-devtools-options
+[2026-03-30T20:24:14.312Z]   Body: export default {"base":"/","componentInspector":true}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIl9feDAwX192aXJ0dWFsOnZ1ZS1kZXZ0b29scy1vcHRpb25zIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBkZWZhdWx0IHtcImJhc2VcIjpcIi9cIixcImNvbXBvbmVudEluc3BlY3RvclwiOnRydWV9Il0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE1BQU0sQ0FBQyxPQUFPLENBQUMsQ0FBQyxDQUFDLElBQUksQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxrQkFBa0IsQ0FBQyxDQUFDLElBQUkifQ==
+[2026-03-30T20:24:14.314Z] Response: 200 - http://localhost:9980/node_modules/.pnpm/@vue+devtools-shared@8.1.1/node_modules/@vue/devtools-shared/dist/index.js?v=d052d7d6
+[2026-03-30T20:24:14.320Z] Response: 200 - http://localhost:9980/src/App.vue
+[2026-03-30T20:24:14.335Z] Response: 200 - http://localhost:9980/node_modules/.pnpm/@vue+devtools-kit@8.1.1/node_modules/@vue/devtools-kit/dist/index.js?v=d052d7d6
+[2026-03-30T20:24:14.335Z] Response: 200 - http://localhost:9980/node_modules/.pnpm/vite-plugin-vue-inspector@5.4.0_vite@7.3.1_@types+node@24.12.0_jiti@2.6.1_sass@1.98.0_yaml@2.8.3_/node_modules/vite-plugin-vue-inspector/src/Overlay.vue?vue&type=style&index=0&scoped=77d8d539&lang.css
+[2026-03-30T20:24:14.336Z] Response: 200 - http://localhost:9980/@id/__x00__plugin-vue:export-helper
+[2026-03-30T20:24:14.336Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/vue.js?v=d052d7d6
+[2026-03-30T20:24:14.337Z] Response: 200 - http://localhost:9980/node_modules/.pnpm/hookable@5.5.3/node_modules/hookable/dist/index.mjs?v=d052d7d6
+[2026-03-30T20:24:14.337Z] Response: 200 - http://localhost:9980/src/components/common/AppLoading.vue
+[2026-03-30T20:24:14.337Z] Response: 200 - http://localhost:9980/src/AppMain.vue
+[2026-03-30T20:24:14.337Z] Response: 200 - http://localhost:9980/node_modules/.pnpm/perfect-debounce@2.1.0/node_modules/perfect-debounce/dist/index.mjs?v=d052d7d6
+[2026-03-30T20:24:14.337Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/chunk-G3PMV62Z.js?v=d052d7d6
+[2026-03-30T20:24:14.363Z] Console: [debug] [vite] connecting...
+[2026-03-30T20:24:14.377Z] Response: 200 - http://localhost:9980/src/components/common/NaiveProvider.vue
+[2026-03-30T20:24:14.377Z] Response: 200 - http://localhost:9980/src/components/common/AppLoading.vue?vue&type=style&index=0&scoped=cdc52396&lang.css
+[2026-03-30T20:24:14.378Z] Response: 200 - http://localhost:9980/node_modules/.pnpm/birpc@2.9.0/node_modules/birpc/dist/index.mjs?v=d052d7d6
+[2026-03-30T20:24:14.378Z] Response: 200 - http://localhost:9980/src/components/common/Watermark.vue
+[2026-03-30T20:24:14.379Z] Response: 200 - http://localhost:9980/src/modules/assets.ts
+[2026-03-30T20:24:14.379Z]   Body: import "/__uno.css";
+import "/src/styles/index.css";
+export function install() {
+}
+
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFzc2V0cy50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgJ3Vuby5jc3MnXG5pbXBvcnQgJ0Avc3R5bGVzL2luZGV4LmNzcydcblxuLy8g5YWo5bGA5byV5YWl55qE6Z2Z5oCB6LWE5rqQXG5leHBvcnQgZnVuY3Rpb24gaW5zdGFsbCgpIHtcbn1cbiJdLCJtYXBwaW5ncyI6IkFBQUEsT0FBTztBQUNQLE9BQU87QUFHQSxnQkFBUyxVQUFVO0FBQzFCOyIsIm5hbWVzIjpbXX0=
+[2026-03-30T20:24:14.379Z] Response: 200 - http://localhost:9980/src/modules/directives.ts
+[2026-03-30T20:24:14.380Z] Response: 200 - http://localhost:9980/src/modules/i18n.ts
+[2026-03-30T20:24:14.380Z] Response: 200 - http://localhost:9980/src/store/index.ts
+[2026-03-30T20:24:14.380Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/naive-ui.js?v=d052d7d6
+[2026-03-30T20:24:14.380Z] Response: 200 - http://localhost:9980/src/utils/index.ts
+[2026-03-30T20:24:14.380Z] Response: 200 - http://localhost:9980/src/router/index.ts
+[2026-03-30T20:24:14.381Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/chunk-4GLPX4MA.js?v=d052d7d6
+[2026-03-30T20:24:14.390Z] Console: [debug] [vite] connected.
+[2026-03-30T20:24:14.395Z] Response: 200 - http://localhost:9980/__uno.css
+[2026-03-30T20:24:14.396Z] Response: 200 - http://localhost:9980/src/styles/index.css
+[2026-03-30T20:24:14.396Z] Response: 200 - http://localhost:9980/src/directives/copy.ts
+[2026-03-30T20:24:14.396Z] Response: 200 - http://localhost:9980/src/directives/permission.ts
+[2026-03-30T20:24:14.397Z] Response: 200 - http://localhost:9980/locales/en_US.json?import
+[2026-03-30T20:24:14.397Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/pinia-plugin-persistedstate.js?v=d052d7d6
+[2026-03-30T20:24:14.398Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/vue-i18n.js?v=d052d7d6
+[2026-03-30T20:24:14.398Z] Response: 200 - http://localhost:9980/src/store/app/index.ts
+[2026-03-30T20:24:14.401Z] Response: 200 - http://localhost:9980/src/store/auth.ts
+[2026-03-30T20:24:14.401Z] Response: 200 - http://localhost:9980/locales/zh_CN.json?import
+[2026-03-30T20:24:14.401Z] Response: 200 - http://localhost:9980/src/store/router/index.ts
+[2026-03-30T20:24:14.401Z] Response: 200 - http://localhost:9980/src/store/tab.ts
+[2026-03-30T20:24:14.402Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/pinia.js?v=d052d7d6
+[2026-03-30T20:24:14.402Z] Response: 200 - http://localhost:9980/@id/virtual:vue-devtools-path:overlay/devtools-overlay.css
+[2026-03-30T20:24:14.402Z] Response: 200 - http://localhost:9980/src/store/dict.ts
+[2026-03-30T20:24:14.402Z] Response: 200 - http://localhost:9980/src/utils/array.ts
+[2026-03-30T20:24:14.402Z] Response: 200 - http://localhost:9980/src/utils/i18n.ts
+[2026-03-30T20:24:14.402Z] Response: 200 - http://localhost:9980/src/utils/icon.ts
+[2026-03-30T20:24:14.407Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/chunk-P3DDAYSC.js?v=d052d7d6
+[2026-03-30T20:24:14.409Z] Response: 200 - http://localhost:9980/src/utils/storage.ts
+[2026-03-30T20:24:14.409Z] Response: 200 - http://localhost:9980/src/utils/normalize.ts
+[2026-03-30T20:24:14.409Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/vue-router.js?v=d052d7d6
+[2026-03-30T20:24:14.410Z] Response: 200 - http://localhost:9980/src/router/routes.inner.ts
+[2026-03-30T20:24:14.410Z] Response: 200 - http://localhost:9980/src/router/guard.ts
+[2026-03-30T20:24:14.414Z] Response: 200 - http://localhost:9980/src/hooks/index.ts
+[2026-03-30T20:24:14.414Z]   Body: export * from "/src/hooks/useBoolean.ts";
+export * from "/src/hooks/useEcharts.ts";
+export * from "/src/hooks/usePermission.ts";
+
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImluZGV4LnRzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCAqIGZyb20gJy4vdXNlQm9vbGVhbidcbmV4cG9ydCAqIGZyb20gJy4vdXNlRWNoYXJ0cydcbmV4cG9ydCAqIGZyb20gJy4vdXNlUGVybWlzc2lvbidcbiJdLCJtYXBwaW5ncyI6IkFBQUEsY0FBYztBQUNkLGNBQWM7QUFDZCxjQUFjOyIsIm5hbWVzIjpbXX0=
+[2026-03-30T20:24:14.428Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/colord.js?v=d052d7d6
+[2026-03-30T20:24:14.429Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/chunk-ISH6AKKV.js?v=d052d7d6
+[2026-03-30T20:24:14.429Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/radash.js?v=d052d7d6
+[2026-03-30T20:24:14.429Z] Response: 200 - http://localhost:9980/src/store/app/theme.json?import
+[2026-03-30T20:24:14.430Z] Response: 200 - http://localhost:9980/src/service/index.ts
+[2026-03-30T20:24:14.437Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/@vueuse_core.js?v=d052d7d6
+[2026-03-30T20:24:14.437Z] Response: 200 - http://localhost:9980/src/router/routes.static.ts
+[2026-03-30T20:24:14.437Z] Response: 200 - http://localhost:9980/src/store/router/helper.ts
+[2026-03-30T20:24:14.440Z] Response: 200 - http://localhost:9980/src/assets/svg-icons/cool.svg?import&raw
+[2026-03-30T20:24:14.441Z] Response: 200 - http://localhost:9980/src/hooks/useEcharts.ts
+[2026-03-30T20:24:14.441Z] Response: 200 - http://localhost:9980/src/hooks/usePermission.ts
+[2026-03-30T20:24:14.441Z] Response: 200 - http://localhost:9980/src/assets/svg-icons/logo.svg?import&raw
+[2026-03-30T20:24:14.491Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/chunk-SCMJ3M2C.js?v=d052d7d6
+[2026-03-30T20:24:14.493Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/@iconify_vue.js?v=d052d7d6
+[2026-03-30T20:24:14.494Z] Response: 200 - http://localhost:9980/src/hooks/useBoolean.ts
+[2026-03-30T20:24:14.510Z] Response: 200 - http://localhost:9980/@id/virtual:vue-devtools-path:overlay/devtools-overlay.mjs
+[2026-03-30T20:24:14.511Z] Response: 200 - http://localhost:9980/src/service/api/list.ts
+[2026-03-30T20:24:14.511Z] Response: 200 - http://localhost:9980/src/service/api/login.ts
+[2026-03-30T20:24:14.512Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/echarts_components.js?v=d052d7d6
+[2026-03-30T20:24:14.512Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/echarts_core.js?v=d052d7d6
+[2026-03-30T20:24:14.512Z] Response: 200 - http://localhost:9980/src/service/api/system.ts
+[2026-03-30T20:24:14.513Z] Response: 200 - http://localhost:9980/src/service/api/test.ts
+[2026-03-30T20:24:14.513Z] Response: 200 - http://localhost:9980/src/layouts/index.vue
+[2026-03-30T20:24:14.513Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/echarts_charts.js?v=d052d7d6
+[2026-03-30T20:24:14.514Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/echarts_features.js?v=d052d7d6
+[2026-03-30T20:24:14.514Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/echarts_renderers.js?v=d052d7d6
+[2026-03-30T20:24:14.523Z] Response: 200 - http://localhost:9980/src/service/http/index.ts
+[2026-03-30T20:24:14.525Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/chunk-7SI4ASMZ.js?v=d052d7d6
+[2026-03-30T20:24:14.526Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/chunk-O2YYAM7J.js?v=d052d7d6
+[2026-03-30T20:24:14.529Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/chunk-OVK6AQF2.js?v=d052d7d6
+[2026-03-30T20:24:14.530Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/chunk-AM6ZMUCD.js?v=d052d7d6
+[2026-03-30T20:24:14.530Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/chunk-N4UVZRIZ.js?v=d052d7d6
+[2026-03-30T20:24:14.531Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/chunk-KGLGWCNN.js?v=d052d7d6
+[2026-03-30T20:24:14.531Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/chunk-NPFCFD2W.js?v=d052d7d6
+[2026-03-30T20:24:14.531Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/chunk-66VA5SFI.js?v=d052d7d6
+[2026-03-30T20:24:14.532Z] Response: 200 - http://localhost:9980/src/components/common/DarkModeSwitch.vue
+[2026-03-30T20:24:14.533Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/hamburger-button
+[2026-03-30T20:24:14.533Z] Response: 200 - http://localhost:9980/src/layouts/components/index.ts
+[2026-03-30T20:24:14.538Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/chunk-CAASHYKE.js?v=d052d7d6
+[2026-03-30T20:24:14.538Z] Response: 200 - http://localhost:9980/src/components/common/LangsSwitch.vue
+[2026-03-30T20:24:14.546Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/chunk-KQKUX3FT.js?v=d052d7d6
+[2026-03-30T20:24:14.548Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/chunk-D7APH7T5.js?v=d052d7d6
+[2026-03-30T20:24:14.552Z] Response: 200 - http://localhost:9980/src/layouts/Content.vue
+[2026-03-30T20:24:14.552Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/chunk-E62JV3VW.js?v=d052d7d6
+[2026-03-30T20:24:14.565Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/chunk-7ME323HH.js?v=d052d7d6
+[2026-03-30T20:24:14.567Z] Response: 200 - http://localhost:9980/src/components/common/CommonWrapper.vue
+[2026-03-30T20:24:14.567Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/laptop-computer
+[2026-03-30T20:24:14.568Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/sun-one
+[2026-03-30T20:24:14.568Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/moon
+[2026-03-30T20:24:14.568Z] Response: 200 - http://localhost:9980/src/service/http/alova.ts
+[2026-03-30T20:24:14.568Z] Response: 200 - http://localhost:9980/src/layouts/components/common/Setting.vue
+[2026-03-30T20:24:14.568Z] Response: 200 - http://localhost:9980/src/layouts/components/common/SettingDrawer.vue
+[2026-03-30T20:24:14.568Z] Response: 200 - http://localhost:9980/src/layouts/components/common/Logo.vue
+[2026-03-30T20:24:14.568Z] Response: 200 - http://localhost:9980/src/layouts/components/common/MobileDrawer.vue
+[2026-03-30T20:24:14.568Z] Response: 200 - http://localhost:9980/src/layouts/components/common/BackTop.vue
+[2026-03-30T20:24:14.569Z] Response: 200 - http://localhost:9980/src/layouts/components/header/Breadcrumb.vue
+[2026-03-30T20:24:14.569Z] Response: 200 - http://localhost:9980/src/layouts/components/header/CollapaseButton.vue
+[2026-03-30T20:24:14.569Z] Response: 200 - http://localhost:9980/src/layouts/components/header/FullScreen.vue
+[2026-03-30T20:24:14.569Z] Response: 200 - http://localhost:9980/src/layouts/components/header/Notices.vue
+[2026-03-30T20:24:14.569Z] Response: 200 - http://localhost:9980/src/layouts/components/header/Search.vue
+[2026-03-30T20:24:14.569Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/translate
+[2026-03-30T20:24:14.569Z] Response: 200 - http://localhost:9980/src/layouts/components/header/UserCenter.vue
+[2026-03-30T20:24:14.569Z] Response: 200 - http://localhost:9980/src/layouts/components/tab/TabBar.vue
+[2026-03-30T20:24:14.590Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/pro-naive-ui.js?v=d052d7d6
+[2026-03-30T20:24:14.591Z] Response: 200 - http://localhost:9980/src/components/common/CommonWrapper.vue?vue&type=style&index=0&scoped=e9ef5dc4&lang.css
+[2026-03-30T20:24:14.591Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/alova.js?v=d052d7d6
+[2026-03-30T20:24:14.591Z] Response: 200 - http://localhost:9980/src/service/http/handle.ts
+[2026-03-30T20:24:14.591Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/alova_fetch.js?v=d052d7d6
+[2026-03-30T20:24:14.591Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/alova_vue.js?v=d052d7d6
+[2026-03-30T20:24:14.591Z] Response: 200 - http://localhost:9980/src/service/http/config.ts
+[2026-03-30T20:24:14.591Z] Response: 200 - http://localhost:9980/src/layouts/components/common/LayoutSelector.vue
+[2026-03-30T20:24:14.592Z] Response: 200 - http://localhost:9980/@id/~icons/svg-icons/logo
+[2026-03-30T20:24:14.593Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/alova_client.js?v=d052d7d6
+[2026-03-30T20:24:14.594Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/to-top
+[2026-03-30T20:24:14.594Z] Response: 200 - http://localhost:9980/src/components/common/NovaIcon.vue
+[2026-03-30T20:24:14.594Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/setting-two
+[2026-03-30T20:24:14.594Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/menu-fold
+[2026-03-30T20:24:14.594Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/menu-unfold
+[2026-03-30T20:24:14.594Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/full-screen
+[2026-03-30T20:24:14.594Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/off-screen
+[2026-03-30T20:24:14.594Z] Response: 200 - http://localhost:9980/src/layouts/components/header/Breadcrumb.vue?vue&type=style&index=0&lang.scss
+[2026-03-30T20:24:14.594Z] Response: 200 - http://localhost:9980/src/layouts/components/common/NoticeList.vue
+[2026-03-30T20:24:14.594Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/right
+[2026-03-30T20:24:14.594Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/search
+[2026-03-30T20:24:14.594Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/user
+[2026-03-30T20:24:14.594Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/remind
+[2026-03-30T20:24:14.594Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/github
+[2026-03-30T20:24:14.594Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/logout
+[2026-03-30T20:24:14.594Z] Response: 200 - http://localhost:9980/src/hooks/useTabScroll.ts
+[2026-03-30T20:24:14.594Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/book-open
+[2026-03-30T20:24:14.594Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/delete-four
+[2026-03-30T20:24:14.595Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/fullwidth
+[2026-03-30T20:24:14.595Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/vue-draggable-plus.js?v=d052d7d6
+[2026-03-30T20:24:14.595Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/redo
+[2026-03-30T20:24:14.595Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/to-left
+[2026-03-30T20:24:14.595Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/close
+[2026-03-30T20:24:14.595Z] Response: 200 - http://localhost:9980/src/layouts/components/tab/ContentFullScreen.vue
+[2026-03-30T20:24:14.595Z] Response: 200 - http://localhost:9980/src/layouts/components/tab/DropTabs.vue
+[2026-03-30T20:24:14.595Z] Response: 200 - http://localhost:9980/src/layouts/components/tab/Reload.vue
+[2026-03-30T20:24:14.595Z] Response: 200 - http://localhost:9980/src/layouts/components/tab/TabBarItem.vue
+[2026-03-30T20:24:14.595Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/to-right
+[2026-03-30T20:24:14.595Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/chunk-YVSDJUDC.js?v=d052d7d6
+[2026-03-30T20:24:14.595Z] Response: 200 - http://localhost:9980/node_modules/.vite/deps/chunk-WD423TWB.js?v=d052d7d6
+[2026-03-30T20:24:14.595Z] Response: 200 - http://localhost:9980/src/layouts/components/common/LayoutSelector.vue?vue&type=style&index=0&scoped=56f6aa86&lang.scss
+[2026-03-30T20:24:14.596Z] Response: 200 - http://localhost:9980/src/layouts/components/tab/TabBar.vue?vue&type=style&index=0&scoped=c3d95e78&lang.css
+[2026-03-30T20:24:14.634Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/off-screen-one
+[2026-03-30T20:24:14.634Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/full-screen-one
+[2026-03-30T20:24:14.635Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/application-menu
+[2026-03-30T20:24:14.635Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/refresh
+[2026-03-30T20:24:14.641Z] Response: 200 - http://localhost:9980/favicon.svg
+[2026-03-30T20:24:14.752Z] Console: [info] <Suspense> is an experimental feature and its API will likely change.
+[2026-03-30T20:24:14.753Z] Console: [log] 🍍 "app-store" store installed 🆕
+[2026-03-30T20:24:14.753Z] Console: [log] 🍍 "route-store" store installed 🆕
+[2026-03-30T20:24:14.753Z] Console: [log] 🍍 "tab-store" store installed 🆕
+[2026-03-30T20:24:14.760Z] Response: 200 - http://localhost:9980/src/views/build-in/login/index.vue
+[2026-03-30T20:24:14.760Z] Response: 200 - http://localhost:9980/src/views/build-in/login/components/index.ts
+[2026-03-30T20:24:14.771Z] Console: [log] 🍍 "auth-store" store installed 🆕
+[2026-03-30T20:24:14.786Z] Response: 200 - http://localhost:9980/src/views/build-in/login/components/Login/index.vue
+[2026-03-30T20:24:14.786Z] Response: 200 - http://localhost:9980/src/views/build-in/login/components/Register/index.vue
+[2026-03-30T20:24:14.787Z] Response: 200 - http://localhost:9980/src/views/build-in/login/components/ResetPwd/index.vue
+[2026-03-30T20:24:14.787Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/github-one
+[2026-03-30T20:24:14.787Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/tencent-qq
+[2026-03-30T20:24:14.787Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/wechat
+[2026-03-30T20:24:14.787Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/preview-open
+[2026-03-30T20:24:14.787Z] Response: 200 - http://localhost:9980/@id/~icons/icon-park-outline/preview-close-one
+[2026-03-30T20:24:14.806Z] Response: 200 - http://localhost:9980/favicon.svg
+[2026-03-30T20:24:15.401Z] Screenshot saved: /Users/wangxiaoping/fayzedu/novasys/playwright/screenshots/debug-login-page-1774902255307.png
+[2026-03-30T20:24:17.404Z] Checking captcha configuration...
+[2026-03-30T20:24:17.441Z] Captcha response: {"code":200,"data":{"captchaId":"","captchaImage":"","enabled":false},"message":"操作成功"}
+[2026-03-30T20:24:17.441Z] Filling login form...
+[2026-03-30T20:24:17.461Z] Found elements - Username: true, Password: true, Captcha: true, Button: true
+[2026-03-30T20:24:17.501Z] Filled captcha
+[2026-03-30T20:24:17.502Z] Clicking login button...
+[2026-03-30T20:24:17.556Z] Console: [error] Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+[2026-03-30T20:24:17.562Z] Response: 500 - http://localhost:9980/proxy-url/login
+[2026-03-30T20:24:17.562Z]   Body: {"statusCode":500,"message":"Internal server error"}
+[2026-03-30T20:24:22.541Z] After login, URL: http://localhost:9980/login
+[2026-03-30T20:24:22.610Z] Screenshot saved: /Users/wangxiaoping/fayzedu/novasys/playwright/screenshots/debug-after-login-1774902262541.png
+[2026-03-30T20:24:22.611Z] LocalStorage: {"accessToken":null,"refreshToken":null,"userInfo":null}
+[2026-03-30T20:24:22.612Z] Login FAILED - No token found
+[2026-03-30T20:24:22.677Z] Debug info saved to debug-info.json
+[2026-03-30T20:24:22.677Z] 
+=== Testing Authenticated Pages ===
+[2026-03-30T20:24:22.921Z] Getting token via API...
+[2026-03-30T20:24:22.938Z] Login API response: {"code":200,"data":{"accessToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc3NDkwMjI2MiwiZXhwIjoxNzc1NTA3MDYyfQ.jR9P0kNSJDCi9w0y9NInperKSuB7Hd4IIciR-A7jOMU"},"message":"操作成功"}
+[2026-03-30T20:24:23.162Z] Token set in localStorage
+[2026-03-30T20:24:23.162Z] Testing dashboard...
+[2026-03-30T20:24:25.762Z] Screenshot saved: /Users/wangxiaoping/fayzedu/novasys/playwright/screenshots/debug-dashboard-1774902265686.png
+[2026-03-30T20:24:25.762Z] Testing user management...
+[2026-03-30T20:24:27.814Z] Screenshot saved: /Users/wangxiaoping/fayzedu/novasys/playwright/screenshots/debug-user-management-1774902267778.png
+[2026-03-30T20:24:27.816Z] Found 0 tables/data-tables on user management page
+[2026-03-30T20:24:27.821Z] Page has data
+[2026-03-30T20:24:27.907Z] 
+Debug test completed at: 2026-03-30T20:24:27.907Z
+[2026-03-30T20:24:27.908Z] Log file: /Users/wangxiaoping/fayzedu/novasys/playwright/test-debug-log.txt

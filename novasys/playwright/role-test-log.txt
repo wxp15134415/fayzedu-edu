@@ -1,0 +1,35 @@
+=== Role Management Page Test ===
+Started at: 2026-03-30T20:48:20.435Z
+
+[2026-03-30T20:48:20.435Z] Starting Role Management Page Test
+[2026-03-30T20:48:21.003Z] Browser launched successfully
+[2026-03-30T20:48:21.005Z] 
+=== Testing Role Management Page ===
+[2026-03-30T20:48:21.228Z] 
+=== Logging in ===
+[2026-03-30T20:48:22.548Z] Screenshot saved: /Users/wangxiaoping/fayzedu/novasys/playwright/screenshots/01-login-page-1774903702197.png
+[2026-03-30T20:48:25.639Z] After login, URL: http://localhost:9980/dashboard/workbench
+[2026-03-30T20:48:25.713Z] Screenshot saved: /Users/wangxiaoping/fayzedu/novasys/playwright/screenshots/02-after-login-1774903705640.png
+[2026-03-30T20:48:25.713Z] 
+Navigating to role management page: /setting/role
+[2026-03-30T20:48:25.738Z] ERROR: Failed: https://api.simplesvg.com/icon-park-outline.json?icons=alarm%2Call-application%2Canalysis%2Canchor%2Capplication-one%2Cevery-user%2Cfile-doc%2Chome%2Cinfo%2Clist%2Clist-bottom%2Clist-two%2Cpeople-safe%2Cpreview-open%2Csetting%2Cstar%2Cuser - net::ERR_ABORTED
+[2026-03-30T20:48:29.493Z] Page loaded successfully (no 404 detected)
+[2026-03-30T20:48:29.565Z] Screenshot saved: /Users/wangxiaoping/fayzedu/novasys/playwright/screenshots/03-role-management-1774903709494.png
+[2026-03-30T20:48:29.567Z] Data tables found: 0
+[2026-03-30T20:48:29.569Z] Empty states found: 0
+[2026-03-30T20:48:29.570Z] Loading elements found: 0
+[2026-03-30T20:48:29.570Z] Page title: 工作台 - Nova - Admin
+[2026-03-30T20:48:29.570Z] Has role-related content: true
+[2026-03-30T20:48:29.570Z] 
+--- Network Errors ---
+[2026-03-30T20:48:29.570Z]   Failed: https://api.simplesvg.com/icon-park-outline.json?icons=alarm%2Call-application%2Canalysis%2Canchor%2Capplication-one%2Cevery-user%2Cfile-doc%2Chome%2Cinfo%2Clist%2Clist-bottom%2Clist-two%2Cpeople-safe%2Cpreview-open%2Csetting%2Cstar%2Cuser - net::ERR_ABORTED
+[2026-03-30T20:48:29.708Z] 
+=== Test Summary ===
+[2026-03-30T20:48:29.708Z] Total issues found: 1
+[2026-03-30T20:48:29.708Z] 
+Issues:
+[2026-03-30T20:48:29.708Z]   1. Failed: https://api.simplesvg.com/icon-park-outline.json?icons=alarm%2Call-application%2Canalysis%2Canchor%2Capplication-one%2Cevery-user%2Cfile-doc%2Chome%2Cinfo%2Clist%2Clist-bottom%2Clist-two%2Cpeople-safe%2Cpreview-open%2Csetting%2Cstar%2Cuser - net::ERR_ABORTED
+[2026-03-30T20:48:29.708Z] 
+Test completed at: 2026-03-30T20:48:29.708Z
+[2026-03-30T20:48:29.708Z] Log file: /Users/wangxiaoping/fayzedu/novasys/playwright/role-test-log.txt
+[2026-03-30T20:48:29.708Z] Screenshots: /Users/wangxiaoping/fayzedu/novasys/playwright/screenshots

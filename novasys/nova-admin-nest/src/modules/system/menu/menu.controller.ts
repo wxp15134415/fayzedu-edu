@@ -1,0 +1,84 @@
+import { CreateMenuDto } from './dto/create-menu.dto'
+import { UpdateMenuDto } from './dto/update-menu.dto'
+
+import { MenuService } from './menu.service'
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  Post,
+  Patch,
+  Query,
+} from '@nestjs/common'
+import {
+  ApiTags,
+  ApiOperation,
+  ApiBearerAuth,
+  ApiParam,
+  ApiBody,
+} from '@nestjs/swagger'
+import { RequirePermissions } from '@/common/decorators'
+
+@ApiTags('菜单管理')
+@ApiBearerAuth('JWT-auth')
+@Controller('menu')
+export class MenuController {
+  constructor(private readonly menuService: MenuService) {}
+
+  @Post()
+  @HttpCode(200)
+  @ApiOperation({ summary: '创建菜单' })
+  @ApiBody({
+    type: CreateMenuDto,
+    description: '创建菜单信息',
+  })
+  // @RequirePermissions('system:menu:add')
+  create(@Body() createMenuDto: CreateMenuDto) {
+    return this.menuService.create(createMenuDto)
+  }
+
+  @Get()
+  @ApiOperation({ summary: '查询所有菜单' })
+  @RequirePermissions('system:menu:query')
+  findAll(@Query() query: { title?: string; status?: number }) {
+    return this.menuService.findAll(query)
+  }
+
+  @Get('options')
+  @ApiOperation({ summary: '菜单下拉选项' })
+  findOptions(@Query('excludePermissions') excludePermissions?: string) {
+    const shouldExcludePermissions = excludePermissions === 'true'
+    return this.menuService.findOptions(shouldExcludePermissions)
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: '查询菜单详情' })
+  @ApiParam({ name: 'id', description: '菜单ID', example: 1 })
+  @RequirePermissions('system:menu:query')
+  findOne(@Param('id') id: string) {
+    return this.menuService.findOne(+id)
+  }
+
+  @Patch(':id')
+  @ApiOperation({ summary: '更新菜单信息' })
+  @ApiParam({ name: 'id', description: '菜单ID', example: 1 })
+  @ApiBody({
+    type: CreateMenuDto,
+    description: '更新菜单信息',
+  })
+  @RequirePermissions('system:menu:edit')
+  update(@Param('id') id: string, @Body() updateMenuDto: UpdateMenuDto) {
+    return this.menuService.update(+id, updateMenuDto)
+  }
+
+  @Delete(':id')
+  @ApiOperation({ summary: '删除菜单' })
+  @ApiParam({ name: 'id', description: '菜单ID', example: 1 })
+  @RequirePermissions('system:menu:remove')
+  remove(@Param('id') id: number) {
+    return this.menuService.remove(+id)
+  }
+}

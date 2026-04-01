@@ -1,0 +1,12 @@
+[
+  {
+    "url": "http://localhost:9980/proxy-url/user/userPage",
+    "status": 200,
+    "time": "2026-03-31T18:44:31.555Z",
+    "body": {
+      "code": 500,
+      "data": null,
+      "message": "权限不足"
+    }
+  }
+]

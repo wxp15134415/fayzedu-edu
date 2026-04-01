@@ -1,0 +1,87 @@
+{
+  "name": "nova-admin-nest",
+  "version": "1.0.0",
+  "description": "基于nestjs的基本后台管理系统",
+  "author": "Rock Chen",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chansee97/nova-admin-nest.git"
+  },
+  "bugs": {
+    "url": "https://github.com/chansee97/nova-admin-nest/issues"
+  },
+  "homepage": "https://github.com/chansee97/nova-admin-nest#readme",
+  "keywords": [
+    "nestjs",
+    "admin",
+    "rbac",
+    "typeorm",
+    "postgresql",
+    "typescript"
+  ],
+  "scripts": {
+    "build": "nest build",
+    "start": "cross-env NODE_ENV=dev nest start",
+    "start:dev": "cross-env NODE_ENV=dev nest start --watch",
+    "start:prod": "cross-env NODE_ENV=prod node dist/main",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "type-check": "tsc --noEmit",
+    "prepare": "simple-git-hooks"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.1.12",
+    "@nestjs/config": "^4.0.2",
+    "@nestjs/core": "^11.1.12",
+    "@nestjs/jwt": "^11.0.2",
+    "@nestjs/platform-express": "^11.1.12",
+    "@nestjs/swagger": "^11.2.5",
+    "@nestjs/typeorm": "^11.0.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
+    "cross-env": "^10.0.0",
+    "geoip-lite": "^1.4.10",
+    "ioredis": "^5.7.0",
+    "nest-winston": "^1.10.2",
+    "pg": "^8.20.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2",
+    "svg-captcha": "^1.4.0",
+    "swagger-ui-express": "^5.0.1",
+    "typeorm": "^0.3.28",
+    "ua-parser-js": "^2.0.5",
+    "winston": "^3.19.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.33.0",
+    "@nestjs/cli": "^11.0.10",
+    "@nestjs/mapped-types": "^2.1.0",
+    "@nestjs/schematics": "^11.0.7",
+    "@nestjs/testing": "^11.1.6",
+    "@types/express": "^5.0.3",
+    "@types/geoip-lite": "^1.4.4",
+    "@types/node": "^24.2.1",
+    "@types/ua-parser-js": "^0.7.39",
+    "eslint": "^9.33.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "globals": "^16.3.0",
+    "lint-staged": "^16.1.5",
+    "prettier": "^3.6.2",
+    "simple-git-hooks": "^2.13.1",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.39.1"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm lint-staged"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix --max-warnings=0",
+      "prettier --write"
+    ]
+  }
+}

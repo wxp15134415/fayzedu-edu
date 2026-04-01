@@ -1,0 +1,56 @@
+=== Nova Admin Playwright Test ===
+Started at: 2026-03-30T20:43:56.195Z
+
+[2026-03-30T20:43:56.195Z] Starting Nova Admin Playwright Tests
+[2026-03-30T20:43:56.206Z] ERROR: Backend is not responding. Please ensure the backend server is running on port 3000
+[2026-03-30T20:43:57.114Z] Browser launched successfully
+[2026-03-30T20:43:57.114Z] 
+=== Testing Login Page ===
+[2026-03-30T20:43:58.675Z] Screenshot saved: /Users/wangxiaoping/fayzedu/novasys/playwright/screenshots/login-page-1774903438581.png
+[2026-03-30T20:43:58.680Z] Captcha field found on login page
+[2026-03-30T20:43:58.690Z] Login form elements - Username: true, Password: true, Button: true
+[2026-03-30T20:44:01.745Z] After login attempt, URL: http://localhost:9980/dashboard/workbench
+[2026-03-30T20:44:01.815Z] Screenshot saved: /Users/wangxiaoping/fayzedu/novasys/playwright/screenshots/after-login-1774903441746.png
+[2026-03-30T20:44:01.815Z] Login appears successful
+[2026-03-30T20:44:01.838Z] 
+=== Testing Dashboard ===
+[2026-03-30T20:44:04.969Z] Screenshot saved: /Users/wangxiaoping/fayzedu/novasys/playwright/screenshots/dashboard-1774903444902.png
+[2026-03-30T20:44:04.971Z] Dashboard loading elements: 0
+[2026-03-30T20:44:04.993Z] 
+=== Testing UserManagement ===
+[2026-03-30T20:44:08.131Z] Screenshot saved: /Users/wangxiaoping/fayzedu/novasys/playwright/screenshots/usermanagement-1774903448055.png
+[2026-03-30T20:44:08.133Z] UserManagement tables found: 0
+[2026-03-30T20:44:08.134Z] UserManagement empty states: 0
+[2026-03-30T20:44:08.153Z] 
+=== Testing RoleManagement ===
+[2026-03-30T20:44:11.314Z] Screenshot saved: /Users/wangxiaoping/fayzedu/novasys/playwright/screenshots/rolemanagement-1774903451237.png
+[2026-03-30T20:44:11.316Z] RoleManagement tables found: 0
+[2026-03-30T20:44:11.317Z] RoleManagement empty states: 0
+[2026-03-30T20:44:11.344Z] 
+=== Testing MenuManagement ===
+[2026-03-30T20:44:14.516Z] Screenshot saved: /Users/wangxiaoping/fayzedu/novasys/playwright/screenshots/menumanagement-1774903454449.png
+[2026-03-30T20:44:14.519Z] MenuManagement tables found: 0
+[2026-03-30T20:44:14.520Z] MenuManagement empty states: 0
+[2026-03-30T20:44:14.536Z] 
+=== Testing DepartmentManagement ===
+[2026-03-30T20:44:17.678Z] Screenshot saved: /Users/wangxiaoping/fayzedu/novasys/playwright/screenshots/departmentmanagement-1774903457615.png
+[2026-03-30T20:44:17.681Z] DepartmentManagement tables found: 0
+[2026-03-30T20:44:17.682Z] DepartmentManagement empty states: 0
+[2026-03-30T20:44:17.720Z] 
+=== Testing DictType ===
+[2026-03-30T20:44:20.843Z] Screenshot saved: /Users/wangxiaoping/fayzedu/novasys/playwright/screenshots/dicttype-1774903460769.png
+[2026-03-30T20:44:20.845Z] DictType tables found: 0
+[2026-03-30T20:44:20.846Z] DictType empty states: 0
+[2026-03-30T20:44:20.865Z] 
+=== Testing DictData ===
+[2026-03-30T20:44:24.087Z] Screenshot saved: /Users/wangxiaoping/fayzedu/novasys/playwright/screenshots/dictdata-1774903464023.png
+[2026-03-30T20:44:24.090Z] DictData tables found: 0
+[2026-03-30T20:44:24.091Z] DictData empty states: 0
+[2026-03-30T20:44:24.204Z] 
+=== Test Summary ===
+[2026-03-30T20:44:24.205Z] Total issues found: 0
+[2026-03-30T20:44:24.205Z] No issues found!
+[2026-03-30T20:44:24.205Z] 
+Test completed at: 2026-03-30T20:44:24.205Z
+[2026-03-30T20:44:24.205Z] Log file: /Users/wangxiaoping/fayzedu/novasys/playwright/test-log.txt
+[2026-03-30T20:44:24.205Z] Screenshots: /Users/wangxiaoping/fayzedu/novasys/playwright/screenshots

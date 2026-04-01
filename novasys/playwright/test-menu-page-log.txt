@@ -1,0 +1,43 @@
+=== Menu Page Full Test ===
+Started at: 2026-03-30T21:11:05.195Z
+
+[2026-03-30T21:11:05.195Z] 🚀 启动浏览器...
+[2026-03-30T21:11:06.443Z] 📂 访问前端地址...
+[2026-03-30T21:11:09.320Z] 🔐 执行登录...
+[2026-03-30T21:11:09.418Z] ⏳ 等待登录跳转...
+[2026-03-30T21:11:09.470Z] ✅ 登录成功
+[2026-03-30T21:11:11.473Z] 当前URL: http://localhost:9980/dashboard/workbench
+[2026-03-30T21:11:11.553Z] Screenshot saved: /Users/wangxiaoping/fayzedu/novasys/playwright/screenshots/menu-page-after-login-1774905071474.png
+[2026-03-30T21:11:11.553Z] 📄 访问菜单管理页面 /setting/menu...
+[2026-03-30T21:11:11.575Z] ERROR: Request Failed: https://api.unisvg.com/icon-park-outline.json?icons=alarm%2Call-application%2Canalysis%2Canchor%2Capplication-one%2Cevery-user%2Cfile-doc%2Chome%2Cinfo%2Clist%2Clist-bottom%2Clist-two%2Cpeople-safe%2Cpreview-open%2Csetting%2Cstar%2Cuser - net::ERR_ABORTED
+[2026-03-30T21:11:11.820Z] ERROR: API Error: http://localhost:9980/proxy-url/getUserRoutes - Status 404
+[2026-03-30T21:11:11.820Z] ERROR: Console Error: Failed to load resource: the server responded with a status of 404 (Not Found)
+[2026-03-30T21:11:11.823Z] ERROR: PageError: Cannot read properties of null (reading 'forEach')
+[2026-03-30T21:11:17.619Z] 菜单页面URL: http://localhost:9980/setting/menu
+[2026-03-30T21:11:17.713Z] Screenshot saved: /Users/wangxiaoping/fayzedu/novasys/playwright/screenshots/menu-management-1774905077620.png
+[2026-03-30T21:11:17.729Z] 页面标题: 菜单设置 - Nova - Admin
+[2026-03-30T21:11:17.730Z] 
+========== 测试结果 ==========
+[2026-03-30T21:11:17.730Z] ✅ 页面404: 是
+[2026-03-30T21:11:17.730Z] ✅ 表格存在: true
+[2026-03-30T21:11:17.730Z] ✅ 菜单数据行: true
+[2026-03-30T21:11:17.730Z] ✅ 包含"菜单"文字: true
+[2026-03-30T21:11:17.730Z] ✅ 控制台错误数: 2
+[2026-03-30T21:11:17.730Z] ✅ API错误数: 2
+[2026-03-30T21:11:17.730Z] 
+--- API响应状态 ---
+[2026-03-30T21:11:17.730Z] 
+--- 控制台错误详情 ---
+[2026-03-30T21:11:17.730Z] ERROR: Failed to load resource: the server responded with a status of 404 (Not Found)
+[2026-03-30T21:11:17.730Z] ERROR: Cannot read properties of null (reading 'forEach')
+[2026-03-30T21:11:17.730Z] 
+--- API错误详情 ---
+[2026-03-30T21:11:17.730Z] ERROR: https://api.unisvg.com/icon-park-outline.json?icons=alarm%2Call-application%2Canalysis%2Canchor%2Capplication-one%2Cevery-user%2Cfile-doc%2Chome%2Cinfo%2Clist%2Clist-bottom%2Clist-two%2Cpeople-safe%2Cpreview-open%2Csetting%2Cstar%2Cuser - net::ERR_ABORTED
+[2026-03-30T21:11:17.730Z] ERROR: http://localhost:9980/proxy-url/getUserRoutes - Status 404
+[2026-03-30T21:11:17.730Z] 
+--- 检查后端API ---
+[2026-03-30T21:11:17.736Z] ✅ 后端API可达，状态码: 404
+[2026-03-30T21:11:17.737Z] 
+========================================
+[2026-03-30T21:11:17.737Z] ✅ 测试完成！浏览器保持打开
+[2026-03-30T21:11:17.737Z] ========================================

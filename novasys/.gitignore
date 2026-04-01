@@ -1,0 +1,19 @@
+# Environment files
+.env
+.env.dev
+.env.production
+
+# macOS
+.DS_Store
+
+# Logs
+logs/
+
+# Dependencies
+nova-admin/node_modules
+nova-admin-nest/node_modules
+playwright/node_modules
+
+# Build outputs
+nova-admin/dist
+nova-admin-nest/dist
