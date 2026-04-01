@@ -6,7 +6,7 @@ import {
 } from 'typeorm'
 import { DateFormat } from '@/common/decorators'
 
-@Entity({ name: 'sys_login_log' })
+@Entity({ name: 'dl_rizhi' })
 export class LoginLog {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number

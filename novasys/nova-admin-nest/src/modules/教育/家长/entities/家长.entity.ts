@@ -12,7 +12,6 @@ import { DateFormat } from '@/common/decorators'
 import { User } from '@/modules/system/user/entities/user.entity'
 
 @Entity('jy_jiiazhang')
-@Index(['yonghuId'])
 @Index(['shoujihao'])
 @Index(['zhuangtai'])
 export class Jiazhang {

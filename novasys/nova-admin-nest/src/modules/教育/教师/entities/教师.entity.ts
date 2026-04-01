@@ -13,7 +13,6 @@ import { User } from '@/modules/system/user/entities/user.entity'
 
 @Entity('jy_jiaoshi')
 @Index(['gonghao'])
-@Index(['yonghuId'])
 @Index(['zhuangtai'])
 export class Teacher {
   @PrimaryGeneratedColumn({ comment: '教师ID' })

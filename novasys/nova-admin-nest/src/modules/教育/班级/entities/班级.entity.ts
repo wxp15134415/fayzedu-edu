@@ -15,7 +15,6 @@ import { Student } from '@/modules/教育/学生/entities/学生.entity'
 
 @Entity('jy_banji')
 @Index(['banjibianhao'])
-@Index(['fudaoyuanId'])
 @Index(['zhuangtai'])
 export class Banji {
   @PrimaryGeneratedColumn({ comment: '班级ID' })
