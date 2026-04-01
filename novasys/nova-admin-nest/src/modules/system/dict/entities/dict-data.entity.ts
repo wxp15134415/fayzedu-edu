@@ -10,7 +10,7 @@ import {
 } from 'typeorm'
 import { DateFormat } from '@/common/decorators'
 
-@Entity('sys_dict_data')
+@Entity('sj_zidian_shuju')
 @Index(['dictType'])
 @Index(['sort'])
 @Index(['status'])

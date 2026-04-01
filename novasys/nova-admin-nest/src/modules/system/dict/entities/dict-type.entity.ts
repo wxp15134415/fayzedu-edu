@@ -9,7 +9,7 @@ import {
 } from 'typeorm'
 import { DateFormat } from '@/common/decorators'
 
-@Entity('sys_dict_type')
+@Entity('sj_zidian_leixing')
 @Index(['type'])
 @Index(['status'])
 export class DictType {

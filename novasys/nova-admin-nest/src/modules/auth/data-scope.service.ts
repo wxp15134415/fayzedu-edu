@@ -36,7 +36,7 @@ export class DataScopeService {
   async applyForUserList(baseWhere: any, session?: Session) {
     // 暂时禁用数据权限过滤，显示所有用户
     return baseWhere
-    
+
     // 方式A：优先使用会话中的完整用户信息，避免额外 IO
     if (!session) return baseWhere
 

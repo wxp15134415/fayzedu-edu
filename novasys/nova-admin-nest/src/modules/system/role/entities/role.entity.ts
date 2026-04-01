@@ -12,7 +12,7 @@ import { User } from '@/modules/system/user/entities/user.entity'
 import { Dept } from '@/modules/system/dept/entities/dept.entity'
 import { DateFormat } from '@/common/decorators'
 
-@Entity('sys_role')
+@Entity('xt_jiaose')
 export class Role {
   @PrimaryGeneratedColumn({ comment: '角色ID' })
   id: number
@@ -67,7 +67,7 @@ export class Role {
   // 角色拥有的菜单权限（多对多）
   @ManyToMany(() => Menu, menu => menu.roles)
   @JoinTable({
-    name: 'sys_role_menu',
+    name: 'xt_jiaose_caidan',
   })
   menus: Menu[]
 
@@ -78,7 +78,7 @@ export class Role {
   // 角色关联的部门（多对多）- 用于数据权限控制
   @ManyToMany(() => Dept, dept => dept.roles)
   @JoinTable({
-    name: 'sys_role_dept',
+    name: 'xt_jiaose_jigou',
   })
   depts: Dept[]
 }

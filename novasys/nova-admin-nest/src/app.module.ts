@@ -5,6 +5,7 @@ import { config } from '@/config'
 import { AuthModule } from './modules/auth/auth.module'
 import { SystemModule } from './modules/system/system.module'
 import { MonitorModule } from './modules/monitor/monitor.module'
+import { 教育Module } from './modules/教育/教育.module'
 import { RedisModule } from '@/modules/common/redis'
 import {
   APP_PIPE,
@@ -51,6 +52,7 @@ import * as winston from 'winston'
     AuthModule,
     SystemModule,
     MonitorModule,
+    教育Module,
     RedisModule,
   ],
   controllers: [AppController],

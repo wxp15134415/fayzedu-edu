@@ -12,7 +12,7 @@ import { User } from '@/modules/system/user/entities/user.entity'
 import { Role } from '@/modules/system/role/entities/role.entity'
 import { DateFormat } from '@/common/decorators'
 
-@Entity('sys_dept')
+@Entity('zz_jigou')
 @Index(['parentId', 'sort'])
 @Index(['status'])
 export class Dept {

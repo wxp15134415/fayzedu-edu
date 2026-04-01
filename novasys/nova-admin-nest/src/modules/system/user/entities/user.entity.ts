@@ -17,7 +17,7 @@ import { Role } from '@/modules/system/role/entities/role.entity'
 import { Dept } from '@/modules/system/dept/entities/dept.entity'
 import { encryptData } from '@/utils/crypto'
 
-@Entity('sys_user')
+@Entity('xt_yonghu')
 @Index(['username'])
 @Index(['phone'])
 @Index(['email'])
@@ -119,7 +119,7 @@ export class User {
 
   @ManyToMany(() => Role, role => role.users)
   @JoinTable({
-    name: 'sys_user_role',
+    name: 'xt_yonghu_jiaose',
   })
   roles: Role[]
 

@@ -10,7 +10,7 @@ import {
 import { Role } from '../../role/entities/role.entity'
 import { DateFormat } from '@/common/decorators'
 
-@Entity('sys_menu')
+@Entity('xt_caidan')
 @Index(['parentId', 'sort'])
 @Index(['menuType'])
 @Index(['status'])
@@ -80,13 +80,6 @@ export class Menu {
     comment: '菜单图标',
   })
   icon: string
-
-  @Column({
-    length: 100,
-    default: '',
-    comment: '国际化标识Key',
-  })
-  i18nKey: string
 
   @Column({
     type: 'boolean',

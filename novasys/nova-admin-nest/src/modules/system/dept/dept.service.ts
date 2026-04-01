@@ -85,10 +85,7 @@ export class DeptService {
   }
 
   async findOptions(session?: any) {
-    const where = await this.dataScopeService.applyForDeptList(
-      {},
-      session,
-    )
+    const where = await this.dataScopeService.applyForDeptList({}, session)
 
     const depts = await this.deptRepository.find({
       where,

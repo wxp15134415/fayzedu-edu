@@ -152,7 +152,7 @@ export class UserService {
       if (!existUser) {
         throw new ApiException('用户不存在', ApiErrorCode.SERVER_ERROR)
       }
-      
+
       const { roleIds, ...userData } = updateUserDto
 
       // 更新基本信息
@@ -163,7 +163,7 @@ export class UserService {
       // 更新角色关联
       if (roleIds !== undefined && roleIds !== null) {
         const user = await this.findOne(id)
-        
+
         if (Array.isArray(roleIds) && roleIds.length > 0) {
           const roles = await this.roleRepository.find({
             where: { id: In(roleIds) },
