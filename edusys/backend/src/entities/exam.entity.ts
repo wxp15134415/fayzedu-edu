@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm'
+import { Grade } from './grade.entity'
 
 @Entity('exam')
 export class Exam {
@@ -11,13 +12,17 @@ export class Exam {
   @Column({ type: 'int', nullable: true })
   gradeId?: number
 
-  @Column({ type: 'varchar', length: 20 })
+  @ManyToOne(() => Grade, { nullable: true })
+  @JoinColumn({ name: 'gradeId' })
+  grade?: Grade
+
+  @Column({ type: 'varchar', length: 20, default: '2025-2026' })
   schoolYear!: string
 
-  @Column({ type: 'varchar', length: 20 })
+  @Column({ type: 'varchar', length: 20, default: '第一学期' })
   semester!: string
 
-  @Column({ type: 'varchar', length: 20 })
+  @Column({ type: 'varchar', length: 20, default: '月考' })
   examType!: string
 
   @Column({ type: 'date', nullable: true })

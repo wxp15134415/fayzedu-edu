@@ -105,6 +105,12 @@ const routes: RouteRecordRaw[] = [
         meta: { permission: 'subject:list', title: '科目管理' }
       },
       {
+        path: 'exam',
+        name: 'Exam',
+        component: () => import('@/views/exam/Index.vue'),
+        meta: { permission: 'exam:list', title: '考试安排' }
+      },
+      {
         path: 'score',
         name: 'Score',
         component: () => import('@/views/score/Index.vue'),

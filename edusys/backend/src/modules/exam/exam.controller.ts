@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, Query } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
-import { Exam, Score, Student } from '@/entities'
+import { Exam, Score, Student, Grade } from '@/entities'
 import { CreateExamDto, UpdateExamDto } from './dto/exam.dto'
 import { IsString, IsNumber, IsOptional } from 'class-validator'
 
@@ -44,9 +44,15 @@ export class ExamController {
     const [list, total] = await this.examRepository.findAndCount({
       skip: (page - 1) * pageSize,
       take: pageSize,
+      relations: ['grade'],
       order: { id: 'DESC' }
     })
-    return { list, total, page, pageSize }
+    // 格式化年级名称
+    const formattedList = list.map(item => ({
+      ...item,
+      gradeName: item.grade?.gradeName || ''
+    }))
+    return { list: formattedList, total, page, pageSize }
   }
 
   @Get(':id')

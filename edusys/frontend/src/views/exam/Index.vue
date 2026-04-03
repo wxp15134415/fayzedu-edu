@@ -8,6 +8,7 @@
     <el-table :data="tableData" v-loading="loading" stripe :header-cell-style="{background: '#f5f7fa'}">
       <el-table-column prop="id" label="ID" width="80" />
       <el-table-column prop="examName" label="考试名称" min-width="180" />
+      <el-table-column prop="gradeName" label="所属年级" width="100" />
       <el-table-column prop="schoolYear" label="学年" width="120" />
       <el-table-column prop="semester" label="学期" width="100" />
       <el-table-column prop="examType" label="考试类型" width="100" />
@@ -44,6 +45,11 @@
       <el-form ref="formRef" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="考试名称" prop="examName">
           <el-input v-model="form.examName" placeholder="如：高三下月考7" />
+        </el-form-item>
+        <el-form-item label="所属年级" prop="gradeId">
+          <el-select v-model="form.gradeId" style="width: 100%" clearable placeholder="请选择年级">
+            <el-option v-for="g in gradeOptions" :key="g.id" :label="g.gradeName" :value="g.id" />
+          </el-select>
         </el-form-item>
         <el-form-item label="学年" prop="schoolYear">
           <el-select v-model="form.schoolYear" style="width: 100%">
@@ -84,9 +90,11 @@ import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import { getExamList, createExam, updateExam, deleteExam } from '@/api/exam'
+import { getGradeList } from '@/api/grade'
 
 const loading = ref(false)
 const tableData = ref<any[]>([])
+const gradeOptions = ref<any[]>([])
 const pagination = reactive({ page: 1, pageSize: 10, total: 0 })
 const dialogVisible = ref(false)
 const formRef = ref<FormInstance>()
@@ -95,6 +103,7 @@ const editId = ref(0)
 
 const form = reactive({
   examName: '',
+  gradeId: undefined as number | undefined,
   schoolYear: '2025-2026',
   semester: '第一学期',
   examType: '月考',
@@ -119,9 +128,19 @@ const loadData = async () => {
   }
 }
 
+const loadGrades = async () => {
+  try {
+    const res = await getGradeList({ pageSize: 100 })
+    gradeOptions.value = res.list || []
+  } catch (error) {
+    console.error('加载年级失败', error)
+  }
+}
+
 const handleAdd = () => {
   isEdit.value = false
   form.examName = ''
+  form.gradeId = undefined
   form.schoolYear = '2025-2026'
   form.semester = '第一学期'
   form.examType = '月考'
@@ -134,6 +153,7 @@ const handleEdit = (row: any) => {
   isEdit.value = true
   editId.value = row.id
   form.examName = row.examName
+  form.gradeId = row.gradeId
   form.schoolYear = row.schoolYear || '2025-2026'
   form.semester = row.semester || '第一学期'
   form.examType = row.examType || '月考'
@@ -185,6 +205,7 @@ const handleDelete = async (row: any) => {
 
 onMounted(() => {
   loadData()
+  loadGrades()
 })
 </script>
 
