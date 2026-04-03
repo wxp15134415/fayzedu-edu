@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, Query } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
-import { Subject, Score } from '@/entities'
+import { Subject } from '@/entities'
 import { IsString, IsNumber, IsOptional } from 'class-validator'
 
 class CreateSubjectDto {
@@ -25,9 +25,7 @@ class CreateSubjectDto {
 export class SubjectController {
   constructor(
     @InjectRepository(Subject)
-    private subjectRepository: Repository<Subject>,
-    @InjectRepository(Score)
-    private scoreRepository: Repository<Score>
+    private subjectRepository: Repository<Subject>
   ) {}
 
   @Get('list')
@@ -62,8 +60,7 @@ export class SubjectController {
 
   @Delete(':id')
   async remove(@Param('id') id: number) {
-    // 先删除关联的成绩
-    await this.scoreRepository.delete({ subjectId: id })
+    // 成绩表不再按科目删除
     await this.subjectRepository.delete(id)
     return { message: '删除成功' }
   }

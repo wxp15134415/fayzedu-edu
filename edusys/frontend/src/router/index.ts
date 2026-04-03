@@ -111,6 +111,24 @@ const routes: RouteRecordRaw[] = [
         meta: { permission: 'exam:list', title: '考试安排' }
       },
       {
+        path: 'exam-venue',
+        name: 'ExamVenue',
+        component: () => import('@/views/exam-venue/Index.vue'),
+        meta: { permission: 'exam-venue:list', title: '考点管理' }
+      },
+      {
+        path: 'exam-room',
+        name: 'ExamRoom',
+        component: () => import('@/views/exam-room/Index.vue'),
+        meta: { permission: 'exam-room:list', title: '考场管理' }
+      },
+      {
+        path: 'exam-arrangement',
+        name: 'ExamArrangement',
+        component: () => import('@/views/exam-arrangement/Index.vue'),
+        meta: { permission: 'exam-arrangement:list', title: '考试编排' }
+      },
+      {
         path: 'score',
         name: 'Score',
         component: () => import('@/views/score/Index.vue'),

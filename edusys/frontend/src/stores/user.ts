@@ -59,6 +59,8 @@ export const useUserStore = defineStore('user', () => {
       userInfo.value = userData.user
       permissions.value = userData.permissions || []
       menus.value = userData.menus || []
+      // 更新 localStorage 中的权限
+      localStorage.setItem('permissions', JSON.stringify(userData.permissions || []))
     } catch (error) {
       console.error('获取用户信息失败', error)
     }

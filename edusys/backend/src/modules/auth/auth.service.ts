@@ -112,6 +112,44 @@ export class AuthService {
       }
     }
 
+    // 考试管理（需要相关权限）
+    if (permissions.some(p => ['exam:list', 'score:list'].includes(p))) {
+      const examMenus: any = { path: '/exam', name: 'Exam', meta: { title: '考试管理' }, children: [] }
+
+      if (permissions.includes('exam:list')) {
+        examMenus.children.push({ path: '/exam', name: 'ExamList', meta: { title: '考试安排', permission: 'exam:list' } })
+      }
+      if (permissions.includes('score:list')) {
+        examMenus.children.push({ path: '/score', name: 'Score', meta: { title: '成绩管理', permission: 'score:list' } })
+      }
+
+      if (examMenus.children.length > 0) {
+        menus.push(examMenus)
+      }
+    }
+
+    // 教务管理（需要相关权限）
+    if (permissions.some(p => ['grade:list', 'class:list', 'student:list', 'subject:list'].includes(p))) {
+      const eduMenus: any = { path: '/education', name: 'Education', meta: { title: '教务管理' }, children: [] }
+
+      if (permissions.includes('grade:list')) {
+        eduMenus.children.push({ path: '/grade', name: 'Grade', meta: { title: '年级管理', permission: 'grade:list' } })
+      }
+      if (permissions.includes('class:list')) {
+        eduMenus.children.push({ path: '/class', name: 'Class', meta: { title: '班级管理', permission: 'class:list' } })
+      }
+      if (permissions.includes('student:list')) {
+        eduMenus.children.push({ path: '/student', name: 'Student', meta: { title: '学生管理', permission: 'student:list' } })
+      }
+      if (permissions.includes('subject:list')) {
+        eduMenus.children.push({ path: '/subject', name: 'Subject', meta: { title: '科目管理', permission: 'subject:list' } })
+      }
+
+      if (eduMenus.children.length > 0) {
+        menus.push(eduMenus)
+      }
+    }
+
     return menus
   }
 }
