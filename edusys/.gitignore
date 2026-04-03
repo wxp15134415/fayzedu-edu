@@ -1,0 +1,15 @@
+# 依赖
+node_modules/
+pnpm-lock.yaml
+
+# 测试文件
+test-*.js
+
+# 临时文件
+tmp/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
