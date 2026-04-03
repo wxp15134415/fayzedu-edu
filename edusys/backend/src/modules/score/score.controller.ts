@@ -40,11 +40,10 @@ export class ScoreController {
   ) {
     const queryBuilder = this.scoreRepository.createQueryBuilder('score')
       .leftJoinAndSelect('score.student', 'student')
-      .leftJoinAndSelect('score.subject', 'subject')
 
     if (keyword) {
       queryBuilder.where(
-        'student.name LIKE :keyword OR student.studentNo LIKE :keyword OR subject.subjectName LIKE :keyword',
+        'student.name LIKE :keyword OR student.studentNo LIKE :keyword',
         { keyword: `%${keyword}%` }
       )
     }
@@ -62,7 +61,7 @@ export class ScoreController {
   async findOne(@Param('id') id: number) {
     return this.scoreRepository.findOne({
       where: { id },
-      relations: ['student', 'subject']
+      relations: ['student']
     })
   }
 

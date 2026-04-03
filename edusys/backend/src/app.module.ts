@@ -13,7 +13,11 @@ import { ScoreModule } from './modules/score/score.module'
 import { SubjectModule } from './modules/subject/subject.module'
 import { SystemInfoModule } from './modules/system-info/system-info.module'
 import { ExamModule } from './modules/exam/exam.module'
-import { User, Role, Permission, RolePermission, Grade, Class, Student, Exam, Score, Subject, SystemInfo } from './entities'
+import { ExamVenueModule } from './modules/exam-venue/exam-venue.module'
+import { ExamRoomModule } from './modules/exam-room/exam-room.module'
+import { ExamSessionModule } from './modules/exam-session/exam-session.module'
+import { ExamArrangementModule } from './modules/exam-arrangement/exam-arrangement.module'
+import { User, Role, Permission, RolePermission, Grade, Class, Student, Exam, Score, Subject, SystemInfo, ExamVenue, ExamRoom, ExamSession, ExamArrangement } from './entities'
 
 @Module({
   imports: [
@@ -31,7 +35,7 @@ import { User, Role, Permission, RolePermission, Grade, Class, Student, Exam, Sc
         username: configService.get('DB_USERNAME') || 'wangxiaoping',
         password: configService.get('DB_PASSWORD') || '',
         database: configService.get('DB_DATABASE') || 'edusys',
-        entities: [User, Role, Permission, RolePermission, Grade, Class, Student, Exam, Score, Subject, SystemInfo],
+        entities: [User, Role, Permission, RolePermission, Grade, Class, Student, Exam, Score, Subject, SystemInfo, ExamVenue, ExamRoom, ExamSession, ExamArrangement],
         synchronize: true,
         logging: false
       })
@@ -46,7 +50,11 @@ import { User, Role, Permission, RolePermission, Grade, Class, Student, Exam, Sc
     ScoreModule,
     SubjectModule,
     SystemInfoModule,
-    ExamModule
+    ExamModule,
+    ExamVenueModule,
+    ExamRoomModule,
+    ExamSessionModule,
+    ExamArrangementModule
   ]
 })
 export class AppModule {}

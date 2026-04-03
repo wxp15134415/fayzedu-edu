@@ -113,11 +113,23 @@ export class AuthService {
     }
 
     // 考试管理（需要相关权限）
-    if (permissions.some(p => ['exam:list', 'score:list'].includes(p))) {
+    if (permissions.some(p => ['exam:list', 'score:list', 'exam-session:list', 'exam-venue:list', 'exam-room:list', 'exam-arrangement:list'].includes(p))) {
       const examMenus: any = { path: '/exam', name: 'Exam', meta: { title: '考试管理' }, children: [] }
 
       if (permissions.includes('exam:list')) {
         examMenus.children.push({ path: '/exam', name: 'ExamList', meta: { title: '考试安排', permission: 'exam:list' } })
+      }
+      if (permissions.includes('exam-session:list')) {
+        examMenus.children.push({ path: '/exam-session', name: 'ExamSession', meta: { title: '考试场次', permission: 'exam-session:list' } })
+      }
+      if (permissions.includes('exam-venue:list')) {
+        examMenus.children.push({ path: '/exam-venue', name: 'ExamVenue', meta: { title: '考点管理', permission: 'exam-venue:list' } })
+      }
+      if (permissions.includes('exam-room:list')) {
+        examMenus.children.push({ path: '/exam-room', name: 'ExamRoom', meta: { title: '考场管理', permission: 'exam-room:list' } })
+      }
+      if (permissions.includes('exam-arrangement:list')) {
+        examMenus.children.push({ path: '/exam-arrangement', name: 'ExamArrangement', meta: { title: '考试编排', permission: 'exam-arrangement:list' } })
       }
       if (permissions.includes('score:list')) {
         examMenus.children.push({ path: '/score', name: 'Score', meta: { title: '成绩管理', permission: 'score:list' } })

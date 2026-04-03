@@ -111,6 +111,12 @@ const routes: RouteRecordRaw[] = [
         meta: { permission: 'exam:list', title: '考试安排' }
       },
       {
+        path: 'exam-session',
+        name: 'ExamSession',
+        component: () => import('@/views/exam-session/Index.vue'),
+        meta: { permission: 'exam-session:list', title: '考试场次' }
+      },
+      {
         path: 'exam-venue',
         name: 'ExamVenue',
         component: () => import('@/views/exam-venue/Index.vue'),
