@@ -5,7 +5,8 @@
       <el-button @click="loadData">刷新</el-button>
     </div>
 
-    <el-table :data="tableData" v-loading="loading" stripe :header-cell-style="{background: '#f5f7fa'}">
+    <!-- 桌面端表格 -->
+    <el-table :data="tableData" v-loading="loading" stripe :header-cell-style="{background: '#f5f7fa'}" v-if="!isMobile">
       <el-table-column prop="id" label="ID" width="80" />
       <el-table-column prop="examName" label="考试名称" min-width="180" />
       <el-table-column prop="gradeName" label="所属年级" width="100" />
@@ -30,19 +31,61 @@
       </el-table-column>
     </el-table>
 
+    <!-- 移动端卡片 -->
+    <div class="mobile-cards" v-if="isMobile && tableData.length > 0">
+      <div class="exam-card" v-for="row in tableData" :key="row.id">
+        <div class="exam-card-header">
+          <span class="exam-card-title">{{ row.examName }}</span>
+          <el-tag :type="row.status === 1 ? 'success' : 'danger'" size="small">
+            {{ row.status === 1 ? '启用' : '禁用' }}
+          </el-tag>
+        </div>
+        <div class="exam-card-info">
+          <div class="exam-card-info-item">
+            <span class="exam-card-info-label">年级:</span>
+            <span>{{ row.gradeName || '-' }}</span>
+          </div>
+          <div class="exam-card-info-item">
+            <span class="exam-card-info-label">学年:</span>
+            <span>{{ row.schoolYear || '-' }}</span>
+          </div>
+          <div class="exam-card-info-item">
+            <span class="exam-card-info-label">学期:</span>
+            <span>{{ row.semester || '-' }}</span>
+          </div>
+          <div class="exam-card-info-item">
+            <span class="exam-card-info-label">类型:</span>
+            <span>{{ row.examType || '-' }}</span>
+          </div>
+          <div class="exam-card-info-item">
+            <span class="exam-card-info-label">日期:</span>
+            <span>{{ row.examDate || '-' }}</span>
+          </div>
+        </div>
+        <div class="exam-card-actions">
+          <el-button type="primary" size="small" @click="handleEdit(row)">编辑</el-button>
+          <el-button type="danger" size="small" @click="handleDelete(row)">删除</el-button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 无数据提示 -->
+    <el-empty v-if="!loading && tableData.length === 0" description="暂无考试数据" />
+
     <el-pagination
       v-model:current-page="pagination.page"
       v-model:page-size="pagination.pageSize"
       :total="pagination.total"
-      :page-sizes="[10, 20, 50, 100]"
-      layout="total, sizes, prev, pager, next, jumper"
+      :page-sizes="isMobile ? [5, 10, 20] : [10, 20, 50, 100]"
+      :layout="isMobile ? 'total, prev, next' : 'total, sizes, prev, pager, next, jumper'"
       @change="loadData"
-      style="margin-top: 20px; justify-content: flex-end"
+      style="margin-top: 20px"
+      :class="{ 'mobile-pagination': isMobile }"
     />
 
     <!-- 新增/编辑对话框 -->
-    <el-dialog v-model="dialogVisible" :title="isEdit ? '编辑考试' : '新增考试'" width="500px">
-      <el-form ref="formRef" :model="form" :rules="rules" label-width="100px">
+    <el-dialog v-model="dialogVisible" :title="isEdit ? '编辑考试' : '新增考试'" :width="isMobile ? '90%' : '500px'" :fullscreen="isMobile">
+      <el-form ref="formRef" :model="form" :rules="rules" label-width="80px" :label-position="isMobile ? 'top' : 'right'">
         <el-form-item label="考试名称" prop="examName">
           <el-input v-model="form.examName" placeholder="如：高三下月考7" />
         </el-form-item>
@@ -86,7 +129,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import { getExamList, createExam, updateExam, deleteExam } from '@/api/exam'
@@ -100,6 +143,12 @@ const dialogVisible = ref(false)
 const formRef = ref<FormInstance>()
 const isEdit = ref(false)
 const editId = ref(0)
+
+// 移动端检测
+const isMobile = ref(window.innerWidth < 768)
+const handleResize = () => {
+  isMobile.value = window.innerWidth < 768
+}
 
 const form = reactive({
   examName: '',
@@ -206,6 +255,11 @@ const handleDelete = async (row: any) => {
 onMounted(() => {
   loadData()
   loadGrades()
+  window.addEventListener('resize', handleResize)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize)
 })
 </script>
 
@@ -216,5 +270,119 @@ onMounted(() => {
 .action-buttons {
   display: flex;
   gap: 4px;
+}
+
+/* 移动端响应式 */
+@media (max-width: 768px) {
+  .exam-management { padding: 12px; }
+
+  .toolbar {
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .toolbar .el-button {
+    flex: 1;
+    min-width: calc(50% - 4px);
+  }
+
+  /* 移动端卡片列表 */
+  .mobile-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .exam-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  .exam-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .exam-card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #303133;
+  }
+
+  .exam-card-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+    font-size: 12px;
+    color: #606266;
+  }
+
+  .exam-card-info-item {
+    display: flex;
+    gap: 4px;
+  }
+
+  .exam-card-info-label {
+    color: #909399;
+  }
+
+  .exam-card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .exam-card-actions .el-button {
+    flex: 1;
+  }
+
+  /* 移动端分页 */
+  :deep(.el-pagination) {
+    flex-wrap: wrap;
+    justify-content: center !important;
+    gap: 8px;
+  }
+
+  :deep(.el-pagination__total) {
+    width: 100%;
+    text-align: center;
+  }
+
+  :deep(.el-pagination__sizes) {
+    width: 100%;
+    justify-content: center;
+  }
+
+  :deep(.el-pagination__jump) {
+    display: none;
+  }
+
+  /* 隐藏桌面端表格 */
+  :deep(.el-table) {
+    display: none;
+  }
+
+  /* 桌面端隐藏卡片 */
+  .mobile-cards {
+    display: none;
+  }
+
+  :deep(.el-table) {
+    display: table;
+  }
+}
+
+/* 桌面端 */
+@media (min-width: 769px) {
+  .mobile-cards {
+    display: none;
+  }
 }
 </style>
