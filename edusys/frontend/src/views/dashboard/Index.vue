@@ -312,4 +312,48 @@ onMounted(() => {
 .action-item:hover span {
   color: #fff;
 }
+
+/* 移动端响应式 */
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 12px;
+  }
+
+  .stat-card {
+    margin-bottom: 12px;
+  }
+
+  .stat-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .stat-icon-wrap {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+
+  .stat-number {
+    font-size: 20px;
+  }
+
+  .stat-label {
+    font-size: 12px;
+  }
+
+  .quick-actions {
+    margin-top: 16px;
+  }
+
+  .action-grid {
+    flex-direction: column;
+  }
+
+  .action-item {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
 </style>
