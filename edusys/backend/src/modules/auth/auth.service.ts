@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import * as bcrypt from 'bcrypt'
-import { User } from '@/entities'
+import { User, Menu, Permission } from '@/entities'
 import { LoginDto } from './dto/auth.dto'
 
 @Injectable()
@@ -11,6 +11,10 @@ export class AuthService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    @InjectRepository(Menu)
+    private menuRepository: Repository<Menu>,
+    @InjectRepository(Permission)
+    private permissionRepository: Repository<Permission>,
     private jwtService: JwtService
   ) {}
 
@@ -34,7 +38,14 @@ export class AuthService {
     }
 
     // 获取权限列表
-    const permissions = user.role?.rolePermissions?.map(rp => rp.permission?.permissionCode).filter(Boolean) || []
+    let permissions = user.role?.rolePermissions?.map(rp => rp.permission?.permissionCode).filter(Boolean) || []
+
+    // 超级管理员自动拥有所有权限
+    const isSuperAdmin = user.role?.isSuperAdmin === 1
+    if (isSuperAdmin) {
+      const allPermissions = await this.permissionRepository.find()
+      permissions = [...new Set([...permissions, ...allPermissions.map(p => p.permissionCode)])]
+    }
 
     // 生成 token
     const payload = { sub: user.id, username: user.username, roleId: user.roleId }
@@ -51,7 +62,7 @@ export class AuthService {
       token,
       user: userInfo,
       permissions,
-      menus: this.buildMenus(permissions)
+      menus: await this.buildMenus(permissions)
     }
   }
 
@@ -69,99 +80,85 @@ export class AuthService {
       throw new UnauthorizedException('用户不存在')
     }
 
-    const permissions = user.role?.rolePermissions?.map(rp => rp.permission?.permissionCode).filter(Boolean) || []
+    let permissions = user.role?.rolePermissions?.map(rp => rp.permission?.permissionCode).filter(Boolean) || []
+
+    // 超级管理员自动拥有所有权限
+    const isSuperAdmin = user.role?.isSuperAdmin === 1
+    if (isSuperAdmin) {
+      const allPermissions = await this.permissionRepository.find()
+      permissions = [...new Set([...permissions, ...allPermissions.map(p => p.permissionCode)])]
+    }
 
     const { password, ...userInfo } = user
 
     return {
       user: userInfo,
       permissions,
-      menus: this.buildMenus(permissions)
+      menus: await this.buildMenus(permissions)
     }
   }
 
-  private buildMenus(permissions: string[]) {
-    const menus: any[] = []
-
-    // 首页
-    menus.push({
-      path: '/dashboard',
-      name: 'Dashboard',
-      meta: { title: '首页' }
+  private async buildMenus(permissions: string[]) {
+    // 从数据库读取菜单
+    const menus = await this.menuRepository.find({
+      where: { status: 1 },
+      order: { sortOrder: 'ASC' }
     })
 
-    // 系统管理（需要相关权限）
-    if (permissions.some(p => ['user:list', 'role:list', 'permission:list', 'system-info:view'].includes(p))) {
-      const systemMenus: any = { path: '/system', name: 'System', meta: { title: '系统管理' }, children: [] }
+    // 构建树形结构并根据权限过滤
+    const result = this.buildMenuTree(menus, permissions)
+    return result
+  }
 
-      if (permissions.includes('user:list')) {
-        systemMenus.children.push({ path: '/user', name: 'User', meta: { title: '用户管理', permission: 'user:list' } })
-      }
-      if (permissions.includes('role:list')) {
-        systemMenus.children.push({ path: '/role', name: 'Role', meta: { title: '角色管理', permission: 'role:list' } })
-      }
-      if (permissions.includes('permission:list')) {
-        systemMenus.children.push({ path: '/permission', name: 'Permission', meta: { title: '权限组管理', permission: 'permission:list' } })
-      }
-      if (permissions.includes('system-info:view')) {
-        systemMenus.children.push({ path: '/system-info', name: 'SystemInfo', meta: { title: '基础信息', permission: 'system-info:view' } })
-      }
+  // 构建菜单树并根据权限过滤
+  private buildMenuTree(menus: Menu[], permissions: string[]): any[] {
+    const map = new Map<number, any>()
+    const roots: any[] = []
 
-      if (systemMenus.children.length > 0) {
-        menus.push(systemMenus)
+    // 转换为带children的结构
+    menus.forEach(menu => {
+      map.set(menu.id, { ...menu, children: [] })
+    })
+
+    // 构建父子关系
+    menus.forEach(menu => {
+      const node = map.get(menu.id)
+      if (menu.parentId === 0) {
+        roots.push(node)
+      } else {
+        const parent = map.get(menu.parentId)
+        if (parent) {
+          parent.children.push(node)
+        }
       }
+    })
+
+    // 过滤：有permission的菜单需要用户有对应权限，没有permission的目录默认显示
+    const filterMenus = (items: any[]): any[] => {
+      return items
+        .map(item => {
+          // 递归过滤子菜单
+          if (item.children && item.children.length > 0) {
+            item.children = filterMenus(item.children)
+          }
+          return item
+        })
+        .filter(item => {
+          // 判断当前菜单是否应该显示
+          if (item.children && item.children.length > 0) {
+            // 有子菜单的目录：至少要有一个可见的子菜单才显示
+            return true
+          }
+          // 没有子菜单的叶子菜单
+          if (!item.permission) {
+            // 没有权限要求的菜单直接显示
+            return true
+          }
+          // 有权限要求的菜单，检查用户是否有该权限
+          return permissions.includes(item.permission)
+        })
     }
 
-    // 考试管理（需要相关权限）
-    if (permissions.some(p => ['exam:list', 'score:list', 'exam-session:list', 'exam-venue:list', 'exam-room:list', 'exam-arrangement:list'].includes(p))) {
-      const examMenus: any = { path: '/exam', name: 'Exam', meta: { title: '考试管理' }, children: [] }
-
-      if (permissions.includes('exam:list')) {
-        examMenus.children.push({ path: '/exam', name: 'ExamList', meta: { title: '考试安排', permission: 'exam:list' } })
-      }
-      if (permissions.includes('exam-session:list')) {
-        examMenus.children.push({ path: '/exam-session', name: 'ExamSession', meta: { title: '考试场次', permission: 'exam-session:list' } })
-      }
-      if (permissions.includes('exam-venue:list')) {
-        examMenus.children.push({ path: '/exam-venue', name: 'ExamVenue', meta: { title: '考点管理', permission: 'exam-venue:list' } })
-      }
-      if (permissions.includes('exam-room:list')) {
-        examMenus.children.push({ path: '/exam-room', name: 'ExamRoom', meta: { title: '考场管理', permission: 'exam-room:list' } })
-      }
-      if (permissions.includes('exam-arrangement:list')) {
-        examMenus.children.push({ path: '/exam-arrangement', name: 'ExamArrangement', meta: { title: '考试编排', permission: 'exam-arrangement:list' } })
-      }
-      if (permissions.includes('score:list')) {
-        examMenus.children.push({ path: '/score', name: 'Score', meta: { title: '成绩管理', permission: 'score:list' } })
-      }
-
-      if (examMenus.children.length > 0) {
-        menus.push(examMenus)
-      }
-    }
-
-    // 教务管理（需要相关权限）
-    if (permissions.some(p => ['grade:list', 'class:list', 'student:list', 'subject:list'].includes(p))) {
-      const eduMenus: any = { path: '/education', name: 'Education', meta: { title: '教务管理' }, children: [] }
-
-      if (permissions.includes('grade:list')) {
-        eduMenus.children.push({ path: '/grade', name: 'Grade', meta: { title: '年级管理', permission: 'grade:list' } })
-      }
-      if (permissions.includes('class:list')) {
-        eduMenus.children.push({ path: '/class', name: 'Class', meta: { title: '班级管理', permission: 'class:list' } })
-      }
-      if (permissions.includes('student:list')) {
-        eduMenus.children.push({ path: '/student', name: 'Student', meta: { title: '学生管理', permission: 'student:list' } })
-      }
-      if (permissions.includes('subject:list')) {
-        eduMenus.children.push({ path: '/subject', name: 'Subject', meta: { title: '科目管理', permission: 'subject:list' } })
-      }
-
-      if (eduMenus.children.length > 0) {
-        menus.push(eduMenus)
-      }
-    }
-
-    return menus
+    return filterMenus(roots)
   }
 }

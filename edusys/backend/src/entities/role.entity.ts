@@ -26,6 +26,9 @@ export class Role {
   @Column({ name: 'is_system', type: 'smallint', default: 0 })
   isSystem: number
 
+  @Column({ name: 'is_super_admin', type: 'smallint', default: 0 })
+  isSuperAdmin: number
+
   @OneToMany(() => RolePermission, (rp) => rp.role)
   rolePermissions: RolePermission[]
 
