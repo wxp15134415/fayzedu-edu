@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
+import { useUserStore } from '@/stores/user'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -75,6 +76,12 @@ const routes: RouteRecordRaw[] = [
         meta: { permission: 'permission:edit', title: '编辑权限组' }
       },
       {
+        path: 'menu',
+        name: 'Menu',
+        component: () => import('@/views/menu/Index.vue'),
+        meta: { permission: 'menu:list', title: '菜单管理' }
+      },
+      {
         path: 'system-info',
         name: 'SystemInfo',
         component: () => import('@/views/system-info/Index.vue'),
@@ -97,6 +104,24 @@ const routes: RouteRecordRaw[] = [
         name: 'Student',
         component: () => import('@/views/student/Index.vue'),
         meta: { permission: 'student:list', title: '学生管理' }
+      },
+      {
+        path: 'teacher',
+        name: 'Teacher',
+        component: () => import('@/views/teacher/Index.vue'),
+        meta: { permission: 'teacher:list', title: '教师管理' }
+      },
+      {
+        path: 'teacher/add',
+        name: 'TeacherAdd',
+        component: () => import('@/views/teacher/Edit.vue'),
+        meta: { permission: 'teacher:add', title: '新增教师' }
+      },
+      {
+        path: 'teacher/:id/edit',
+        name: 'TeacherEdit',
+        component: () => import('@/views/teacher/Edit.vue'),
+        meta: { permission: 'teacher:edit', title: '编辑教师' }
       },
       {
         path: 'subject',
@@ -139,6 +164,12 @@ const routes: RouteRecordRaw[] = [
         name: 'Score',
         component: () => import('@/views/score/Index.vue'),
         meta: { permission: 'score:list', title: '成绩管理' }
+      },
+      {
+        path: 'score-import',
+        name: 'ScoreImport',
+        component: () => import('@/views/score-import/Index.vue'),
+        meta: { permission: 'score-import:list', title: '成绩导入' }
       }
     ]
   },
@@ -157,12 +188,20 @@ const router = createRouter({
 
 router.beforeEach((to, from) => {
   const token = localStorage.getItem('token')
+  const userStore = useUserStore()
 
   if (to.meta.requiresAuth !== false && !token) {
     return '/login'
   } else if (to.path === '/login' && token) {
     return '/'
   }
+
+  // 检查路由权限（超级管理员自动拥有所有权限）
+  if (to.meta.permission && !userStore.hasPermission(to.meta.permission as string)) {
+    // 无权限，跳转到首页
+    return '/dashboard'
+  }
+
   return true
 })
 

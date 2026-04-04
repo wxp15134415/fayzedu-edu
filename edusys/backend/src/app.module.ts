@@ -17,7 +17,13 @@ import { ExamVenueModule } from './modules/exam-venue/exam-venue.module'
 import { ExamRoomModule } from './modules/exam-room/exam-room.module'
 import { ExamSessionModule } from './modules/exam-session/exam-session.module'
 import { ExamArrangementModule } from './modules/exam-arrangement/exam-arrangement.module'
-import { User, Role, Permission, RolePermission, Grade, Class, Student, Exam, Score, Subject, SystemInfo, ExamVenue, ExamRoom, ExamSession, ExamArrangement } from './entities'
+import { MenuModule } from './modules/menu/menu.module'
+import { ScoreImportModule } from './modules/score-import/score-import.module'
+import { TeacherModule } from './modules/teacher/teacher.module'
+import { SubjectGroupModule } from './modules/subject-group/subject-group.module'
+import { OperationLogModule } from './modules/operation-log/operation-log.module'
+import { ImportModule } from './modules/import/import.module'
+import { User, Role, Permission, RolePermission, Grade, Class, Student, Teacher, Exam, Score, Subject, SystemInfo, ExamVenue, ExamRoom, ExamSession, ExamArrangement, Menu, ScoreImportTemp, SubjectGroup, SubjectGroupSubject, StudentSubject, StudentGroup, OperationLog, ImportTemp } from './entities'
 
 @Module({
   imports: [
@@ -35,7 +41,7 @@ import { User, Role, Permission, RolePermission, Grade, Class, Student, Exam, Sc
         username: configService.get('DB_USERNAME') || 'wangxiaoping',
         password: configService.get('DB_PASSWORD') || '',
         database: configService.get('DB_DATABASE') || 'edusys',
-        entities: [User, Role, Permission, RolePermission, Grade, Class, Student, Exam, Score, Subject, SystemInfo, ExamVenue, ExamRoom, ExamSession, ExamArrangement],
+        entities: [User, Role, Permission, RolePermission, Grade, Class, Student, Teacher, Exam, Score, Subject, SystemInfo, ExamVenue, ExamRoom, ExamSession, ExamArrangement, Menu, ScoreImportTemp, SubjectGroup, SubjectGroupSubject, StudentSubject, StudentGroup, OperationLog],
         synchronize: true,
         logging: false
       })
@@ -54,7 +60,12 @@ import { User, Role, Permission, RolePermission, Grade, Class, Student, Exam, Sc
     ExamVenueModule,
     ExamRoomModule,
     ExamSessionModule,
-    ExamArrangementModule
+    ExamArrangementModule,
+    MenuModule,
+    ScoreImportModule,
+    TeacherModule,
+    SubjectGroupModule,
+    OperationLogModule
   ]
 })
 export class AppModule {}
