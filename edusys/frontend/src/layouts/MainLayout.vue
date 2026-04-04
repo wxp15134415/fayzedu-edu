@@ -21,39 +21,24 @@
         class="sidebar-menu"
         @select="drawerVisible = false"
       >
-        <el-menu-item index="/dashboard">
-          <el-icon><HomeFilled /></el-icon>
-          <span>首页</span>
-        </el-menu-item>
-        <el-sub-menu index="/system" v-if="hasAnyPermission(['user:list', 'role:list', 'permission:list', 'system-info:view'])">
-          <template #title>
-            <el-icon><Setting /></el-icon>
-            <span>系统管理</span>
-          </template>
-          <el-menu-item index="/user" v-if="hasPermission('user:list')">用户管理</el-menu-item>
-          <el-menu-item index="/role" v-if="hasPermission('role:list')">角色管理</el-menu-item>
-          <el-menu-item index="/permission" v-if="hasPermission('permission:list')">权限组管理</el-menu-item>
-          <el-menu-item index="/system-info" v-if="hasPermission('system-info:view')">基础信息</el-menu-item>
-        </el-sub-menu>
-        <el-sub-menu index="/exam" v-if="hasAnyPermission(['exam:list', 'score:list'])">
-          <template #title>
-            <el-icon><Document /></el-icon>
-            <span>考试管理</span>
-          </template>
-          <el-menu-item index="/exam" v-if="hasPermission('exam:list')">考试安排</el-menu-item>
-          <el-menu-item index="/score" v-if="hasPermission('score:list')">成绩管理</el-menu-item>
-        </el-sub-menu>
-        <el-sub-menu index="/education" v-if="hasAnyPermission(['grade:list', 'class:list', 'student:list', 'subject:list'])">
-          <template #title>
-            <el-icon><School /></el-icon>
-            <span>教务管理</span>
-          </template>
-          <el-menu-item index="/grade" v-if="hasPermission('grade:list')">年级管理</el-menu-item>
-          <el-menu-item index="/class" v-if="hasPermission('class:list')">班级管理</el-menu-item>
-          <el-menu-item index="/student" v-if="hasPermission('student:list')">学生管理</el-menu-item>
-          <el-menu-item index="/subject" v-if="hasPermission('subject:list')">科目管理</el-menu-item>
-          <el-menu-item index="/score" v-if="hasPermission('score:list')">成绩管理</el-menu-item>
-        </el-sub-menu>
+        <!-- 使用后端返回的菜单（包括首页） -->
+        <template v-for="menu in menus" :key="menu.id">
+          <!-- 一级菜单 -->
+          <el-sub-menu v-if="menu.children && menu.children.length > 0" :index="menu.path">
+            <template #title>
+              <el-icon><Setting v-if="menu.name === '系统管理'" /><Document v-else-if="menu.name === '考试管理'" /><DataAnalysis v-else-if="menu.name === '成绩分析'" /><School v-else /><!-- 默认为School --></el-icon>
+              <span>{{ menu.name }}</span>
+            </template>
+            <!-- 二级菜单 -->
+            <el-menu-item v-for="child in menu.children" :key="child.id" :index="child.path">
+              <span>{{ child.name }}</span>
+            </el-menu-item>
+          </el-sub-menu>
+          <el-menu-item v-else :index="menu.path">
+            <el-icon><HomeFilled /></el-icon>
+            <span>{{ menu.name }}</span>
+          </el-menu-item>
+        </template>
       </el-menu>
     </el-drawer>
 
@@ -72,30 +57,24 @@
           :unique-opened="true"
           class="sidebar-menu"
         >
-          <el-menu-item index="/dashboard">
-            <el-icon><HomeFilled /></el-icon>
-            <span>首页</span>
-          </el-menu-item>
-          <el-sub-menu index="/system" v-if="hasAnyPermission(['user:list', 'role:list', 'permission:list', 'system-info:view'])">
-            <template #title>
-              <el-icon><Setting /></el-icon>
-              <span>系统管理</span>
-            </template>
-            <el-menu-item index="/user" v-if="hasPermission('user:list')">用户管理</el-menu-item>
-            <el-menu-item index="/role" v-if="hasPermission('role:list')">角色管理</el-menu-item>
-            <el-menu-item index="/permission" v-if="hasPermission('permission:list')">权限组管理</el-menu-item>
-            <el-menu-item index="/system-info" v-if="hasPermission('system-info:view')">基础信息</el-menu-item>
-          </el-sub-menu>
-          <el-sub-menu index="/education" v-if="hasAnyPermission(['grade:list', 'class:list', 'student:list', 'subject:list'])">
-            <template #title>
-              <el-icon><School /></el-icon>
-              <span>教务管理</span>
-            </template>
-            <el-menu-item index="/grade" v-if="hasPermission('grade:list')">年级管理</el-menu-item>
-            <el-menu-item index="/class" v-if="hasPermission('class:list')">班级管理</el-menu-item>
-            <el-menu-item index="/student" v-if="hasPermission('student:list')">学生管理</el-menu-item>
-            <el-menu-item index="/subject" v-if="hasPermission('subject:list')">科目管理</el-menu-item>
-          </el-sub-menu>
+          <!-- 使用后端返回的菜单（包括首页） -->
+          <template v-for="menu in menus" :key="menu.id">
+            <!-- 一级菜单 -->
+            <el-sub-menu v-if="menu.children && menu.children.length > 0" :index="menu.path">
+              <template #title>
+                <el-icon><Setting v-if="menu.name === '系统管理'" /><Document v-else-if="menu.name === '考试管理'" /><DataAnalysis v-else-if="menu.name === '成绩分析'" /><School v-else /></el-icon>
+                <span>{{ menu.name }}</span>
+              </template>
+              <!-- 二级菜单 -->
+              <el-menu-item v-for="child in menu.children" :key="child.id" :index="child.path">
+                <span>{{ child.name }}</span>
+              </el-menu-item>
+            </el-sub-menu>
+            <el-menu-item v-else :index="menu.path">
+              <el-icon><HomeFilled /></el-icon>
+              <span>{{ menu.name }}</span>
+            </el-menu-item>
+          </template>
         </el-menu>
       </el-aside>
 
@@ -154,15 +133,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, markRaw } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
-import { HomeFilled, Setting, Fold, Expand, School, Menu, ArrowDown, User, SwitchButton } from '@element-plus/icons-vue'
+import { HomeFilled, Setting, Fold, Expand, School, Menu, ArrowDown, User, SwitchButton, DataAnalysis, Document } from '@element-plus/icons-vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
 
 const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
+
+// 从用户 store 获取菜单
+const menus = computed(() => userStore.menus || [])
 
 // 响应式布局检测
 const isMobile = ref(window.innerWidth < 768)
@@ -194,12 +176,19 @@ const currentRoute = computed(() => {
   return route.meta?.title as string || ''
 })
 
-const hasPermission = (permission: string) => {
-  return userStore.hasPermission(permission)
+// 菜单图标映射
+const iconMap: Record<string, any> = {
+  Setting: markRaw(Setting),
+  School: markRaw(School),
+  Document: markRaw(Document),
+  DataAnalysis: markRaw(DataAnalysis),
+  HomeFilled: markRaw(HomeFilled)
 }
 
-const hasAnyPermission = (permissions: string[]) => {
-  return permissions.some(p => userStore.hasPermission(p))
+// 获取菜单图标
+const getIcon = (iconName?: string) => {
+  if (!iconName) return HomeFilled
+  return iconMap[iconName] || HomeFilled
 }
 
 const handleLogout = () => {

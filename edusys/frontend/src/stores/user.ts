@@ -13,6 +13,8 @@ export const useUserStore = defineStore('user', () => {
   const savedMenus = localStorage.getItem('menus')
   const permissions = ref<string[]>(savedPermissions ? JSON.parse(savedPermissions) : [])
   const menus = ref<any[]>(savedMenus ? JSON.parse(savedMenus) : [])
+  // 超级管理员标识
+  const isSuperAdmin = ref<boolean>(localStorage.getItem('isSuperAdmin') === 'true')
 
   const isLoggedIn = computed(() => !!token.value)
 
@@ -27,6 +29,9 @@ export const useUserStore = defineStore('user', () => {
     userInfo.value = loginData.user
     permissions.value = loginData.permissions || []
     menus.value = loginData.menus || []
+    // 判断是否为超级管理员
+    isSuperAdmin.value = loginData.user?.role?.isSuperAdmin === 1
+    localStorage.setItem('isSuperAdmin', String(isSuperAdmin.value))
     // 保存用户信息、权限和菜单到 localStorage，确保页面刷新后也能显示
     localStorage.setItem('userInfo', JSON.stringify(loginData.user))
     localStorage.setItem('permissions', JSON.stringify(loginData.permissions || []))
@@ -45,10 +50,12 @@ export const useUserStore = defineStore('user', () => {
     userInfo.value = null
     permissions.value = []
     menus.value = []
+    isSuperAdmin.value = false
     localStorage.removeItem('token')
     localStorage.removeItem('userInfo')
     localStorage.removeItem('permissions')
     localStorage.removeItem('menus')
+    localStorage.removeItem('isSuperAdmin')
   }
 
   async function fetchUserInfo() {
@@ -59,6 +66,9 @@ export const useUserStore = defineStore('user', () => {
       userInfo.value = userData.user
       permissions.value = userData.permissions || []
       menus.value = userData.menus || []
+      // 判断是否为超级管理员
+      isSuperAdmin.value = userData.user?.role?.isSuperAdmin === 1
+      localStorage.setItem('isSuperAdmin', String(isSuperAdmin.value))
       // 更新 localStorage 中的权限
       localStorage.setItem('permissions', JSON.stringify(userData.permissions || []))
     } catch (error) {
@@ -68,7 +78,15 @@ export const useUserStore = defineStore('user', () => {
 
   function hasPermission(permission: string): boolean {
     if (!permission) return true
+    // 超级管理员拥有所有权限
+    if (isSuperAdmin.value) return true
     return permissions.value.includes(permission)
+  }
+
+  // 模块级权限检查
+  function hasModulePermission(module: string): boolean {
+    if (isSuperAdmin.value) return true
+    return permissions.value.some(p => p.startsWith(`${module}:`))
   }
 
   return {
@@ -76,10 +94,12 @@ export const useUserStore = defineStore('user', () => {
     userInfo,
     permissions,
     menus,
+    isSuperAdmin,
     isLoggedIn,
     login,
     logout,
     fetchUserInfo,
-    hasPermission
+    hasPermission,
+    hasModulePermission
   }
 })

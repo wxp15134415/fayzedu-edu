@@ -27,13 +27,13 @@ export class Score {
   totalRankExam?: number
 
   @Column({ type: 'decimal', precision: 6, scale: 2, nullable: true })
-  totalScoreWeighted?: number
+  totalScoreAssign?: number
 
   @Column({ type: 'int', nullable: true })
-  totalRankWeighted?: number
+  totalRankAssign?: number
 
   @Column({ type: 'int', nullable: true })
-  totalRankWeightedExam?: number
+  totalRankAssignExam?: number
 
   // 语文
   @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
@@ -46,7 +46,10 @@ export class Score {
   chineseRankExam?: number
 
   @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
-  chineseWeighted?: number
+  chineseAssign?: number
+
+  @Column({ type: 'int', nullable: true })
+  chineseRankAssign?: number
 
   // 数学
   @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
@@ -59,7 +62,10 @@ export class Score {
   mathRankExam?: number
 
   @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
-  mathWeighted?: number
+  mathAssign?: number
+
+  @Column({ type: 'int', nullable: true })
+  mathRankAssign?: number
 
   // 英语
   @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
@@ -72,7 +78,10 @@ export class Score {
   englishRankExam?: number
 
   @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
-  englishWeighted?: number
+  englishAssign?: number
+
+  @Column({ type: 'int', nullable: true })
+  englishRankAssign?: number
 
   // 物理
   @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
@@ -85,7 +94,10 @@ export class Score {
   physicsRankExam?: number
 
   @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
-  physicsWeighted?: number
+  physicsAssign?: number
+
+  @Column({ type: 'int', nullable: true })
+  physicsRankAssign?: number
 
   // 化学
   @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
@@ -98,7 +110,10 @@ export class Score {
   chemistryRankExam?: number
 
   @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
-  chemistryWeighted?: number
+  chemistryAssign?: number
+
+  @Column({ type: 'int', nullable: true })
+  chemistryRankAssign?: number
 
   // 生物
   @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
@@ -111,7 +126,10 @@ export class Score {
   biologyRankExam?: number
 
   @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
-  biologyWeighted?: number
+  biologyAssign?: number
+
+  @Column({ type: 'int', nullable: true })
+  biologyRankAssign?: number
 
   // 政治
   @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
@@ -124,7 +142,10 @@ export class Score {
   politicsRankExam?: number
 
   @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
-  politicsWeighted?: number
+  politicsAssign?: number
+
+  @Column({ type: 'int', nullable: true })
+  politicsRankAssign?: number
 
   // 历史
   @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
@@ -137,7 +158,10 @@ export class Score {
   historyRankExam?: number
 
   @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
-  historyWeighted?: number
+  historyAssign?: number
+
+  @Column({ type: 'int', nullable: true })
+  historyRankAssign?: number
 
   // 地理
   @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
@@ -150,7 +174,10 @@ export class Score {
   geographyRankExam?: number
 
   @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
-  geographyWeighted?: number
+  geographyAssign?: number
+
+  @Column({ type: 'int', nullable: true })
+  geographyRankAssign?: number
 
   @CreateDateColumn()
   createdAt!: Date

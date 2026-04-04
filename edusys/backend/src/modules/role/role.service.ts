@@ -61,6 +61,17 @@ export class RoleService {
   }
 
   async updatePermissions(roleId: number, permissionIds: number[]) {
+    // 获取角色信息
+    const role = await this.roleRepository.findOne({ where: { id: roleId } })
+    if (!role) {
+      throw new Error('角色不存在')
+    }
+
+    // 超级管理员权限由系统自动管理，不允许手动修改
+    if (role.isSuperAdmin === 1) {
+      throw new Error('超级管理员权限由系统自动管理，不允许修改')
+    }
+
     await this.rolePermissionRepository.delete({ roleId })
 
     const rolePermissions = permissionIds.map(permissionId => {

@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, Query } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
-import { Exam, Score, Student, Grade } from '@/entities'
+import { Repository, In } from 'typeorm'
+import { Exam, Score, ExamSession, ExamArrangement } from '@/entities'
 import { CreateExamDto, UpdateExamDto } from './dto/exam.dto'
 import { IsString, IsNumber, IsOptional } from 'class-validator'
 
@@ -33,7 +33,11 @@ export class ExamController {
     @InjectRepository(Exam)
     private examRepository: Repository<Exam>,
     @InjectRepository(Score)
-    private scoreRepository: Repository<Score>
+    private scoreRepository: Repository<Score>,
+    @InjectRepository(ExamSession)
+    private sessionRepository: Repository<ExamSession>,
+    @InjectRepository(ExamArrangement)
+    private arrangementRepository: Repository<ExamArrangement>
   ) {}
 
   @Get('list')
@@ -74,8 +78,19 @@ export class ExamController {
 
   @Delete(':id')
   async remove(@Param('id') id: number) {
-    // 删除考试时同时删除成绩
+    // 删除考试时同时删除关联数据
+    // 1. 删除成绩
     await this.scoreRepository.delete({ examId: id })
+    // 2. 获取该考试的所有场次
+    const sessions = await this.sessionRepository.find({ where: { examId: id } })
+    const sessionIds = sessions.map(s => s.id)
+    // 3. 删除编排记录
+    if (sessionIds.length > 0) {
+      await this.arrangementRepository.delete({ sessionId: In(sessionIds) })
+    }
+    // 4. 删除场次
+    await this.sessionRepository.delete({ examId: id })
+    // 5. 删除考试
     await this.examRepository.delete(id)
     return { message: '删除成功' }
   }
