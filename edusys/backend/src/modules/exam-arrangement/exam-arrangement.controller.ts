@@ -1,7 +1,9 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Query } from '@nestjs/common'
+import { Controller, Get, Post, Put, Delete, Body, Param, Query, UseGuards } from '@nestjs/common'
 import { ExamArrangementService } from './exam-arrangement.service'
+import { JwtAuthGuard } from '../auth/auth.guard'
 
 @Controller('exam-arrangement')
+@UseGuards(JwtAuthGuard)
 export class ExamArrangementController {
   constructor(private readonly examArrangementService: ExamArrangementService) {}
 

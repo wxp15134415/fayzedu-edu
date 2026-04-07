@@ -1,0 +1,69 @@
+{
+  "enabled": true,
+  "strategies": [
+    {
+      "name": "考号",
+      "code": "student_no",
+      "priority": 1,
+      "enabled": true,
+      "description": "通过考号精确匹配学生",
+      "fields": ["student_no"],
+      "options": {
+        "case_sensitive": false,
+        "multi_match_action": "filter_by_class"
+      }
+    },
+    {
+      "name": "学籍辅号(去H)",
+      "code": "student_id_no_h",
+      "priority": 2,
+      "enabled": true,
+      "description": "去除学籍辅号前缀H后匹配",
+      "fields": ["student_id"],
+      "options": {
+        "case_sensitive": false,
+        "clean_prefix": ["H", "h"],
+        "multi_match_action": "first"
+      }
+    },
+    {
+      "name": "学籍辅号",
+      "code": "student_id",
+      "priority": 3,
+      "enabled": true,
+      "description": "学籍辅号原始值匹配",
+      "fields": ["student_id"],
+      "options": {
+        "case_sensitive": false,
+        "multi_match_action": "first"
+      }
+    },
+    {
+      "name": "班级+姓名",
+      "code": "class_name",
+      "priority": 4,
+      "enabled": true,
+      "description": "班级名称+姓名组合匹配",
+      "fields": ["class_name", "name"],
+      "options": {
+        "case_sensitive": false,
+        "multi_match_action": "first"
+      }
+    },
+    {
+      "name": "姓名模糊匹配",
+      "code": "name_fuzzy",
+      "priority": 5,
+      "enabled": false,
+      "description": "姓名模糊匹配（需手动启用）",
+      "fields": ["name"],
+      "options": {
+        "case_sensitive": false,
+        "fuzzy_threshold": 0.8,
+        "multi_match_action": "first"
+      }
+    }
+  ],
+  "default_strategy": "student_no",
+  "fallback_strategy": "class_name"
+}

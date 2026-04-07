@@ -194,8 +194,7 @@ export class ImportService {
    * 导入单行数据
    */
   private async importRow(data: Record<string, any>, module: string): Promise<void> {
-    // TODO: 根据模块调用对应的服务
-    console.log(`Importing ${module} data:`, data)
+    // 根据模块调用对应的服务
   }
 
   /**

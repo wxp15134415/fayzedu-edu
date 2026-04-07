@@ -1,6 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, Index } from 'typeorm'
 
 @Entity('subject')
+@Index('idx_subject_name', ['subjectName'])
+@Index('idx_subject_status', ['status'])
 export class Subject {
   @PrimaryGeneratedColumn('increment', { type: 'int' })
   id!: number

@@ -14,11 +14,11 @@ export class ScoreImportTemp {
   @JoinColumn({ name: 'examId' })
   exam?: Exam
 
-  @Column({ name: 'student_id', type: 'int' })
-  studentId!: number
+  @Column({ name: 'student_id', type: 'int', nullable: true })
+  studentId?: number
 
-  @ManyToOne(() => Student)
-  @JoinColumn({ name: 'studentId' })
+  @ManyToOne(() => Student, { eager: true })
+  @JoinColumn({ name: 'student_id' })
   student?: Student
 
   @Column({ name: 'import_batch', type: 'varchar', length: 50 })
@@ -154,9 +154,17 @@ export class ScoreImportTemp {
   @Column({ name: 'geography_rank_assign', type: 'int', nullable: true })
   geographyRankAssign?: number
 
-  // 状态: 0待确认, 1已确认, 2已放弃
+  // 状态: 0待分析, 1待审核, 2已导入
   @Column({ type: 'int', default: 0 })
   status!: number
+
+  // 分析状态: 0未分析, 1分析中, 2分析完成
+  @Column({ name: 'analysis_status', type: 'int', default: 0 })
+  analysisStatus!: number
+
+  // 分析备注
+  @Column({ name: 'analysis_remark', type: 'varchar', length: 500, nullable: true })
+  analysisRemark?: string
 
   // 匹配方式
   @Column({ name: 'matched_method', type: 'varchar', length: 50, nullable: true })

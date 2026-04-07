@@ -44,7 +44,7 @@
       <el-table-column prop="status" label="状态" width="80">
         <template #default="{ row }">
           <el-tag :type="row.status === 1 ? 'success' : 'danger'">
-            {{ row.status === 1 ? '启用' : '禁用' }}
+            {{ formatStatus(row.status, ['禁用', '启用']) }}
           </el-tag>
         </template>
       </el-table-column>
@@ -176,7 +176,7 @@ import { Search } from '@element-plus/icons-vue'
 import { getExamSessionList, createExamSession, updateExamSession, deleteExamSession, batchCreateExamSession } from '@/api/exam-session'
 import { getExamList } from '@/api/exam'
 import { getSubjectList } from '@/api/subject'
-import { exportToExcel } from '@/utils/excel'
+import { exportToExcel, formatStatus } from '@/utils/excel'
 
 const loading = ref(false)
 const isMobile = ref(window.innerWidth < 768)
@@ -324,7 +324,7 @@ const handleExport = () => {
     开始时间: row.startTime,
     结束时间: row.endTime,
     备注: row.remark,
-    状态: row.status === 1 ? '启用' : '禁用'
+    状态: formatStatus(row.status, ['禁用', '启用'])
   }))
   exportToExcel(exportData, '考试场次')
 }

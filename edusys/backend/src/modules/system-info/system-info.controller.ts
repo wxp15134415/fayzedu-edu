@@ -1,8 +1,10 @@
-import { Controller, Get, Put, Body } from '@nestjs/common'
+import { Controller, Get, Put, Body, UseGuards } from '@nestjs/common'
 import { SystemInfoService } from './system-info.service'
 import { UpdateSystemInfoDto } from './dto/system-info.dto'
+import { JwtAuthGuard } from '../auth/auth.guard'
 
 @Controller('system-info')
+@UseGuards(JwtAuthGuard)
 export class SystemInfoController {
   constructor(private readonly systemInfoService: SystemInfoService) {}
 

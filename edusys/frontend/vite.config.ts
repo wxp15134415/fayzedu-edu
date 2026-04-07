@@ -30,7 +30,7 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: 5173,
-    allowedHosts: ['opencode.dns.army', 'localhost', '127.0.0.1'],
+    allowedHosts: ['opencode.dns.army', 'fayzedu.dns.army', 'localhost', '127.0.0.1'],
     proxy: {
       '/api': {
         target: 'http://localhost:3000',
@@ -40,6 +40,11 @@ export default defineConfig({
         target: 'http://localhost:3000',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/health/, '/health')
+      },
+      '/v1': {
+        target: 'http://localhost:9015',
+        changeOrigin: true,
+        rewrite: (path) => path
       }
     }
   }

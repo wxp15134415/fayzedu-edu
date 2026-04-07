@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, OneToMany, Index } from 'typeorm'
 import { Exam } from './exam.entity'
 import { Subject } from './subject.entity'
 import { Student } from './student.entity'
@@ -6,6 +6,7 @@ import { SubjectGroup } from './subject-group.entity'
 
 // 考点
 @Entity('exam_venue')
+@Index('idx_venue_status', ['status'])
 export class ExamVenue {
   @PrimaryGeneratedColumn('increment', { type: 'int' })
   id!: number

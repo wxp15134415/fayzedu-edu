@@ -146,3 +146,56 @@ export const getPrintCheckin = (params: {
     params: params.venueId ? { venueId: params.venueId } : undefined
   })
 }
+
+// ==================== 编排扩展API ====================
+
+// 自动编排（场次优先，随机座位号）
+export const autoArrange = (data: { examId: number; venueId?: number }) => {
+  return request({
+    url: '/exam-arrangement/auto-arrange',
+    method: 'POST',
+    data
+  })
+}
+
+// 随机座位号
+export const randomSeat = (data: { examId: number; sessionId?: number }) => {
+  return request({
+    url: '/exam-arrangement/random-seat',
+    method: 'POST',
+    data
+  })
+}
+
+// 检测冲突
+export const detectConflicts = (examId: number) => {
+  return request({
+    url: `/exam-arrangement/detect-conflicts/${examId}`,
+    method: 'GET'
+  })
+}
+
+// 编排预览
+export const previewArrangement = (examId: number) => {
+  return request({
+    url: `/exam-arrangement/preview/${examId}`,
+    method: 'GET'
+  })
+}
+
+// 导出准考证
+export const exportTickets = (examId: number, sessionId?: number) => {
+  return request({
+    url: `/exam-arrangement/export-tickets/${examId}`,
+    method: 'GET',
+    params: sessionId ? { sessionId } : undefined
+  })
+}
+
+// 导出场次表（按考场）
+export const exportRoomSeats = (examId: number, sessionId: number) => {
+  return request({
+    url: `/exam-arrangement/export-room-seats/${examId}/${sessionId}`,
+    method: 'GET'
+  })
+}

@@ -5,12 +5,15 @@ import {
   Put,
   Delete,
   Body,
-  Param
+  Param,
+  UseGuards
 } from '@nestjs/common'
 import { PermissionService } from './permission.service'
 import { CreatePermissionDto, UpdatePermissionDto } from './dto/permission.dto'
+import { JwtAuthGuard } from '../auth/auth.guard'
 
 @Controller('permission')
+@UseGuards(JwtAuthGuard)
 export class PermissionController {
   constructor(private readonly permissionService: PermissionService) {}
 

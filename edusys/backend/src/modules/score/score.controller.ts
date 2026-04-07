@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Query } from '@nestjs/common'
+import { Controller, Get, Post, Put, Delete, Body, Param, Query, UseGuards } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { Score } from '@/entities'
 import { IsNumber, IsOptional, IsString } from 'class-validator'
+import { JwtAuthGuard } from '../auth/auth.guard'
 
 class CreateScoreDto {
   @IsNumber()
@@ -26,6 +27,7 @@ class CreateScoreDto {
 }
 
 @Controller('score')
+@UseGuards(JwtAuthGuard)
 export class ScoreController {
   constructor(
     @InjectRepository(Score)

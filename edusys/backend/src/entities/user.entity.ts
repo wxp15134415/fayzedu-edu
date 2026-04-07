@@ -5,11 +5,15 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  JoinColumn
+  JoinColumn,
+  Index
 } from 'typeorm'
 import { Role } from './role.entity'
 
 @Entity('sys_user')
+@Index('idx_user_username', ['username'])
+@Index('idx_user_role', ['roleId'])
+@Index('idx_user_status', ['status'])
 export class User {
   @PrimaryGeneratedColumn('increment', { type: 'bigint' })
   id: number

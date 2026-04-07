@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { PassportModule } from '@nestjs/passport'
+import { ThrottlerConfigModule } from './config/throttler.config'
 import { AuthModule } from './modules/auth/auth.module'
 import { UserModule } from './modules/user/user.module'
 import { RoleModule } from './modules/role/role.module'
@@ -23,13 +24,17 @@ import { TeacherModule } from './modules/teacher/teacher.module'
 import { SubjectGroupModule } from './modules/subject-group/subject-group.module'
 import { OperationLogModule } from './modules/operation-log/operation-log.module'
 import { ImportModule } from './modules/import/import.module'
-import { User, Role, Permission, RolePermission, Grade, Class, Student, Teacher, Exam, Score, Subject, SystemInfo, ExamVenue, ExamRoom, ExamSession, ExamArrangement, Menu, ScoreImportTemp, SubjectGroup, SubjectGroupSubject, StudentSubject, StudentGroup, OperationLog, ImportTemp } from './entities'
+import { HealthModule } from './modules/health/health.module'
+import { InterceptorModule } from './modules/interceptor.module'
+import { User, Role, Permission, RolePermission, Grade, Class, Student, Teacher, Exam, Score, Subject, SystemInfo, ExamVenue, ExamRoom, ExamSession, ExamArrangement, Menu, ScoreImportTemp, SubjectGroup, SubjectGroupSubject, StudentSubject, StudentGroup, OperationLog, ImportTemp, ExamScore } from './entities'
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true
     }),
+    // 速率限制模块
+    ThrottlerConfigModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -41,7 +46,7 @@ import { User, Role, Permission, RolePermission, Grade, Class, Student, Teacher,
         username: configService.get('DB_USERNAME') || 'wangxiaoping',
         password: configService.get('DB_PASSWORD') || '',
         database: configService.get('DB_DATABASE') || 'edusys',
-        entities: [User, Role, Permission, RolePermission, Grade, Class, Student, Teacher, Exam, Score, Subject, SystemInfo, ExamVenue, ExamRoom, ExamSession, ExamArrangement, Menu, ScoreImportTemp, SubjectGroup, SubjectGroupSubject, StudentSubject, StudentGroup, OperationLog],
+        entities: [User, Role, Permission, RolePermission, Grade, Class, Student, Teacher, Exam, Score, Subject, SystemInfo, ExamVenue, ExamRoom, ExamSession, ExamArrangement, Menu, ScoreImportTemp, SubjectGroup, SubjectGroupSubject, StudentSubject, StudentGroup, OperationLog, ExamScore],
         synchronize: true,
         logging: false
       })
@@ -65,7 +70,9 @@ import { User, Role, Permission, RolePermission, Grade, Class, Student, Teacher,
     ScoreImportModule,
     TeacherModule,
     SubjectGroupModule,
-    OperationLogModule
+    OperationLogModule,
+    HealthModule,
+    InterceptorModule
   ]
 })
 export class AppModule {}

@@ -1,114 +1,14 @@
 <template>
   <div class="score-import-temp">
-    <div class="toolbar">
-      <el-button type="primary" @click="openImportDialog">导入成绩</el-button>
-      <el-button @click="loadData">刷新</el-button>
-      <el-select v-model="filterStatus" placeholder="筛选状态" clearable style="width: 120px; margin-left: 10px" @change="handleFilter">
-        <el-option label="待确认" :value="0" />
-        <el-option label="已确认" :value="1" />
-        <el-option label="已放弃" :value="2" />
-      </el-select>
-      <el-input
-        v-model="searchKeyword"
-        placeholder="搜索学生姓名/考号"
-        clearable
-        @keyup.enter="handleSearch"
-        style="width: 220px; margin-left: auto"
-      >
-        <template #append>
-          <el-button :icon="Search" @click="handleSearch" />
-        </template>
-      </el-input>
-    </div>
-
-    <!-- 统计信息 -->
-    <el-row :gutter="20" class="stats-row">
-      <el-col :span="6">
-        <el-card shadow="hover" class="stat-card">
-          <div class="stat-value">{{ stats[0] || 0 }}</div>
-          <div class="stat-label">待确认</div>
-        </el-card>
-      </el-col>
-      <el-col :span="6">
-        <el-card shadow="hover" class="stat-card">
-          <div class="stat-value" style="color: #67c23a">{{ stats[1] || 0 }}</div>
-          <div class="stat-label">已确认</div>
-        </el-card>
-      </el-col>
-      <el-col :span="6">
-        <el-card shadow="hover" class="stat-card">
-          <div class="stat-value" style="color: #909399">{{ stats[2] || 0 }}</div>
-          <div class="stat-label">已放弃</div>
-        </el-card>
-      </el-col>
-      <el-col :span="6">
-        <el-card shadow="hover" class="stat-card">
-          <div class="stat-value" style="color: #f56c6c">{{ totalCount }}</div>
-          <div class="stat-label">总计</div>
-        </el-card>
-      </el-col>
-    </el-row>
-
-    <!-- 表格 -->
-    <el-table v-if="!isMobile" :data="tableData" v-loading="loading" stripe :header-cell-style="{background: '#f5f7fa'}" fit>
-      <el-table-column prop="id" label="ID" width="60" />
-      <el-table-column prop="student" label="学生" width="120">
-        <template #default="{ row }">
-          {{ row.student?.name || '-' }}
-        </template>
-      </el-table-column>
-      <el-table-column prop="studentNo" label="考号" width="120" />
-      <el-table-column prop="totalScore" label="总分" width="80" />
-      <el-table-column prop="totalRank" label="排名" width="60" />
-      <el-table-column prop="chinese" label="语文" width="70" />
-      <el-table-column prop="math" label="数学" width="70" />
-      <el-table-column prop="english" label="英语" width="70" />
-      <el-table-column prop="physics" label="物理" width="70" />
-      <el-table-column prop="chemistry" label="化学" width="70" />
-      <el-table-column prop="biology" label="生物" width="70" />
-      <el-table-column prop="matchedMethod" label="匹配方式" width="100">
-        <template #default="{ row }">
-          <el-tag v-if="row.matchedMethod" size="small" :type="row.studentId ? 'success' : 'warning'">
-            {{ row.matchedMethod }}
-          </el-tag>
-          <span v-else>-</span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="status" label="状态" width="80">
-        <template #default="{ row }">
-          <el-tag :type="row.status === 0 ? 'warning' : row.status === 1 ? 'success' : 'info'" size="small">
-            {{ row.status === 0 ? '待确认' : row.status === 1 ? '已确认' : '已放弃' }}
-          </el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" width="180" fixed="right">
-        <template #default="{ row }">
-          <div class="action-buttons">
-            <el-button v-if="!row.studentId" type="primary" link @click="handleManualMatch(row)">匹配</el-button>
-            <el-button v-if="row.status === 0" type="success" link @click="handleConfirmSingle(row)">确认</el-button>
-            <el-button v-if="row.status === 0" type="danger" link @click="handleCancelSingle(row)">放弃</el-button>
-          </div>
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <!-- 空状态 -->
-    <el-empty v-if="!loading && tableData.length === 0" description="暂无导入数据">
-      <el-button type="primary" @click="openImportDialog">导入成绩</el-button>
-    </el-empty>
-
-    <el-pagination v-if="tableData.length > 0" v-model:current-page="pagination.page" v-model:page-size="pagination.pageSize" :total="pagination.total" :page-sizes="[10, 20, 50, 100]" layout="total, sizes, prev, pager, next, jumper" @change="loadData" style="margin-top: 20px; justify-content: flex-end" />
-
-    <!-- 导入对话框 - 分步工作流 -->
-    <el-dialog title="导入成绩" width="900px" :close-on-click-modal="false" :show-close="step > 0" v-model="importDialogVisible">
+    <!-- 导入流程 - 直接显示在页面上 -->
+    <div class="import-flow">
       <!-- 步骤条 -->
       <el-steps :active="step" finish-status="success" simple style="margin-bottom: 20px">
         <el-step title="选择考试" />
         <el-step title="选择系统" />
-        <el-step title="上传文件" />
-        <el-step title="解析数据" />
-        <el-step title="学生匹配" />
-        <el-step title="保存到临时表" />
+        <el-step title="解析文件" />
+        <el-step title="匹配学生" />
+        <el-step title="保存到数据库" />
       </el-steps>
 
       <div class="step-content">
@@ -470,26 +370,22 @@
             </el-row>
 
             <!-- 已匹配列表 -->
-            <el-collapse v-if="matchResult.matched?.length > 0" v-model="activeMatchCollapse" style="margin-bottom: 15px">
+            <el-collapse v-if="matchResult && matchResult.matched?.length > 0" v-model="activeMatchCollapse" style="margin-bottom: 15px">
               <el-collapse-item title="已匹配学生 (点击展开)" name="matched">
-                <el-table :data="matchResult.matched" size="small" max-height="200">
+                <el-table :data="matchResult?.matched || []" size="small" max-height="200">
                   <el-table-column prop="name" label="姓名" width="80" />
                   <el-table-column prop="student_no" label="考号" width="120" />
                   <el-table-column prop="class_name" label="班级" width="100" />
                   <el-table-column prop="matched_student_id" label="学生ID" width="80" />
-                  <el-table-column prop="match_method" label="匹配方式" width="100">
-                    <template #default="{ row }">
-                      <el-tag size="small" type="success">{{ row.match_method }}</el-tag>
-                    </template>
-                  </el-table-column>
+                  <el-table-column prop="match_method" label="匹配方式" width="100" />
                 </el-table>
               </el-collapse-item>
             </el-collapse>
 
             <!-- 未匹配列表 -->
-            <el-collapse v-if="matchResult.unmatched?.length > 0" v-model="activeUnmatchCollapse">
+            <el-collapse v-if="matchResult && matchResult.unmatched?.length > 0" v-model="activeUnmatchCollapse">
               <el-collapse-item title="未匹配学生 (需要手动匹配)" name="unmatched">
-                <el-table :data="matchResult.unmatched" size="small" max-height="200">
+                <el-table :data="matchResult?.unmatched || []" size="small" max-height="200">
                   <el-table-column prop="name" label="姓名" width="80" />
                   <el-table-column prop="student_no" label="考号" width="120" />
                   <el-table-column prop="student_id" label="学籍号" width="120" />
@@ -527,21 +423,25 @@
         <el-button v-if="step === 1" type="primary" :disabled="!selectedSystem" @click="nextToUpload">下一步</el-button>
         <el-button v-if="step === 2" type="primary" :disabled="!currentFile" @click="doParse">开始解析</el-button>
         <el-button v-if="step === 3 && parseResult?.success" type="primary" @click="doMatch">匹配学生</el-button>
-        <el-button v-if="step === 4 && matchResult?.success" type="primary" @click="saveToTemp">保存到临时表</el-button>
+        <el-button v-if="step === 3 && matchResult" type="primary" @click="() => { console.log('saveToTemp clicked'); saveToTemp() }">保存到临时表</el-button>
       </div>
-    </el-dialog>
+    </div>
 
     <!-- 手动匹配对话框 -->
-    <el-dialog v-model="manualMatchVisible" title="手动匹配学生" width="500px">
+    <el-dialog v-model="manualMatchVisible" title="手动匹配学生" width="500px" @close="manualMatchVisible = false">
       <div style="margin-bottom: 10px">
         当前未匹配: <strong>{{ currentUnmatchedRow?.name }}</strong> ({{ currentUnmatchedRow?.class_name }})
       </div>
       <el-input v-model="studentSearch" placeholder="搜索学生姓名/考号" clearable @input="searchStudent" style="margin-bottom: 10px" />
-      <el-table :data="studentOptions" height="300" style="margin-top: 10px" @row-click="selectStudent" highlight-current-row>
+      <el-table :data="studentOptions || []" height="300" style="margin-top: 10px">
         <el-table-column prop="name" label="姓名" width="80" />
         <el-table-column prop="studentNo" label="考号" width="120" />
         <el-table-column prop="studentId" label="学籍号" width="120" />
-        <el-table-column prop="className" label="班级" width="100" />
+        <el-table-column prop="className" label="班级" width="100">
+          <template #default="{ row }">
+            <el-button type="primary" size="small" @click="handleSelectStudent(row)">选择</el-button>
+          </template>
+        </el-table-column>
       </el-table>
     </el-dialog>
 
@@ -551,7 +451,7 @@
         检测到该考试已有 <strong>{{ duplicateCount }}</strong> 名学生的成绩记录
       </el-alert>
       <div style="max-height: 300px; overflow-y: auto">
-        <el-table :data="duplicateStudents" size="small" border>
+        <el-table :data="duplicateStudents || []" size="small" border>
           <el-table-column prop="studentName" label="姓名" width="100" />
           <el-table-column prop="studentNo" label="考号" width="150" />
         </el-table>
@@ -566,11 +466,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, onUnmounted, computed } from 'vue'
+import { ref, reactive, onMounted, onUnmounted, computed, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { Search, UploadFilled, Loading } from '@element-plus/icons-vue'
-import { previewImport, confirmImport, cancelImport, manualMatch as manualMatchApi, getStudentsForMatch, parseExcel, matchStudents, checkDuplicate } from '@/api/score-import'
+import { previewImport, confirmImport, cancelImport, manualMatch as manualMatchApi, getStudentsForMatch, parseExcel, matchStudents, checkDuplicate, saveToTemp as saveToTempApi } from '@/api/score-import'
 import { getExamList, createExam } from '@/api/exam'
 import { getGradeList } from '@/api/grade'
 
@@ -685,7 +585,7 @@ const handleCreateExam = async () => {
 }
 
 onMounted(() => {
-  loadData()
+  // 加载数据
   loadStudents()
   loadExamAndGradeList()
 })
@@ -825,11 +725,12 @@ const doMatch = async () => {
     // 调用后端 API (后端会转发给 Python 微服务)
     const res: any = await matchStudents(allStudents.value, importStudents)
     const data = res.data || res
+    console.log('doMatch: match result =', data)
+    console.log('doMatch: matched count =', data.matched?.length, 'unmatched count =', data.unmatched?.length)
     matchResult.value = data
-    if (data.success) {
-      matchProgress.value = 100
-      step.value = 4
-    }
+    // 匹配完成后停留在当前步骤，让用户确认后再保存
+    matchProgress.value = 100
+    ElMessage.success(`匹配完成：成功 ${data.matched?.length || 0} 人，未匹配 ${data.unmatched?.length || 0} 人`)
   } catch (error: any) {
     ElMessage.error('匹配失败: ' + error.message)
     matchProgress.value = 0
@@ -841,45 +742,87 @@ const doMatch = async () => {
 }
 
 const saveToTemp = async () => {
+  try {
+    console.log('[saveToTemp] START')
+    if (!selectedExamId.value) {
+      ElMessage.warning('请先选择考试')
+      return
+    }
+
+    const matchedStudents = matchResult.value?.matched || []
+    const studentIds = matchedStudents.map((s: any) => s.matched_student_id).filter(Boolean)
+
+    console.log('[saveToTemp] matched count:', matchedStudents.length, 'studentIds:', studentIds.length)
+
+    if (studentIds.length === 0) {
+      console.log('[saveToTemp] No studentIds, first item:', matchedStudents[0])
+      ElMessage.warning('没有匹配的学生数据')
+      return
+    }
+
+    // 检查是否有重复数据
+    const checkRes: any = await checkDuplicate(selectedExamId.value, studentIds)
+    const checkData = checkRes.data || checkRes
+
+    console.log('[saveToTemp] checkDuplicate:', checkData)
+
+    if (checkData.exists) {
+      showDuplicateDialog.value = true
+      duplicateStudents.value = checkData.students || []
+      duplicateCount.value = checkData.count || 0
+    } else {
+      await doSaveToTemp()
+    }
+  } catch (error: any) {
+    console.error('[saveToTemp] ERROR:', error)
+    ElMessage.error('保存失败: ' + error.message)
+  }
+}
+
+// 执行保存到临时表
+const doSaveToTemp = async (overwrite: boolean = false) => {
   if (!selectedExamId.value) {
     ElMessage.warning('请先选择考试')
     return
   }
 
   const matchedStudents = matchResult.value?.matched || []
-  const studentIds = matchedStudents.map((s: any) => s.matched_student_id).filter(Boolean)
+  const unmatchedStudents = matchResult.value?.unmatched || []
 
-  if (studentIds.length === 0) {
+  console.log('[doSaveToTemp] step:', step.value)
+  console.log('[doSaveToTemp] matchResult:', matchResult.value)
+  console.log('[doSaveToTemp] matchedStudents:', matchedStudents.length)
+  console.log('[doSaveToTemp] unmatchedStudents:', unmatchedStudents.length)
+
+  // 过滤出有 matched_student_id 的记录
+  const validMatched = matchedStudents.filter((s: any) => s.matched_student_id)
+  console.log('[doSaveToTemp] validMatched count:', validMatched.length)
+
+  if (validMatched.length === 0) {
+    console.log('[doSaveToTemp] No valid matched students, checking matched array structure:')
+    console.log('[doSaveToTemp] First matched item:', matchedStudents[0])
     ElMessage.warning('没有匹配的学生数据')
     return
   }
 
   try {
-    // 检查是否有重复数据
-    const checkRes: any = await checkDuplicate(selectedExamId.value, studentIds)
-    const checkData = checkRes.data || checkRes
+    const data: any = await saveToTempApi(selectedExamId.value, validMatched, unmatchedStudents)
+    const result = data.data || data
 
-    if (checkData.exists) {
-      // 弹出确认对话框
-      showDuplicateDialog.value = true
-      duplicateStudents.value = checkData.students || []
-      duplicateCount.value = checkData.count || 0
+    console.log('[doSaveToTemp] result:', result)
+
+    if (result.success) {
+      savedCount.value = result.count || 0
+      step.value = 5
+      showDuplicateDialog.value = false
+      ElMessage.success(result.message || '数据已保存到临时表')
     } else {
-      // 没有重复，直接保存
-      await doSaveToTemp()
+      ElMessage.error(result.message || '保存失败')
     }
   } catch (error: any) {
-    ElMessage.error('检查重复数据失败: ' + error.message)
+    console.error('[doSaveToTemp] error:', error)
+    ElMessage.error(error.message || '保存失败')
   }
-}
-
-// 执行保存到临时表
-const doSaveToTemp = async (overwrite: boolean = false) => {
-  // TODO: 调用后端保存到临时表（需要传入 examId 和 overwrite 参数）
-  savedCount.value = (matchResult.value.matched?.length || 0) + (matchResult.value.unmatched?.length || 0)
-  step.value = 5
-  showDuplicateDialog.value = false
-  ElMessage.success('数据已保存到临时表')
 }
 
 // 处理重复数据选项
@@ -901,10 +844,17 @@ const goToTempList = () => {
 }
 
 const openMatchDialog = (row: any) => {
+  console.log('[openMatchDialog] called with row:', row)
+  console.log('[openMatchDialog] before - manualMatchVisible:', manualMatchVisible.value)
   currentUnmatchedRow.value = row
   studentSearch.value = ''
   studentOptions.value = allStudents.value
   manualMatchVisible.value = true
+  console.log('[openMatchDialog] after - manualMatchVisible:', manualMatchVisible.value)
+  // 强制刷新
+  nextTick(() => {
+    console.log('[openMatchDialog] nextTick - manualMatchVisible:', manualMatchVisible.value)
+  })
 }
 
 const searchStudent = () => {
@@ -918,11 +868,51 @@ const searchStudent = () => {
   )
 }
 
-const selectStudent = async (row: any) => {
-  if (!currentUnmatchedRow.value) return
-  // 临时处理：直接匹配成功
+const selectStudent = async (selectedRow: any) => {
+  if (!currentUnmatchedRow.value || !matchResult.value) {
+    console.log('selectStudent: missing data', { currentUnmatchedRow: currentUnmatchedRow.value, matchResult: matchResult.value })
+    return
+  }
+
+  console.log('selectStudent: selectedRow=', selectedRow, 'currentUnmatchedRow=', currentUnmatchedRow.value)
+
+  // 创建新的匹配记录
+  const newMatched = {
+    row: currentUnmatchedRow.value.row,
+    name: currentUnmatchedRow.value.name,
+    student_no: currentUnmatchedRow.value.student_no,
+    student_id: currentUnmatchedRow.value.student_id,
+    class_name: currentUnmatchedRow.value.class_name,
+    matched_student_id: selectedRow.id,
+    match_method: '手动匹配',
+    scores: currentUnmatchedRow.value.scores || {}
+  }
+
+  // 添加到已匹配列表
+  if (!matchResult.value.matched) {
+    matchResult.value.matched = []
+  }
+  matchResult.value.matched.push(newMatched)
+
+  // 从未匹配列表中移除
+  if (matchResult.value.unmatched) {
+    const idx = matchResult.value.unmatched.findIndex((u: any) =>
+      u.row === currentUnmatchedRow.value.row &&
+      u.name === currentUnmatchedRow.value.name
+    )
+    if (idx >= 0) {
+      matchResult.value.unmatched.splice(idx, 1)
+    }
+  }
+
+  // 关闭对话框
   manualMatchVisible.value = false
-  ElMessage.success('匹配成功')
+  ElMessage.success(`已将 ${currentUnmatchedRow.value.name} 匹配到 ${selectedRow.name}`)
+}
+
+// 处理选择学生（对话框中的按钮）
+const handleSelectStudent = (row: any) => {
+  selectStudent(row)
 }
 
 const handleManualMatch = (row: any) => {

@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Query } from '@nestjs/common'
+import { Controller, Get, Post, Put, Delete, Body, Param, Query, UseGuards } from '@nestjs/common'
 import { SubjectGroupService } from './subject-group.service'
 import { CreateSubjectGroupDto, UpdateSubjectGroupDto, SetGroupSubjectsDto, AssignStudentGroupDto, AssignStudentSubjectsDto, BatchAssignGroupDto } from './dto/subject-group.dto'
+import { JwtAuthGuard } from '../auth/auth.guard'
 
 @Controller('subject-group')
+@UseGuards(JwtAuthGuard)
 export class SubjectGroupController {
   constructor(private readonly subjectGroupService: SubjectGroupService) {}
 

@@ -12,7 +12,7 @@ export class UserService {
     private userRepository: Repository<User>
   ) {}
 
-  async findAll(page: number = 1, pageSize: number = 10, sortField: string = '', sortOrder: string = '', keyword: string = '') {
+  async findAll(page: number = 1, pageSize: number = 10, sortField: string = '', sortOrder: string = '', keyword: string = '', roleName?: string, status?: number) {
     // 构建排序
     const order: any = {}
     if (sortField && sortOrder) {
@@ -30,6 +30,16 @@ export class UserService {
         'user.username LIKE :keyword OR user.realName LIKE :keyword OR user.phone LIKE :keyword OR user.email LIKE :keyword',
         { keyword: `%${keyword}%` }
       )
+    }
+
+    // 角色筛选
+    if (roleName) {
+      queryBuilder.andWhere('role.roleName = :roleName', { roleName })
+    }
+
+    // 状态筛选
+    if (status !== undefined) {
+      queryBuilder.andWhere('user.status = :status', { status })
     }
 
     queryBuilder

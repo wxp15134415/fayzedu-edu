@@ -6,7 +6,7 @@
     </div>
 
     <!-- 桌面端表格 -->
-    <el-table :data="tableData" v-loading="loading" stripe :header-cell-style="{background: '#f5f7fa'}" v-if="!isMobile">
+    <el-table :data="tableData" v-loading="loading" stripe :header-cell-style="{background: '#f5f7fa'}" v-if="!isMobile" fit>
       <el-table-column prop="id" label="ID" width="80" />
       <el-table-column prop="examName" label="考试名称" min-width="180" />
       <el-table-column prop="gradeName" label="所属年级" width="100" />
@@ -17,7 +17,7 @@
       <el-table-column prop="status" label="状态" width="80">
         <template #default="{ row }">
           <el-tag :type="row.status === 1 ? 'success' : 'danger'">
-            {{ row.status === 1 ? '启用' : '禁用' }}
+            {{ formatStatus(row.status, ['禁用', '启用']) }}
           </el-tag>
         </template>
       </el-table-column>
@@ -37,7 +37,7 @@
         <div class="exam-card-header">
           <span class="exam-card-title">{{ row.examName }}</span>
           <el-tag :type="row.status === 1 ? 'success' : 'danger'" size="small">
-            {{ row.status === 1 ? '启用' : '禁用' }}
+            {{ formatStatus(row.status, ['禁用', '启用']) }}
           </el-tag>
         </div>
         <div class="exam-card-info">
@@ -136,6 +136,7 @@ import { getExamList, createExam, updateExam, deleteExam } from '@/api/exam'
 import { getGradeList } from '@/api/grade'
 import { getSubjectList } from '@/api/subject'
 import { batchCreateExamSession, updateExamSessionsByExam } from '@/api/exam-session'
+import { formatStatus } from '@/utils/excel'
 
 const loading = ref(false)
 const tableData = ref<any[]>([])
@@ -148,9 +149,9 @@ const isEdit = ref(false)
 const editId = ref(0)
 
 // 移动端检测
-const isMobile = ref(window.innerWidth < 768)
+const isMobile = ref(window.innerWidth < 769)
 const handleResize = () => {
-  isMobile.value = window.innerWidth < 768
+  isMobile.value = window.innerWidth < 769
 }
 
 const form = reactive({
@@ -327,7 +328,7 @@ onUnmounted(() => {
 }
 
 /* 移动端响应式 */
-@media (max-width: 768px) {
+@media (max-width: 769px) {
   .exam-management { padding: 12px; }
 
   .toolbar {
@@ -421,15 +422,6 @@ onUnmounted(() => {
   /* 隐藏桌面端表格 */
   :deep(.el-table) {
     display: none;
-  }
-
-  /* 桌面端隐藏卡片 */
-  .mobile-cards {
-    display: none;
-  }
-
-  :deep(.el-table) {
-    display: table;
   }
 }
 

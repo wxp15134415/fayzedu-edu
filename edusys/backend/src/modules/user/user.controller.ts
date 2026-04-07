@@ -6,12 +6,15 @@ import {
   Delete,
   Body,
   Param,
-  Query
+  Query,
+  UseGuards
 } from '@nestjs/common'
 import { UserService } from './user.service'
 import { CreateUserDto, UpdateUserDto, UpdateUserStatusDto } from './dto/user.dto'
+import { JwtAuthGuard } from '../auth/auth.guard'
 
 @Controller('user')
+@UseGuards(JwtAuthGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -21,9 +24,19 @@ export class UserController {
     @Query('pageSize') pageSize: number = 10,
     @Query('sortField') sortField: string = '',
     @Query('sortOrder') sortOrder: string = '',
-    @Query('keyword') keyword: string = ''
+    @Query('keyword') keyword: string = '',
+    @Query('roleName') roleName: string = '',
+    @Query('status') status: string = ''
   ) {
-    return this.userService.findAll(+page, +pageSize, sortField, sortOrder, keyword)
+    return this.userService.findAll(
+      +page,
+      +pageSize,
+      sortField,
+      sortOrder,
+      keyword,
+      roleName || undefined,
+      status !== '' ? +status : undefined
+    )
   }
 
   @Get(':id')

@@ -11,6 +11,8 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    ActionButtons: typeof import('./components/ActionButtons/index.vue')['default']
+    AIAssistant: typeof import('./components/AIAssistant/index.vue')['default']
     ElAlert: typeof import('element-plus/es')['ElAlert']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
@@ -64,8 +66,13 @@ declare module 'vue' {
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     ImportDialog: typeof import('./components/ImportDialog/index.vue')['default']
     OfflineIndicator: typeof import('./components/OfflineIndicator.vue')['default']
+    PageHeader: typeof import('./components/PageHeader/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SearchBar: typeof import('./components/SearchBar/index.vue')['default']
+    StatCard: typeof import('./components/StatCard/index.vue')['default']
+    TableCard: typeof import('./components/TableCard/index.vue')['default']
+    TabsView: typeof import('./components/TabsView/index.vue')['default']
   }
   export interface GlobalDirectives {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']

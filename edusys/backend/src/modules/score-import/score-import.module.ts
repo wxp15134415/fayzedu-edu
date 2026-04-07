@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { ScoreImportController } from './score-import.controller'
-import { Student, ScoreImportTemp, Exam, Score, Class, Grade } from '@/entities'
+import { Student, ScoreImportTemp, Exam, Score, Class, Grade, ExamScore } from '@/entities'
 
 @Module({
   imports: [
@@ -11,7 +11,8 @@ import { Student, ScoreImportTemp, Exam, Score, Class, Grade } from '@/entities'
       Exam,
       Score,
       Class,
-      Grade
+      Grade,
+      ExamScore
     ])
   ],
   controllers: [ScoreImportController],

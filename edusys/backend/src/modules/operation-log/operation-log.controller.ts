@@ -1,7 +1,9 @@
-import { Controller, Get, Post, Body, Query, Param } from '@nestjs/common'
+import { Controller, Get, Post, Put, Delete, Body, Query, Param, UseGuards } from '@nestjs/common'
 import { OperationLogService } from './operation-log.service'
+import { JwtAuthGuard } from '../auth/auth.guard'
 
 @Controller('operation-log')
+@UseGuards(JwtAuthGuard)
 export class OperationLogController {
   constructor(private readonly logService: OperationLogService) {}
 

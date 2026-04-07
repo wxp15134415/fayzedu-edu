@@ -7,3 +7,5 @@ export const updateStudent = (id: number, data: any) => request({ url: `/student
 export const deleteStudent = (id: number) => request({ url: `/student/${id}`, method: 'DELETE' })
 export const updateStudentStatus = (id: number, status: number) => request({ url: `/student/${id}/status`, method: 'PUT', data: { status } })
 export const getClassList = (params?: any) => request({ url: '/class/list', method: 'GET', params })
+export const getSchoolTypes = () => request({ url: '/student/school-types', method: 'GET' })
+export const getSources = () => request({ url: '/student/sources', method: 'GET' })

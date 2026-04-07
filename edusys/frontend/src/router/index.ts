@@ -170,6 +170,18 @@ const routes: RouteRecordRaw[] = [
         name: 'ScoreImport',
         component: () => import('@/views/score-import/Index.vue'),
         meta: { permission: 'score-import:list', title: '成绩导入' }
+      },
+      {
+        path: 'score-import-wizard',
+        name: 'ScoreImportWizard',
+        component: () => import('@/views/score-import/Wizard.vue'),
+        meta: { permission: 'score-import:list', title: '成绩导入向导' }
+      },
+      {
+        path: 'score-import-temp',
+        name: 'ScoreImportTemp',
+        component: () => import('@/views/score-import/Index.vue'),
+        meta: { permission: 'score-import-temp:list', title: '导入临时成绩' }
       }
     ]
   },

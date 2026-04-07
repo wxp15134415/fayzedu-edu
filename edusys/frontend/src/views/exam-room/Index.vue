@@ -9,6 +9,9 @@
       <el-select v-model="filterVenueId" placeholder="选择考点" clearable style="width: 150px" @change="handleFilterChange">
         <el-option v-for="v in venueList" :key="v.id" :label="v.venueName" :value="v.id" />
       </el-select>
+      <el-select v-model="filterGrade" placeholder="选择年级" clearable style="width: 120px" @change="handleFilterChange">
+        <el-option v-for="g in gradeOptions" :key="g.value" :label="g.label" :value="g.value" />
+      </el-select>
       <el-input
         v-model="searchKeyword"
         placeholder="搜索考场号/名称"
@@ -39,7 +42,7 @@
       <el-table-column prop="status" label="状态" width="80">
         <template #default="{ row }">
           <el-tag :type="row.status === 1 ? 'success' : 'danger'">
-            {{ row.status === 1 ? '启用' : '禁用' }}
+            {{ formatStatus(row.status, ['禁用', '启用']) }}
           </el-tag>
         </template>
       </el-table-column>
@@ -48,7 +51,7 @@
           <div class="action-buttons">
             <el-button type="primary" link @click="handleEdit(row)">编辑</el-button>
             <el-button :type="row.status === 1 ? 'danger' : 'success'" link @click="handleToggleStatus(row)">
-              {{ row.status === 1 ? '禁用' : '启用' }}
+              {{ formatStatus(row.status, ['禁用', '启用'], true) }}
             </el-button>
             <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
           </div>
@@ -78,13 +81,13 @@
         <div class="mobile-card-item">
           <span class="mobile-card-label">状态</span>
           <el-tag :type="row.status === 1 ? 'success' : 'danger'" size="small">
-            {{ row.status === 1 ? '启用' : '禁用' }}
+            {{ formatStatus(row.status, ['禁用', '启用']) }}
           </el-tag>
         </div>
         <div class="mobile-card-actions">
           <el-button type="primary" size="small" link @click="handleEdit(row)">编辑</el-button>
           <el-button :type="row.status === 1 ? 'danger' : 'success'" size="small" link @click="handleToggleStatus(row)">
-            {{ row.status === 1 ? '禁用' : '启用' }}
+            {{ formatStatus(row.status, ['禁用', '启用'], true) }}
           </el-button>
           <el-button type="danger" size="small" link @click="handleDelete(row)">删除</el-button>
         </div>
@@ -185,20 +188,28 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { Search } from '@element-plus/icons-vue'
 import { getExamRoomList, createExamRoom, updateExamRoom, deleteExamRoom, batchCreateExamRoom } from '@/api/exam-room'
 import { getExamVenueList } from '@/api/exam-venue'
-import { exportToExcel } from '@/utils/excel'
+import { exportToExcel, formatStatus } from '@/utils/excel'
 
 const loading = ref(false)
 const isMobile = ref(window.innerWidth < 768)
 const tableData = ref<any[]>([])
 const venueList = ref<any[]>([])
 const searchKeyword = ref('')
-const filterVenueId = ref<number | null>(null)
+const filterVenueId = ref<number | null>(1) // 默认福安一中
+const filterGrade = ref<string | null>(null) // 年级筛选
 const pagination = reactive({
   page: 1,
   pageSize: 10,
   total: 0
 })
 const selectedRows = ref<any[]>([])
+
+// 年级选项
+const gradeOptions = [
+  { label: '高一', value: '高一' },
+  { label: '高二', value: '高二' },
+  { label: '高三', value: '高三' }
+]
 
 // 弹窗相关
 const dialogVisible = ref(false)
@@ -254,6 +265,11 @@ const loadVenues = async () => {
   try {
     const res = await getExamVenueList({ pageSize: 100 })
     venueList.value = res.list || []
+    // 默认选中福安一中
+    if (venueList.value.length > 0 && !filterVenueId.value) {
+      const fuAnYiZhong = venueList.value.find(v => v.venueName === '福安一中')
+      filterVenueId.value = fuAnYiZhong?.id || venueList.value[0].id
+    }
   } catch (error) {
     console.error('加载考点失败', error)
   }
@@ -271,6 +287,7 @@ const loadData = async () => {
       page: pagination.page,
       pageSize: pagination.pageSize,
       venueId: filterVenueId.value,
+      grade: filterGrade.value,
       keyword: searchKeyword.value
     })
     tableData.value = res.list || []
@@ -322,7 +339,7 @@ const handleExport = () => {
     容纳人数: row.capacity,
     当前人数: row.currentCount,
     楼层: row.floor,
-    状态: row.status === 1 ? '启用' : '禁用'
+    状态: formatStatus(row.status, ['禁用', '启用'])
   }))
   exportToExcel(exportData, '考场数据')
 }

@@ -6,17 +6,22 @@ import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 
 import router from './router'
 import App from './App.vue'
+
+// 设计系统样式 (顺序很重要：先变量，再组件，最后响应式)
+import './styles/tokens.css'
+import './styles/components.css'
+import './styles/responsive.css'
 import './style.css'
 
 const app = createApp(App)
 
-// 配置 Element Plus 绿色主题
+// 配置 Element Plus 紫色主题
 app.use(ElementPlus, {
   locale: zhCn,
   zIndex: 3000
 })
 
-// 自定义主题色 - 绿色
+// 自定义主题色 - 紫色
 app.config.globalProperties.$ELEMENT = {
   size: 'default',
   zIndex: 3000
@@ -26,20 +31,21 @@ app.config.globalProperties.$ELEMENT = {
 const style = document.createElement('style')
 style.textContent = `
   :root {
-    --el-color-primary: #67c23a;
-    --el-color-primary-light-3: #85ce61;
-    --el-color-primary-light-5: #a9d78d;
-    --el-color-primary-light-7: #cce8b4;
-    --el-color-primary-light-8: #e1f0d2;
-    --el-color-primary-light-9: #f0f7eb;
-    --el-color-primary-dark-2: #529b2e;
+    /* 蓝紫渐变主题色 (Page Agent 风格) */
+    --el-color-primary: #58c0fc;
+    --el-color-primary-light-3: #89d4ff;
+    --el-color-primary-light-5: #aee3ff;
+    --el-color-primary-light-7: #d4f1ff;
+    --el-color-primary-light-8: #e8f8ff;
+    --el-color-primary-light-9: #f5fbff;
+    --el-color-primary-dark-2: #3aa8e8;
 
-    /* 侧边栏背景色 - 浅绿色调 */
-    --el-menu-bg-color: #f5f7fa;
-    --el-menu-hover-bg-color: #e8f5e9;
-    --el-menu-text-color: #606266;
-    --el-menu-active-color: #67c23a;
-    --el-menu-item-hover-fill: #e8f5e9;
+    /* 侧边栏背景色 - 深色 */
+    --el-menu-bg-color: #1d1e1f;
+    --el-menu-hover-bg-color: rgba(88, 192, 252, 0.15);
+    --el-menu-text-color: #cfd3dc;
+    --el-menu-active-color: #58c0fc;
+    --el-menu-item-hover-fill: rgba(88, 192, 252, 0.15);
   }
 `
 document.head.appendChild(style)

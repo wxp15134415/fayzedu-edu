@@ -5,12 +5,15 @@ import {
   Put,
   Delete,
   Body,
-  Param
+  Param,
+  UseGuards
 } from '@nestjs/common'
 import { RoleService } from './role.service'
 import { CreateRoleDto, UpdateRoleDto, UpdateRolePermissionsDto } from './dto/role.dto'
+import { JwtAuthGuard } from '../auth/auth.guard'
 
 @Controller('role')
+@UseGuards(JwtAuthGuard)
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
 

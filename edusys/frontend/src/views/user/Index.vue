@@ -29,18 +29,42 @@
     </div>
 
     <!-- 桌面端表格 -->
-    <el-table v-if="!isMobile" :data="tableData" v-loading="loading" stripe :header-cell-style="{background: '#f5f7fa'}" @sort-change="handleSortChange" @selection-change="handleSelectionChange" fit>
+    <el-table
+      v-if="!isMobile"
+      :data="tableData"
+      v-loading="loading"
+      stripe
+      :header-cell-style="{background: '#f5f7fa'}"
+      @sort-change="handleSortChange"
+      @selection-change="handleSelectionChange"
+      @filter-change="handleFilterChange"
+      fit
+    >
       <el-table-column type="selection" width="55" />
       <el-table-column prop="id" label="ID" width="60" sortable="custom" />
       <el-table-column prop="username" label="用户名" sortable="custom" />
       <el-table-column prop="realName" label="姓名" sortable="custom" />
-      <el-table-column prop="roleName" label="角色" width="80" />
+      <el-table-column
+        prop="roleName"
+        label="角色"
+        width="100"
+        :filters="roleFilters"
+        :filter-multiple="false"
+        column-key="roleName"
+      />
       <el-table-column prop="phone" label="手机号" width="120" sortable="custom" />
       <el-table-column prop="email" label="邮箱" sortable="custom" />
-      <el-table-column prop="status" label="状态" width="70">
+      <el-table-column
+        prop="status"
+        label="状态"
+        width="80"
+        :filters="statusFilters"
+        :filter-multiple="false"
+        column-key="status"
+      >
         <template #default="{ row }">
           <el-tag :type="row.status === 1 ? 'success' : 'danger'">
-            {{ row.status === 1 ? '启用' : '禁用' }}
+            {{ formatStatus(row.status, ['禁用', '启用']) }}
           </el-tag>
         </template>
       </el-table-column>
@@ -58,7 +82,7 @@
               link
               @click="handleToggleStatus(row)"
             >
-              {{ row.status === 1 ? '禁用' : '启用' }}
+              {{ formatStatus(row.status, ['禁用', '启用'], true) }}
             </el-button>
             <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
           </div>
@@ -88,13 +112,13 @@
         <div class="mobile-card-item">
           <span class="mobile-card-label">状态</span>
           <el-tag :type="row.status === 1 ? 'success' : 'danger'" size="small">
-            {{ row.status === 1 ? '启用' : '禁用' }}
+            {{ formatStatus(row.status, ['禁用', '启用']) }}
           </el-tag>
         </div>
         <div class="mobile-card-actions">
           <el-button type="primary" size="small" link @click="handleEdit(row)">编辑</el-button>
           <el-button :type="row.status === 1 ? 'danger' : 'success'" size="small" link @click="handleToggleStatus(row)">
-            {{ row.status === 1 ? '禁用' : '启用' }}
+            {{ formatStatus(row.status, ['禁用', '启用'], true) }}
           </el-button>
           <el-button type="danger" size="small" link @click="handleDelete(row)">删除</el-button>
         </div>
@@ -139,7 +163,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Search } from '@element-plus/icons-vue'
 import { getUserList, updateUserStatus, deleteUser, createUser } from '@/api/user'
-import { exportToExcel, importFromExcel } from '@/utils/excel'
+import { exportToExcel, importFromExcel, formatStatus } from '@/utils/excel'
 import type { User } from '@/api/types'
 
 const router = useRouter()
@@ -156,6 +180,30 @@ const pagination = reactive({
 const sortField = ref('')
 const sortOrder = ref('')
 const selectedRows = ref<User[]>([])
+
+// 表格筛选状态
+const filters = ref<Record<string, any>>({})
+
+// 角色筛选选项
+const roleFilters = [
+  { text: '超级管理员', value: '超级管理员' },
+  { text: '管理员', value: '管理员' },
+  { text: '教师', value: '教师' },
+  { text: '学生', value: '学生' }
+]
+
+// 状态筛选选项
+const statusFilters = [
+  { text: '启用', value: '1' },
+  { text: '禁用', value: '0' }
+]
+
+// 筛选变化处理
+const handleFilterChange = (newFilters: Record<string, any>) => {
+  filters.value = newFilters
+  pagination.page = 1
+  loadData()
+}
 
 const handleResize = () => {
   isMobile.value = window.innerWidth < 768
@@ -178,7 +226,10 @@ const loadData = async () => {
       pageSize: pagination.pageSize,
       sortField: sortField.value,
       sortOrder: sortOrder.value,
-      keyword: searchKeyword.value
+      keyword: searchKeyword.value,
+      // 添加筛选参数
+      roleName: filters.value.roleName ? filters.value.roleName[0] : undefined,
+      status: filters.value.status ? Number(filters.value.status[0]) : undefined
     })
     tableData.value = res.list || []
     pagination.total = res.total || 0
@@ -264,7 +315,7 @@ const handleExport = () => {
     角色: row.roleName,
     手机号: row.phone,
     邮箱: row.email,
-    状态: row.status === 1 ? '启用' : '禁用',
+    状态: formatStatus(row.status, ['禁用', '启用']),
     最后登录: row.lastLoginTime || '-'
   }))
   exportToExcel(exportData, '用户数据')

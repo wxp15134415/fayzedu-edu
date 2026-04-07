@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Query } from '@nestjs/common'
+import { Controller, Get, Post, Put, Delete, Body, Param, Query, UseGuards } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository, In } from 'typeorm'
 import { Exam, Score, ExamSession, ExamArrangement } from '@/entities'
 import { CreateExamDto, UpdateExamDto } from './dto/exam.dto'
 import { IsString, IsNumber, IsOptional } from 'class-validator'
+import { JwtAuthGuard } from '../auth/auth.guard'
 
 class CreateScoreDto {
   @IsNumber()
@@ -28,6 +29,7 @@ class CreateScoreDto {
 }
 
 @Controller('exam')
+@UseGuards(JwtAuthGuard)
 export class ExamController {
   constructor(
     @InjectRepository(Exam)

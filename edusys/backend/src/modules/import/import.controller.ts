@@ -1,8 +1,10 @@
-import { Controller, Post, Get, Body, Query, UseInterceptors, UploadedFile } from '@nestjs/common'
+import { Controller, Post, Get, Body, Query, UseInterceptors, UploadedFile, UseGuards } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { ImportService } from './import.service'
+import { JwtAuthGuard } from '../auth/auth.guard'
 
 @Controller('import')
+@UseGuards(JwtAuthGuard)
 export class ImportController {
   constructor(private readonly importService: ImportService) {}
 

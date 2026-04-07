@@ -1,7 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, Index } from 'typeorm'
 import { Grade } from './grade.entity'
 
 @Entity('exam')
+@Index('idx_exam_grade', ['gradeId'])
+@Index('idx_exam_status', ['status'])
+@Index('idx_exam_date', ['examDate'])
 export class Exam {
   @PrimaryGeneratedColumn('increment', { type: 'int' })
   id!: number
@@ -30,6 +33,14 @@ export class Exam {
 
   @Column({ type: 'int', default: 1 })
   status!: number
+
+  // 是否已导入成绩 0-未导入, 1-已导入
+  @Column({ name: 'has_scores', type: 'int', default: 0 })
+  hasScores!: number
+
+  // 成绩导入时间
+  @Column({ name: 'score_import_time', type: 'timestamp', nullable: true })
+  scoreImportTime?: Date
 
   @CreateDateColumn()
   createdAt!: Date

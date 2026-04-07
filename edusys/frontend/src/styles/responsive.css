@@ -1,0 +1,251 @@
+/**
+ * 设计系统 - 响应式工具类
+ * 响应式断点和显示控制
+ */
+
+/* ============ 断点变量 (与 tokens.css 保持一致) ============ */
+/* --breakpoint-sm: 576px */
+/* --breakpoint-md: 768px */
+/* --breakpoint-lg: 992px */
+/* --breakpoint-xl: 1200px */
+/* --breakpoint-xxl: 1920px */
+
+/* ============ 响应式显示 ============ */
+.hide { display: none !important; }
+.show { display: block !important; }
+.inline { display: inline; }
+.inline-block { display: inline-block; }
+.flex { display: flex; }
+.inline-flex { display: inline-flex; }
+
+/* 移动端显示/隐藏 */
+@media (max-width: 767px) {
+  .hide-mobile { display: none !important; }
+  .show-mobile { display: block !important; }
+}
+
+@media (min-width: 768px) {
+  .hide-desktop { display: none !important; }
+  .show-desktop { display: block !important; }
+}
+
+/* 平板及以上显示 */
+@media (min-width: 768px) and (max-width: 991px) {
+  .hide-tablet { display: none !important; }
+  .show-tablet { display: block !important; }
+}
+
+/* 大屏幕显示 */
+@media (min-width: 1920px) {
+  .show-large { display: block !important; }
+  .hide-large { display: none !important; }
+}
+
+/* ============ 响应式宽度 ============ */
+.w-full { width: 100%; }
+.w-auto { width: auto; }
+.w-screen { width: 100vw; }
+
+.max-w-sm { max-width: 576px; }
+.max-w-md { max-width: 768px; }
+.max-w-lg { max-width: 992px; }
+.max-w-xl { max-width: 1200px; }
+.max-w-full { max-width: 100%; }
+
+/* ============ 响应式 Flex ============ */
+.flex-col { flex-direction: column; }
+.flex-row { flex-direction: row; }
+.flex-wrap { flex-wrap: wrap; }
+.flex-nowrap { flex-wrap: nowrap; }
+
+.items-start { align-items: flex-start; }
+.items-center { align-items: center; }
+.items-end { align-items: flex-end; }
+.items-stretch { align-items: stretch; }
+
+.justify-start { justify-content: flex-start; }
+.justify-center { justify-content: center; }
+.justify-end { justify-content: flex-end; }
+.justify-between { justify-content: space-between; }
+.justify-around { justify-content: space-around; }
+
+.flex-1 { flex: 1; }
+.flex-auto { flex: auto; }
+.flex-none { flex: none; }
+.flex-shrink-0 { flex-shrink: 0; }
+
+/* ============ 响应式间距 ============ */
+.m-auto { margin: auto; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.my-auto { margin-top: auto; margin-bottom: auto; }
+
+.p-0 { padding: 0; }
+.p-base { padding: 16px; }
+.p-sm { padding: 8px; }
+.p-lg { padding: 24px; }
+
+/* 响应式间距 */
+@media (max-width: 767px) {
+  .mobile-p-0 { padding: 0; }
+  .mobile-p-sm { padding: 8px; }
+  .mobile-p-base { padding: 12px; }
+  .mobile-mb-sm { margin-bottom: 8px; }
+  .mobile-mb-base { margin-bottom: 12px; }
+  .mobile-mb-lg { margin-bottom: 16px; }
+}
+
+@media (min-width: 1920px) {
+  .large-p-base { padding: 24px; }
+  .large-mb-base { margin-bottom: 24px; }
+}
+
+/* ============ 响应式字号 ============ */
+.text-xs { font-size: 12px; }
+.text-sm { font-size: 13px; }
+.text-base { font-size: 14px; }
+.text-lg { font-size: 16px; }
+.text-xl { font-size: 18px; }
+.text-xxl { font-size: 20px; }
+
+@media (max-width: 767px) {
+  .mobile-text-xs { font-size: 11px; }
+  .mobile-text-sm { font-size: 12px; }
+  .mobile-text-base { font-size: 13px; }
+}
+
+@media (min-width: 1920px) {
+  .large-text-base { font-size: 15px; }
+  .large-text-lg { font-size: 18px; }
+}
+
+/* ============ 响应式栅格 (简单版) ============ */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -8px;
+}
+
+.col-1, .col-2, .col-3, .col-4, .col-6, .col-8, .col-12 {
+  padding: 0 8px;
+  box-sizing: border-box;
+}
+
+.col-1 { width: 8.333%; }
+.col-2 { width: 16.667%; }
+.col-3 { width: 25%; }
+.col-4 { width: 33.333%; }
+.col-6 { width: 50%; }
+.col-8 { width: 66.667%; }
+.col-12 { width: 100%; }
+
+/* 响应式栅格 */
+@media (max-width: 767px) {
+  .row { margin: 0 -4px; }
+  .col-1, .col-2, .col-3, .col-4, .col-6, .col-8, .col-12 {
+    padding: 0 4px;
+  }
+
+  .mobile-col-1, .mobile-col-2, .mobile-col-3, .mobile-col-4,
+  .mobile-col-6, .mobile-col-8, .mobile-col-12 {
+    padding: 0 4px;
+  }
+
+  .mobile-col-1 { width: 8.333%; }
+  .mobile-col-2 { width: 16.667%; }
+  .mobile-col-3 { width: 25%; }
+  .mobile-col-4 { width: 33.333%; }
+  .mobile-col-6 { width: 50%; }
+  .mobile-col-8 { width: 66.667%; }
+  .mobile-col-12 { width: 100%; }
+}
+
+@media (min-width: 1920px) {
+  .large-col-3 { width: 25%; }
+  .large-col-4 { width: 33.333%; }
+  .large-col-6 { width: 50%; }
+}
+
+/* ============ 响应式定位 ============ */
+.relative { position: relative; }
+.absolute { position: absolute; }
+.fixed { position: fixed; }
+.sticky { position: sticky; }
+
+.inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+
+/* ============ 响应式边框 ============ */
+.rounded-none { border-radius: 0; }
+.rounded-sm { border-radius: 4px; }
+.rounded { border-radius: 6px; }
+.rounded-md { border-radius: 8px; }
+.rounded-lg { border-radius: 12px; }
+.rounded-full { border-radius: 9999px; }
+
+/* 响应式边框 (移动端无圆角) */
+@media (max-width: 767px) {
+  .mobile-rounded-none { border-radius: 0; }
+}
+
+/* ============ 响应式溢出 ============ */
+.overflow-hidden { overflow: hidden; }
+.overflow-auto { overflow: auto; }
+.overflow-scroll { overflow: scroll; }
+.overflow-x-auto { overflow-x: auto; }
+.overflow-y-auto { overflow-y: auto; }
+
+/* 移动端横向滚动 */
+@media (max-width: 767px) {
+  .mobile-overflow-x-auto {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* ============ 响应式文本 ============ */
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+@media (max-width: 767px) {
+  .mobile-text-center { text-align: center; }
+  .mobile-text-left { text-align: left; }
+}
+
+/* ============ 响应式层级 ============ */
+.z-dropdown { z-index: 1000; }
+.z-modal { z-index: 2000; }
+.z-popover { z-index: 3000; }
+.z-tooltip { z-index: 4000; }
+
+/* ============ 响应式不透明度和可见性 ============ */
+.opacity-0 { opacity: 0; }
+.opacity-50 { opacity: 0.5; }
+.opacity-100 { opacity: 1; }
+
+.visible { visibility: visible; }
+.invisible { visibility: hidden; }
+
+/* ============ 响应式指针事件 ============ */
+.pointer-events-none { pointer-events: none; }
+.pointer-events-auto { pointer-events: auto; }
+
+/* 移动端禁用点击 */
+@media (max-width: 767px) {
+  .mobile-pointer-events-none { pointer-events: none; }
+}
+
+/* ============ 暗色模式 (可选) ============ */
+/*
+@media (prefers-color-scheme: dark) {
+  .dark-bg {
+    background-color: #1a1a1a;
+    color: #e5e5e5;
+  }
+}
+*/

@@ -120,15 +120,18 @@
 
         <!-- 内容区 -->
         <el-main class="main-content">
-          <router-view />
+          <TabsView />
         </el-main>
       </el-container>
     </el-container>
 
     <!-- 移动端内容区 -->
     <el-main class="main-content mobile-content" v-if="isMobile">
-      <router-view />
+      <TabsView />
     </el-main>
+
+    <!-- AI 助手 -->
+    <AIAssistant v-if="!isMobile" />
   </el-container>
 </template>
 
@@ -138,6 +141,8 @@ import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { HomeFilled, Setting, Fold, Expand, School, Menu, ArrowDown, User, SwitchButton, DataAnalysis, Document } from '@element-plus/icons-vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
+import TabsView from '@/components/TabsView/index.vue'
+import AIAssistant from '@/components/AIAssistant/index.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -238,7 +243,7 @@ const handleCommand = (command: string) => {
   color: #fff;
   font-size: 16px;
   font-weight: bold;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #58c0fc 0%, #bd45fb 100%);
 }
 
 .sidebar-menu {
@@ -263,7 +268,7 @@ const handleCommand = (command: string) => {
 }
 
 :deep(.el-menu-item.is-active) {
-  color: #667eea;
+  color: #58c0fc;
   background-color: rgba(102, 126, 234, 0.2);
 }
 
@@ -274,7 +279,7 @@ const handleCommand = (command: string) => {
   top: 0;
   height: 100%;
   width: 3px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #58c0fc 0%, #bd45fb 100%);
 }
 
 :deep(.el-sub-menu .el-menu-item) {
@@ -282,7 +287,7 @@ const handleCommand = (command: string) => {
 }
 
 :deep(.el-sub-menu .el-menu-item.is-active) {
-  color: #667eea;
+  color: #58c0fc;
 }
 
 .sidebar-menu:not(.el-menu--collapse) {
@@ -314,7 +319,7 @@ const handleCommand = (command: string) => {
   align-items: center;
   gap: 16px;
   padding: 8px 16px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #58c0fc 0%, #bd45fb 100%);
   border-radius: 8px;
 }
 
@@ -490,7 +495,7 @@ const handleCommand = (command: string) => {
   color: #fff;
   font-size: 16px;
   font-weight: bold;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #58c0fc 0%, #bd45fb 100%);
 }
 
 /* 响应式表格 */

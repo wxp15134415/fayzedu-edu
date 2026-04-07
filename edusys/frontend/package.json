@@ -6,7 +6,8 @@
   "author": "Fayzedu",
   "main": "electron/main.js",
   "scripts": {
-    "dev": "vite",
+    "dev": "lsof -ti :5173 | xargs kill -9 2>/dev/null; vite",
+    "dev:clean": "lsof -ti :5173 | xargs kill -9 2>/dev/null; vite",
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview",
     "electron:dev": "concurrently -k \"vite\" \"wait-on http://localhost:5173 && electron .\"",
@@ -20,6 +21,7 @@
     "axios": "^1.14.0",
     "dexie": "^4.4.2",
     "element-plus": "^2.13.6",
+    "page-agent": "^1.7.1",
     "pinia": "^3.0.4",
     "vue": "^3.5.30",
     "vue-router": "^5.0.4",

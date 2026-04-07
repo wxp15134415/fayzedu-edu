@@ -6,6 +6,10 @@
       <el-button type="danger" :disabled="selectedRows.length === 0" @click="handleBatchDelete">批量删除</el-button>
       <el-button type="success" :disabled="selectedRows.length === 0" @click="handleBatchStatus(1)">批量在读</el-button>
       <el-button type="warning" :disabled="selectedRows.length === 0" @click="handleBatchStatus(0)">批量离校</el-button>
+      <el-button :disabled="selectedRows.length === 0" @click="handleBatchQualityAnalysis(true)">批量质量分析</el-button>
+      <el-button :disabled="selectedRows.length === 0" @click="handleBatchQualityAnalysis(false)">批量取消质量分析</el-button>
+      <el-button :disabled="selectedRows.length === 0" @click="handleBatchLeaveStatus(true)">批量请假</el-button>
+      <el-button :disabled="selectedRows.length === 0" @click="handleBatchLeaveStatus(false)">批量取消请假</el-button>
       <el-button @click="handleExport">导出</el-button>
       <el-upload
         :show-file-list="false"
@@ -35,31 +39,52 @@
       :data="tableData"
       v-loading="loading"
       stripe
-      :header-cell-style="{background: '#f5f7fa'}"
+      :header-cell-style="{background: '#f5f7fa', textAlign: 'center'}"
+      :cell-style="{ textAlign: 'center' }"
       @selection-change="handleSelectionChange"
-      :fit="false"
+      @filter-change="handleFilterChange"
       style="width: 100%"
+      fit
     >
       <el-table-column type="selection" width="50" />
-      <el-table-column prop="studentNo" label="学籍辅号" :width="columnWidth" />
-      <el-table-column prop="studentId" label="学籍号" :width="columnWidth" />
-      <el-table-column prop="name" label="姓名" :width="columnWidth" />
-      <el-table-column prop="class.className" label="班级" :width="columnWidth" />
+      <el-table-column prop="name" label="姓名" min-width="80" />
+      <el-table-column prop="class.grade.gradeName" label="年级" min-width="100" column-key="gradeId" :filter-multiple="false" :filters="gradeList.map((g: any) => ({ text: g.gradeName, value: g.id }))" />
+      <el-table-column prop="class.className" label="班级" min-width="100" column-key="classId" :filter-multiple="false" :filters="classList.map((c: any) => ({ text: c.className, value: c.id }))" />
       <el-table-column prop="seatNo" label="座号" width="50" />
-      <el-table-column prop="gender" label="性别" width="50">
+      <el-table-column prop="gender" label="性别" width="60" column-key="gender" :filters="genderFilters">
         <template #default="{ row }">
-          {{ row.gender === '1' || row.gender === '男' ? '男' : '女' }}
+          {{ formatGender(row.gender) }}
         </template>
       </el-table-column>
-      <el-table-column prop="schoolType" label="类型" :width="columnWidth" />
-      <el-table-column prop="source" label="来源" :width="columnWidth" />
-      <el-table-column prop="subjectType" label="科类" :width="columnWidth" />
-      <el-table-column prop="status" label="状态" width="60">
+      <el-table-column prop="leaveStatus" label="请假状态" width="90" column-key="leaveStatus" :filters="leaveStatusFilters">
         <template #default="{ row }">
-          <el-tag :type="row.status === 1 ? 'success' : 'danger'">{{ row.status === 1 ? '在读' : '离校' }}</el-tag>
+          <el-switch
+            v-model="row.leaveStatus"
+            active-value="是"
+            inactive-value="否"
+            @change="(val: string) => handleStatusChange(row, 'leaveStatus', val)"
+          />
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="120" fixed="right">
+      <el-table-column prop="qualityAnalysis" label="质量分析" width="90" column-key="qualityAnalysis" :filters="qualityAnalysisFilters">
+        <template #default="{ row }">
+          <el-switch
+            v-model="row.qualityAnalysis"
+            active-value="是"
+            inactive-value="否"
+            @change="(val: string) => handleStatusChange(row, 'qualityAnalysis', val)"
+          />
+        </template>
+      </el-table-column>
+      <el-table-column prop="schoolType" label="类型" min-width="80" column-key="schoolType" :filters="schoolTypeFilters" />
+      <el-table-column prop="source" label="来源" min-width="100" column-key="source" :filters="sourceFilters" />
+      <el-table-column prop="subjectType" label="科类" min-width="80" column-key="subjectType" :filters="subjectTypeFilters" />
+      <el-table-column prop="status" label="状态" width="70" column-key="status" :filters="statusFilters">
+        <template #default="{ row }">
+          <el-tag :type="row.status === 1 ? 'success' : 'danger'" size="small">{{ formatStatus(row.status, ['离校', '在读']) }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" width="100" fixed="right">
         <template #default="{ row }">
           <div class="action-buttons">
             <el-button type="primary" link @click="handleEdit(row)">编辑</el-button>
@@ -90,7 +115,7 @@
         </div>
         <div class="mobile-card-item">
           <span class="mobile-card-label">性别</span>
-          <span class="mobile-card-value">{{ row.gender === '1' || row.gender === '男' ? '男' : '女' }}</span>
+          <span class="mobile-card-value">{{ formatGender(row.gender) }}</span>
         </div>
         <div class="mobile-card-item">
           <span class="mobile-card-label">类型</span>
@@ -98,7 +123,7 @@
         </div>
         <div class="mobile-card-item">
           <span class="mobile-card-label">状态</span>
-          <el-tag :type="row.status === 1 ? 'success' : 'danger'" size="small">{{ row.status === 1 ? '在读' : '离校' }}</el-tag>
+          <el-tag :type="row.status === 1 ? 'success' : 'danger'" size="small">{{ formatStatus(row.status, ['离校', '在读']) }}</el-tag>
         </div>
         <div class="mobile-card-actions">
           <el-button type="primary" size="small" link @click="handleEdit(row)">编辑</el-button>
@@ -213,6 +238,16 @@
               <el-switch v-model="form.status" :active-value="1" :inactive-value="0" active-text="在读" inactive-text="离校" />
             </el-form-item>
           </el-col>
+          <el-col :span="12">
+            <el-form-item label="请假状态" prop="leaveStatus">
+              <el-switch v-model="form.leaveStatus" active-value="是" inactive-value="否" active-text="是" inactive-text="否" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="质量分析" prop="qualityAnalysis">
+              <el-switch v-model="form.qualityAnalysis" active-value="是" inactive-value="否" active-text="是" inactive-text="否" />
+            </el-form-item>
+          </el-col>
         </el-row>
       </el-form>
       <template #footer>
@@ -227,13 +262,15 @@
 import { ref, reactive, onMounted, onUnmounted, nextTick } from 'vue'
 import { ElMessage, ElMessageBox, type FormInstance, type FormRules } from 'element-plus'
 import { Search } from '@element-plus/icons-vue'
-import { getStudentList, createStudent, updateStudent, deleteStudent, getClassList, updateStudentStatus } from '@/api/student'
-import { exportToExcel, importFromExcel } from '@/utils/excel'
+import { getStudentList, createStudent, updateStudent, deleteStudent, getClassList, updateStudentStatus, getSchoolTypes, getSources } from '@/api/student'
+import { getGradeList } from '@/api/grade'
+import { exportToExcel, importFromExcel, formatGender, formatStatus } from '@/utils/excel'
 
 const loading = ref(false)
 const isMobile = ref(window.innerWidth < 768)
 const tableData = ref<any[]>([])
 const classList = ref<any[]>([])
+const gradeList = ref<any[]>([])
 const searchKeyword = ref('')
 const selectedRows = ref<any[]>([])
 const pagination = reactive({ page: 1, pageSize: 10, total: 0 })
@@ -243,6 +280,135 @@ const dialogVisible = ref(false)
 const formRef = ref<FormInstance>()
 const isEdit = ref(false)
 const editId = ref(0)
+
+// 表头筛选状态
+const leaveStatusFilter = ref('')
+const qualityAnalysisFilter = ref('')
+const gradeFilter = ref<number | undefined>(undefined)
+const classFilter = ref<number | undefined>(undefined)
+const genderFilter = ref('')
+const statusFilter = ref<number | undefined>(undefined)
+const schoolTypeFilter = ref('')
+const sourceFilter = ref('')
+const subjectTypeFilter = ref('')
+
+// 表头筛选配置
+const leaveStatusFilters = [
+  { text: '是', value: '是' },
+  { text: '否', value: '否' }
+]
+
+const qualityAnalysisFilters = [
+  { text: '是', value: '是' },
+  { text: '否', value: '否' }
+]
+
+const genderFilters = [
+  { text: '男', value: '男' },
+  { text: '女', value: '女' }
+]
+
+const statusFilters = [
+  { text: '在读', value: '1' },
+  { text: '离校', value: '0' }
+]
+
+const schoolTypeFilters = ref<any[]>([])
+const subjectTypeFilters = [
+  { text: '物理类', value: '物理类' },
+  { text: '历史类', value: '历史类' }
+]
+
+const sourceFilters = ref<any[]>([])
+
+// 加载筛选选项
+const loadFilterOptions = async () => {
+  try {
+    const [types, sources] = await Promise.all([
+      getSchoolTypes(),
+      getSources()
+    ])
+
+    // 动态生成类型筛选选项
+    schoolTypeFilters.value = (types as string[]).map((t: string) => ({ text: t, value: t }))
+
+    // 动态生成来源筛选选项
+    sourceFilters.value = (sources as string[]).map((s: string) => ({ text: s, value: s }))
+  } catch (error) {
+    console.error('加载筛选选项失败', error)
+  }
+}
+
+// 处理表头筛选变化 - 使用后端筛选
+const handleFilterChange = (filters: any) => {
+  console.log('Filter changed:', filters)
+
+  // gradeId 筛选
+  if (filters.gradeId && filters.gradeId.length > 0) {
+    gradeFilter.value = filters.gradeId[0]
+  } else {
+    gradeFilter.value = undefined
+  }
+
+  // classId 筛选
+  if (filters.classId && filters.classId.length > 0) {
+    classFilter.value = filters.classId[0]
+  } else {
+    classFilter.value = undefined
+  }
+
+  // gender 筛选
+  if (filters.gender && filters.gender.length > 0) {
+    genderFilter.value = filters.gender[0]
+  } else {
+    genderFilter.value = ''
+  }
+
+  // leaveStatus 筛选
+  if (filters.leaveStatus && filters.leaveStatus.length > 0) {
+    leaveStatusFilter.value = filters.leaveStatus[0]
+  } else {
+    leaveStatusFilter.value = ''
+  }
+
+  // qualityAnalysis 筛选
+  if (filters.qualityAnalysis && filters.qualityAnalysis.length > 0) {
+    qualityAnalysisFilter.value = filters.qualityAnalysis[0]
+  } else {
+    qualityAnalysisFilter.value = ''
+  }
+
+  // schoolType 筛选
+  if (filters.schoolType && filters.schoolType.length > 0) {
+    schoolTypeFilter.value = filters.schoolType[0]
+  } else {
+    schoolTypeFilter.value = ''
+  }
+
+  // source 筛选
+  if (filters.source && filters.source.length > 0) {
+    sourceFilter.value = filters.source[0]
+  } else {
+    sourceFilter.value = ''
+  }
+
+  // subjectType 筛选
+  if (filters.subjectType && filters.subjectType.length > 0) {
+    subjectTypeFilter.value = filters.subjectType[0]
+  } else {
+    subjectTypeFilter.value = ''
+  }
+
+  // status 筛选
+  if (filters.status && filters.status.length > 0) {
+    statusFilter.value = filters.status[0]
+  } else {
+    statusFilter.value = undefined
+  }
+
+  pagination.page = 1
+  loadData()
+}
 
 const handleResize = () => {
   isMobile.value = window.innerWidth < 768
@@ -264,6 +430,8 @@ onMounted(() => {
   window.addEventListener('resize', handleResize)
   loadData()
   loadClasses()
+  loadGrades()
+  loadFilterOptions()
   calculateColumnWidth()
 })
 
@@ -275,7 +443,8 @@ const form = reactive({
   studentNo: '', studentId: '', idCard: '', name: '',
   classId: undefined as number | undefined, seatNo: undefined as number | undefined,
   gender: '男', birthDate: '', subjects: '', schoolType: '', source: '',
-  subjectType: '', phone: '', address: '', status: 1
+  subjectType: '', phone: '', address: '', status: 1,
+  leaveStatus: '否', qualityAnalysis: '否'
 })
 
 const rules: FormRules = {
@@ -288,7 +457,16 @@ const loadData = async () => {
     const res = await getStudentList({
       page: pagination.page,
       pageSize: pagination.pageSize,
-      keyword: searchKeyword.value
+      keyword: searchKeyword.value,
+      gradeId: gradeFilter.value,
+      classId: classFilter.value,
+      gender: genderFilter.value,
+      status: statusFilter.value,
+      schoolType: schoolTypeFilter.value,
+      source: sourceFilter.value,
+      subjectType: subjectTypeFilter.value,
+      leaveStatus: leaveStatusFilter.value,
+      qualityAnalysis: qualityAnalysisFilter.value
     })
     tableData.value = res.list || []
     pagination.total = res.total || 0
@@ -299,9 +477,47 @@ const loadData = async () => {
 
 const loadClasses = async () => { try { const res = await getClassList({ page: 1, pageSize: 100 }); classList.value = res.list || [] } catch (error) { console.error('加载班级失败', error) } }
 
+const loadGrades = async () => { try { const res = await getGradeList({ page: 1, pageSize: 100 }); gradeList.value = res.list || [] } catch (error) { console.error('加载年级失败', error) } }
+
 const handleSearch = () => {
   pagination.page = 1
   loadData()
+}
+
+// 切换请假状态
+const toggleLeaveStatus = async (row: any) => {
+  const newStatus = row.leaveStatus === '是' ? '否' : '是'
+  try {
+    await updateStudent(row.id, { leaveStatus: newStatus })
+    row.leaveStatus = newStatus
+    ElMessage.success('请假状态已更新')
+  } catch (error: any) {
+    ElMessage.error(error.message || '更新失败')
+  }
+}
+
+// 切换质量分析
+const toggleQualityAnalysis = async (row: any) => {
+  const newStatus = row.qualityAnalysis === '是' ? '否' : '是'
+  try {
+    await updateStudent(row.id, { qualityAnalysis: newStatus })
+    row.qualityAnalysis = newStatus
+    ElMessage.success('质量分析已更新')
+  } catch (error: any) {
+    ElMessage.error(error.message || '更新失败')
+  }
+}
+
+// 通用状态切换处理
+const handleStatusChange = async (row: any, field: string, value: string) => {
+  try {
+    await updateStudent(row.id, { [field]: value })
+    ElMessage.success('状态已更新')
+  } catch (error: any) {
+    // 回滚状态
+    row[field] = value === '是' ? '否' : '是'
+    ElMessage.error(error.message || '更新失败')
+  }
 }
 
 const handleSelectionChange = (rows: any[]) => {
@@ -339,12 +555,47 @@ const handleBatchStatus = async (status: number) => {
   }
 }
 
+// 批量设置质量分析
+const handleBatchQualityAnalysis = async (enable: boolean) => {
+  if (selectedRows.value.length === 0) return
+  const text = enable ? '启用' : '禁用'
+  try {
+    await ElMessageBox.confirm(`确定要将选中的 ${selectedRows.value.length} 个学生设为质量分析${text}吗？`, `批量质量分析`, { type: 'warning' })
+    for (const row of selectedRows.value) {
+      await updateStudent(row.id, { qualityAnalysis: enable ? '是' : '否' })
+    }
+    ElMessage.success(`批量质量分析${text}成功`)
+    selectedRows.value = []
+    loadData()
+  } catch (error: any) {
+    if (error !== 'cancel') ElMessage.error(error.message || '操作失败')
+  }
+}
+
+// 批量设置请假状态
+const handleBatchLeaveStatus = async (enable: boolean) => {
+  if (selectedRows.value.length === 0) return
+  const text = enable ? '请假' : '取消请假'
+  try {
+    await ElMessageBox.confirm(`确定要将选中的 ${selectedRows.value.length} 个学生设为${text}吗？`, `批量请假`, { type: 'warning' })
+    for (const row of selectedRows.value) {
+      await updateStudent(row.id, { leaveStatus: enable ? '是' : '否' })
+    }
+    ElMessage.success(`批量${text}成功`)
+    selectedRows.value = []
+    loadData()
+  } catch (error: any) {
+    if (error !== 'cancel') ElMessage.error(error.message || '操作失败')
+  }
+}
+
 const handleAdd = () => {
   isEdit.value = false
   form.studentNo = ''; form.studentId = ''; form.idCard = ''; form.name = ''
   form.classId = undefined; form.seatNo = undefined; form.gender = '男'; form.birthDate = ''
   form.subjects = ''; form.schoolType = ''; form.source = ''; form.subjectType = ''
   form.phone = ''; form.address = ''; form.status = 1
+  form.leaveStatus = '否'; form.qualityAnalysis = '否'
   dialogVisible.value = true
 }
 
@@ -366,7 +617,9 @@ const handleEdit = (row: any) => {
     subjectType: row.subjectType || '',
     phone: row.phone || '',
     address: row.address || '',
-    status: row.status
+    status: row.status,
+    leaveStatus: row.leaveStatus || '否',
+    qualityAnalysis: row.qualityAnalysis || '否'
   })
   dialogVisible.value = true
 }
@@ -404,7 +657,7 @@ const handleExport = () => {
     姓名: row.name,
     班级: row.class?.className || '',
     座号: row.seatNo,
-    性别: row.gender === '1' || row.gender === '男' ? '男' : '女',
+    性别: formatGender(row.gender),
     类型: row.schoolType || '',
     来源: row.source || '',
     科类: row.subjectType || '',

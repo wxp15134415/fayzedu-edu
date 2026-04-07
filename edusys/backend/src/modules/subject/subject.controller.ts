@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Query } from '@nestjs/common'
+import { Controller, Get, Post, Put, Delete, Body, Param, Query, UseGuards } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { Subject } from '@/entities'
 import { IsString, IsNumber, IsOptional } from 'class-validator'
+import { JwtAuthGuard } from '../auth/auth.guard'
 
 class CreateSubjectDto {
   @IsString()
@@ -22,6 +23,7 @@ class CreateSubjectDto {
 }
 
 @Controller('subject')
+@UseGuards(JwtAuthGuard)
 export class SubjectController {
   constructor(
     @InjectRepository(Subject)

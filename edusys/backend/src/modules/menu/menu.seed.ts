@@ -31,6 +31,8 @@ export async function seedMenus(dataSource: DataSource) {
     { id: 34, name: '考场管理', path: '/exam-room', parentId: 3, sortOrder: 4, icon: '', permission: 'exam-room:list', type: 'menu', status: 1 },
     { id: 35, name: '考试编排', path: '/exam-arrangement', parentId: 3, sortOrder: 5, icon: '', permission: 'exam-arrangement:list', type: 'menu', status: 1 },
     { id: 36, name: '成绩管理', path: '/score', parentId: 3, sortOrder: 6, icon: '', permission: 'score:list', type: 'menu', status: 1 },
+    { id: 37, name: '成绩导入', path: '/score-import-wizard', parentId: 3, sortOrder: 7, icon: '', permission: 'score-import:list', type: 'menu', status: 1 },
+    { id: 38, name: '导入临时成绩', path: '/score-import-temp', parentId: 3, sortOrder: 8, icon: '', permission: 'score-import-temp:list', type: 'menu', status: 1 },
 
     // 教务管理
     { id: 4, name: '教务管理', path: '/education', parentId: 0, sortOrder: 4, icon: 'Reading', permission: '', type: 'menu', status: 1 },

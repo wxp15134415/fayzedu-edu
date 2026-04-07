@@ -61,3 +61,14 @@ export const updateExamSessionsByExam = (examId: number, subjectList: any[]) => 
     data: { subjectList }
   })
 }
+
+// ==================== 场次扩展API ====================
+
+// 检查考场容量
+export const checkSessionCapacity = (examId: number, sessionId?: number) => {
+  return request({
+    url: `/exam-session/check-capacity/${examId}`,
+    method: 'GET',
+    params: sessionId ? { sessionId } : undefined
+  })
+}

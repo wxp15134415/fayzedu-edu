@@ -26,17 +26,28 @@
       </el-input>
     </div>
 
-    <!-- 统计卡片 -->
-    <div v-if="stats" class="stats-cards">
-      <el-card class="stats-card">
-        <div class="stats-value">{{ stats.totalStudents }}</div>
-        <div class="stats-label">总考生数</div>
-      </el-card>
-      <el-card v-for="s in stats.sessions" :key="s.sessionId" class="stats-card">
-        <div class="stats-value">{{ s.count }}</div>
-        <div class="stats-label">{{ s.sessionName }}</div>
-        <div class="stats-sub">考场: {{ s.roomCount }}</div>
-      </el-card>
+    <!-- 场次容量信息 -->
+    <div v-if="capacityData.length > 0" class="capacity-section">
+      <div class="section-title">场次编排情况</div>
+      <el-table :data="capacityData" size="small" stripe>
+        <el-table-column prop="sessionName" label="场次" />
+        <el-table-column prop="subjectName" label="科目" />
+        <el-table-column prop="arrangedCount" label="已编排人数" width="120">
+          <template #default="{ row }">
+            <el-tag :type="row.arrangedCount > 0 ? 'success' : 'info'">
+              {{ row.arrangedCount }} 人
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="适用组合" width="200">
+          <template #default="{ row }">
+            <span v-if="row.applicableGroups && row.applicableGroups.length > 0">
+              {{ row.applicableGroups.join(', ') }}
+            </span>
+            <span v-else class="text-gray">全部学生</span>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
 
     <!-- 桌面端表格 -->
@@ -322,11 +333,11 @@
 import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Search } from '@element-plus/icons-vue'
-import { getExamArrangementList, generateExamArrangement, generateExamNo, getExamArrangementStats, getAvailableStudents, getPrintAdmission, getPrintCheckin, deleteExamArrangement } from '@/api/exam-arrangement'
+import { getExamArrangementList, generateExamArrangement, generateExamNo, getAvailableStudents, getPrintAdmission, getPrintCheckin, deleteExamArrangement, autoArrange, randomSeat, detectConflicts, previewArrangement, exportTickets, exportRoomSeats } from '@/api/exam-arrangement'
 import { getExamList } from '@/api/exam'
 import { getExamVenueList } from '@/api/exam-venue'
 import { getGradeList } from '@/api/grade'
-import { getExamSessionsByExam } from '@/api/exam-session'
+import { getExamSessionsByExam, checkSessionCapacity } from '@/api/exam-session'
 
 const loading = ref(false)
 const isMobile = ref(window.innerWidth < 768)
@@ -335,7 +346,7 @@ const examList = ref<any[]>([])
 const venueList = ref<any[]>([])
 const gradeList = ref<any[]>([])
 const sessionList = ref<any[]>([])
-const stats = ref<any>(null)
+const capacityData = ref<any[]>([])
 const searchKeyword = ref('')
 const filterExamId = ref<number | null>(null)
 const filterVenueId = ref<number | null>(null)
@@ -454,6 +465,18 @@ const loadSessions = async (examId: number) => {
 
 const onExamChange = (examId: number) => {
   loadSessions(examId)
+  loadCapacity(examId)
+}
+
+// 加载场次容量信息
+const loadCapacity = async (examId: number) => {
+  if (!examId) return
+  try {
+    const res = await checkSessionCapacity(examId)
+    capacityData.value = res || []
+  } catch (error) {
+    console.error('加载容量失败', error)
+  }
 }
 
 const loadData = async () => {
@@ -469,10 +492,9 @@ const loadData = async () => {
     tableData.value = res.list || []
     pagination.total = res.total || 0
 
-    // 加载统计
+    // 加载容量信息
     if (filterExamId.value) {
-      const statsRes = await getExamArrangementStats(filterExamId.value)
-      stats.value = statsRes
+      await loadCapacity(filterExamId.value)
     }
   } catch (error) {
     console.error('加载失败', error)
@@ -489,6 +511,9 @@ const handleSearch = () => {
 const handleFilterChange = () => {
   pagination.page = 1
   loadData()
+  if (filterExamId.value) {
+    loadCapacity(filterExamId.value)
+  }
 }
 
 // 选择学生
@@ -651,6 +676,101 @@ const handleDeleteArrangement = async (row: any) => {
     ElMessage.error(error.message || '移除失败')
   }
 }
+
+// 自动编排
+const handleAutoArrange = async () => {
+  if (!filterExamId.value) {
+    ElMessage.warning('请先选择考试')
+    return
+  }
+  try {
+    const res = await autoArrange({ examId: filterExamId.value })
+    ElMessage.success(res.message || '自动编排完成')
+    loadData()
+  } catch (error: any) {
+    ElMessage.error(error.message || '自动编排失败')
+  }
+}
+
+// 随机座位号
+const handleRandomSeat = async () => {
+  if (!filterExamId.value) {
+    ElMessage.warning('请先选择考试')
+    return
+  }
+  try {
+    const res = await randomSeat({ examId: filterExamId.value })
+    ElMessage.success(res.message || '座位号已随机生成')
+    loadData()
+  } catch (error: any) {
+    ElMessage.error(error.message || '操作失败')
+  }
+}
+
+// 检测冲突
+const handleCheckConflicts = async () => {
+  if (!filterExamId.value) {
+    ElMessage.warning('请先选择考试')
+    return
+  }
+  try {
+    const res = await detectConflicts(filterExamId.value)
+    if (res.hasConflicts) {
+      ElMessage.warning(`检测到 ${res.conflicts.length} 个冲突`)
+      // 可以显示冲突详情
+      console.log('冲突详情:', res.conflicts)
+    } else {
+      ElMessage.success('没有检测到冲突')
+    }
+  } catch (error: any) {
+    ElMessage.error(error.message || '检测失败')
+  }
+}
+
+// 编排预览
+const handlePreview = async () => {
+  if (!filterExamId.value) {
+    ElMessage.warning('请先选择考试')
+    return
+  }
+  try {
+    const res = await previewArrangement(filterExamId.value)
+    console.log('编排预览:', res)
+    ElMessage.success('编排预览已输出到控制台')
+  } catch (error: any) {
+    ElMessage.error(error.message || '预览失败')
+  }
+}
+
+// 导出准考证
+const handleExportTickets = async () => {
+  if (!filterExamId.value) {
+    ElMessage.warning('请先选择考试')
+    return
+  }
+  try {
+    const res = await exportTickets(filterExamId.value)
+    console.log('准考证数据:', res)
+    ElMessage.success('导出成功，数据已输出到控制台')
+  } catch (error: any) {
+    ElMessage.error(error.message || '导出失败')
+  }
+}
+
+// 导出场次表
+const handleExportRoomSeats = async () => {
+  if (!filterExamId.value || sessionList.value.length === 0) {
+    ElMessage.warning('请先选择考试和场次')
+    return
+  }
+  try {
+    const res = await exportRoomSeats(filterExamId.value, sessionList.value[0].id)
+    console.log('场次表数据:', res)
+    ElMessage.success('导出成功，数据已输出到控制台')
+  } catch (error: any) {
+    ElMessage.error(error.message || '导出失败')
+  }
+}
 </script>
 
 <style scoped>
@@ -661,34 +781,19 @@ const handleDeleteArrangement = async (row: any) => {
   margin-bottom: 16px;
 }
 
-.stats-cards {
-  display: flex;
-  gap: 16px;
+.capacity-section {
   margin-bottom: 16px;
-  flex-wrap: wrap;
 }
 
-.stats-card {
-  min-width: 120px;
-  text-align: center;
-}
-
-.stats-value {
-  font-size: 24px;
-  font-weight: bold;
-  color: #409eff;
-}
-
-.stats-label {
+.section-title {
   font-size: 14px;
-  color: #666;
-  margin-top: 4px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
 }
 
-.stats-sub {
-  font-size: 12px;
+.text-gray {
   color: #999;
-  margin-top: 2px;
 }
 
 .mobile-card-list {

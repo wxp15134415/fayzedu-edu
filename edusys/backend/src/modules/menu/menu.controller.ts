@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Query } from '@nestjs/common'
+import { Controller, Get, Post, Put, Delete, Body, Param, Query, UseGuards } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { Menu } from '@/entities'
 import { IsNumber, IsOptional, IsString } from 'class-validator'
 import { MenuService } from './menu.service'
+import { JwtAuthGuard } from '../auth/auth.guard'
 
 class CreateMenuDto {
   @IsString()
@@ -32,6 +33,7 @@ class CreateMenuDto {
 }
 
 @Controller('menu')
+@UseGuards(JwtAuthGuard)
 export class MenuController {
   constructor(
     private menuService: MenuService

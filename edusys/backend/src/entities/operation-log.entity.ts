@@ -1,10 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, Index } from 'typeorm'
 
 /**
  * 操作日志表
  * 记录用户的重要操作行为（登录、导入、导出、修改等）
  */
 @Entity('operation_log')
+@Index('idx_log_user', ['userId'])
+@Index('idx_log_created', ['createdAt'])
+@Index('idx_log_module', ['module'])
 export class OperationLog {
   @PrimaryGeneratedColumn()
   id: number

@@ -45,8 +45,9 @@ service.interceptors.response.use(
     ElMessage.error(res.message || '请求失败')
     return Promise.reject(new Error(res.message || '请求失败'))
   },
-  (error) => {
-    ElMessage.error(error.message || '网络错误')
+  (error: any) => {
+    const msg = error.response?.data?.message || error.message || '网络错误'
+    ElMessage.error(msg)
     return Promise.reject(error)
   }
 )

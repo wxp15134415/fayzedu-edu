@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Query } from '@nestjs/common'
+import { Controller, Get, Post, Put, Delete, Body, Param, Query, UseGuards } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { Student, Score, Class, Grade } from '@/entities'
 import { IsString, IsNumber, IsOptional, IsDateString } from 'class-validator'
+import { JwtAuthGuard } from '../auth/auth.guard'
 
 class CreateStudentDto {
   @IsString()
@@ -115,9 +116,16 @@ class UpdateStudentDto {
   @IsNumber()
   @IsOptional()
   status?: number
+  @IsString()
+  @IsOptional()
+  leaveStatus?: string
+  @IsString()
+  @IsOptional()
+  qualityAnalysis?: string
 }
 
 @Controller('student')
+@UseGuards(JwtAuthGuard)
 export class StudentController {
   constructor(
     @InjectRepository(Student)
@@ -134,7 +142,16 @@ export class StudentController {
   async findAll(
     @Query('page') page: number = 1,
     @Query('pageSize') pageSize: number = 10,
-    @Query('keyword') keyword: string = ''
+    @Query('keyword') keyword: string = '',
+    @Query('gradeId') gradeId: number | undefined = undefined,
+    @Query('classId') classId: number | undefined = undefined,
+    @Query('gender') gender: string = '',
+    @Query('status') status: number | undefined = undefined,
+    @Query('schoolType') schoolType: string = '',
+    @Query('source') source: string = '',
+    @Query('subjectType') subjectType: string = '',
+    @Query('leaveStatus') leaveStatus: string = '',
+    @Query('qualityAnalysis') qualityAnalysis: string = ''
   ) {
     const queryBuilder = this.studentRepository.createQueryBuilder('student')
       .leftJoinAndSelect('student.class', 'class')
@@ -147,6 +164,51 @@ export class StudentController {
       )
     }
 
+    // 按年级筛选
+    if (gradeId) {
+      queryBuilder.andWhere('grade.id = :gradeId', { gradeId })
+    }
+
+    // 按班级筛选
+    if (classId) {
+      queryBuilder.andWhere('student.classId = :classId', { classId })
+    }
+
+    // 按性别筛选
+    if (gender) {
+      queryBuilder.andWhere('student.gender = :gender', { gender })
+    }
+
+    // 按状态筛选
+    if (status !== undefined) {
+      queryBuilder.andWhere('student.status = :status', { status })
+    }
+
+    // 按类型筛选
+    if (schoolType) {
+      queryBuilder.andWhere('student.schoolType = :schoolType', { schoolType })
+    }
+
+    // 按来源筛选
+    if (source) {
+      queryBuilder.andWhere('student.source = :source', { source })
+    }
+
+    // 按科类筛选
+    if (subjectType) {
+      queryBuilder.andWhere('student.subjectType = :subjectType', { subjectType })
+    }
+
+    // 按请假状态筛选
+    if (leaveStatus) {
+      queryBuilder.andWhere('student.leaveStatus = :leaveStatus', { leaveStatus })
+    }
+
+    // 按质量分析筛选
+    if (qualityAnalysis) {
+      queryBuilder.andWhere('student.qualityAnalysis = :qualityAnalysis', { qualityAnalysis })
+    }
+
     queryBuilder
       .skip((page - 1) * pageSize)
       .take(pageSize)
@@ -156,6 +218,34 @@ export class StudentController {
 
     const [list, total] = await queryBuilder.getManyAndCount()
     return { list, total, page, pageSize }
+  }
+
+  // 获取学生类型筛选选项（从数据库动态获取）
+  @Get('school-types')
+  async getSchoolTypes() {
+    const result = await this.studentRepository
+      .createQueryBuilder('student')
+      .select('DISTINCT student.schoolType', 'schoolType')
+      .where('student.schoolType IS NOT NULL')
+      .andWhere('student.schoolType != :empty', { empty: '' })
+      .orderBy('student.schoolType', 'ASC')
+      .getRawMany()
+
+    return result.map((r: any) => r.schoolType)
+  }
+
+  // 获取学生来源筛选选项（从数据库动态获取）
+  @Get('sources')
+  async getSources() {
+    const result = await this.studentRepository
+      .createQueryBuilder('student')
+      .select('DISTINCT student.source', 'source')
+      .where('student.source IS NOT NULL')
+      .andWhere('student.source != :empty', { empty: '' })
+      .orderBy('student.source', 'ASC')
+      .getRawMany()
+
+    return result.map((r: any) => r.source)
   }
 
   @Get(':id')

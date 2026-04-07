@@ -24,7 +24,7 @@
       <el-table-column prop="description" label="描述" />
       <el-table-column prop="status" label="状态" width="70">
         <template #default="{ row }">
-          <el-tag :type="row.status === 1 ? 'success' : 'danger'">{{ row.status === 1 ? '启用' : '禁用' }}</el-tag>
+          <el-tag :type="row.status === 1 ? 'success' : 'danger'">{{ formatStatus(row.status, ['禁用', '启用']) }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="150" fixed="right">
@@ -58,7 +58,7 @@
         </div>
         <div class="mobile-card-item">
           <span class="mobile-card-label">状态</span>
-          <el-tag :type="row.status === 1 ? 'success' : 'danger'" size="small">{{ row.status === 1 ? '启用' : '禁用' }}</el-tag>
+          <el-tag :type="row.status === 1 ? 'success' : 'danger'" size="small">{{ formatStatus(row.status, ['禁用', '启用']) }}</el-tag>
         </div>
         <div class="mobile-card-actions">
           <el-button type="primary" size="small" link @click="handleEdit(row)">编辑</el-button>
@@ -108,7 +108,7 @@
 import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import { ElMessage, ElMessageBox, type FormInstance, type FormRules } from 'element-plus'
 import { getSubjectList, createSubject, updateSubject, deleteSubject } from '@/api/score'
-import { exportToExcel, importFromExcel } from '@/utils/excel'
+import { exportToExcel, importFromExcel, formatStatus } from '@/utils/excel'
 
 const loading = ref(false)
 const isMobile = ref(window.innerWidth < 768)
@@ -171,7 +171,7 @@ const handleExport = () => {
     科目编码: row.subjectCode,
     学分: row.credit,
     描述: row.description || '',
-    状态: row.status === 1 ? '启用' : '禁用'
+    状态: formatStatus(row.status, ['禁用', '启用'])
   }))
   exportToExcel(exportData, '科目数据')
 }

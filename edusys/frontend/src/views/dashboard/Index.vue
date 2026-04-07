@@ -1,137 +1,41 @@
 <template>
-  <div class="dashboard">
-    <h2>欢迎使用学校管理系统</h2>
+  <div class="dashboard page-container">
+    <PageHeader title="欢迎使用学校管理系统" subtitle="实时了解系统运行状态" />
 
     <!-- 统计卡片 -->
     <el-row :gutter="20">
-      <el-col :span="6">
-        <el-card shadow="hover" class="stat-card">
-          <div class="stat-content">
-            <div class="stat-left">
-              <div class="stat-icon-wrap" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                <el-icon><User /></el-icon>
-              </div>
-            </div>
-            <div class="stat-right">
-              <div class="stat-number">{{ stats.totalUsers }}</div>
-              <div class="stat-label">用户总数</div>
-            </div>
-          </div>
-        </el-card>
+      <el-col :xs="12" :sm="12" :md="6" :lg="6" :xl="6">
+        <StatCard :value="stats.totalUsers" label="用户总数" icon="User" gradient="linear-gradient(135deg, #58c0fc 0%, #bd45fb 100%)" />
       </el-col>
-      <el-col :span="6">
-        <el-card shadow="hover" class="stat-card">
-          <div class="stat-content">
-            <div class="stat-left">
-              <div class="stat-icon-wrap" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                <el-icon><UserFilled /></el-icon>
-              </div>
-            </div>
-            <div class="stat-right">
-              <div class="stat-number">{{ stats.totalStudents }}</div>
-              <div class="stat-label">学生数</div>
-            </div>
-          </div>
-        </el-card>
+      <el-col :xs="12" :sm="12" :md="6" :lg="6" :xl="6">
+        <StatCard :value="stats.totalStudents" label="学生数" icon="UserFilled" gradient="linear-gradient(135deg, #f093fb 0%, #f5576c 100%)" />
       </el-col>
-      <el-col :span="6">
-        <el-card shadow="hover" class="stat-card">
-          <div class="stat-content">
-            <div class="stat-left">
-              <div class="stat-icon-wrap" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-                <el-icon><School /></el-icon>
-              </div>
-            </div>
-            <div class="stat-right">
-              <div class="stat-number">{{ stats.totalClasses }}</div>
-              <div class="stat-label">班级数</div>
-            </div>
-          </div>
-        </el-card>
+      <el-col :xs="12" :sm="12" :md="6" :lg="6" :xl="6">
+        <StatCard :value="stats.totalClasses" label="班级数" icon="School" gradient="linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)" />
       </el-col>
-      <el-col :span="6">
-        <el-card shadow="hover" class="stat-card">
-          <div class="stat-content">
-            <div class="stat-left">
-              <div class="stat-icon-wrap" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
-                <el-icon><Collection /></el-icon>
-              </div>
-            </div>
-            <div class="stat-right">
-              <div class="stat-number">{{ stats.totalGrades }}</div>
-              <div class="stat-label">年级数</div>
-            </div>
-          </div>
-        </el-card>
+      <el-col :xs="12" :sm="12" :md="6" :lg="6" :xl="6">
+        <StatCard :value="stats.totalGrades" label="年级数" icon="Collection" gradient="linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)" />
       </el-col>
     </el-row>
 
     <!-- 第二行 -->
-    <el-row :gutter="20" style="margin-top: 20px;">
-      <el-col :span="6">
-        <el-card shadow="hover" class="stat-card">
-          <div class="stat-content">
-            <div class="stat-left">
-              <div class="stat-icon-wrap" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
-                <el-icon><Notebook /></el-icon>
-              </div>
-            </div>
-            <div class="stat-right">
-              <div class="stat-number">{{ stats.totalSubjects }}</div>
-              <div class="stat-label">科目数</div>
-            </div>
-          </div>
-        </el-card>
+    <el-row :gutter="20" class="mt-base">
+      <el-col :xs="12" :sm="12" :md="6" :lg="6" :xl="6">
+        <StatCard :value="stats.totalSubjects" label="科目数" icon="Notebook" gradient="linear-gradient(135deg, #fa709a 0%, #fee140 100%)" />
       </el-col>
-      <el-col :span="6">
-        <el-card shadow="hover" class="stat-card">
-          <div class="stat-content">
-            <div class="stat-left">
-              <div class="stat-icon-wrap" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
-                <el-icon><DataLine /></el-icon>
-              </div>
-            </div>
-            <div class="stat-right">
-              <div class="stat-number">{{ stats.totalScores }}</div>
-              <div class="stat-label">成绩记录</div>
-            </div>
-          </div>
-        </el-card>
+      <el-col :xs="12" :sm="12" :md="6" :lg="6" :xl="6">
+        <StatCard :value="stats.totalScores" label="成绩记录" icon="DataLine" gradient="linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)" />
       </el-col>
-      <el-col :span="6">
-        <el-card shadow="hover" class="stat-card">
-          <div class="stat-content">
-            <div class="stat-left">
-              <div class="stat-icon-wrap" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                <el-icon><Key /></el-icon>
-              </div>
-            </div>
-            <div class="stat-right">
-              <div class="stat-number">{{ stats.totalRoles }}</div>
-              <div class="stat-label">角色数</div>
-            </div>
-          </div>
-        </el-card>
+      <el-col :xs="12" :sm="12" :md="6" :lg="6" :xl="6">
+        <StatCard :value="stats.totalRoles" label="角色数" icon="Key" gradient="linear-gradient(135deg, #58c0fc 0%, #bd45fb 100%)" />
       </el-col>
-      <el-col :span="6">
-        <el-card shadow="hover" class="stat-card">
-          <div class="stat-content">
-            <div class="stat-left">
-              <div class="stat-icon-wrap" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);">
-                <el-icon><Lock /></el-icon>
-              </div>
-            </div>
-            <div class="stat-right">
-              <div class="stat-number">{{ stats.totalPermissions }}</div>
-              <div class="stat-label">权限数</div>
-            </div>
-          </div>
-        </el-card>
+      <el-col :xs="12" :sm="12" :md="6" :lg="6" :xl="6">
+        <StatCard :value="stats.totalPermissions" label="权限数" icon="Lock" gradient="linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)" />
       </el-col>
     </el-row>
 
     <!-- 快速操作 -->
-    <el-card shadow="hover" class="quick-actions" style="margin-top: 20px;">
+    <el-card shadow="hover" class="quick-actions">
       <template #header>
         <span>快速操作</span>
       </template>
@@ -161,6 +65,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { getStatistics } from '@/api/systemInfo'
+import { StatCard, PageHeader } from '@/components/index'
 import {
   User,
   UserFilled,
@@ -219,66 +124,26 @@ onMounted(() => {
 
 <style scoped>
 .dashboard {
-  padding: 20px;
+  background-color: var(--color-bg-base);
 }
 
-.dashboard h2 {
-  margin-bottom: 20px;
-  color: #303133;
-  font-size: 18px;
+.mt-base {
+  margin-top: var(--spacing-base);
 }
 
-.stat-card {
-  cursor: default;
+.quick-actions {
+  margin-top: var(--spacing-base);
 }
 
-.stat-content {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.stat-left {
-  flex-shrink: 0;
-}
-
-.stat-icon-wrap {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-size: 22px;
-}
-
-.stat-right {
-  flex: 1;
-  min-width: 0;
-}
-
-.stat-number {
-  font-size: 24px;
-  font-weight: bold;
-  color: #303133;
-}
-
-.stat-label {
-  font-size: 13px;
-  color: #909399;
-  margin-top: 2px;
-}
-
-.quick-actions .el-card__header {
-  font-size: 15px;
-  font-weight: 600;
+.quick-actions :deep(.el-card__header) {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
 }
 
 .action-grid {
   display: flex;
-  gap: 16px;
   flex-wrap: wrap;
+  gap: var(--spacing-base);
 }
 
 .action-item {
@@ -286,18 +151,18 @@ onMounted(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 90px;
-  height: 70px;
-  background: #f5f7fa;
-  border-radius: 8px;
+  min-width: 80px;
+  padding: var(--spacing-md);
+  background: var(--color-bg-page);
+  border-radius: var(--radius-md);
   cursor: pointer;
-  transition: all 0.3s;
-  gap: 6px;
+  transition: all var(--transition-base);
+  gap: var(--spacing-xs);
 }
 
 .action-item:hover {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #fff;
+  background: linear-gradient(135deg, var(--color-gradient-start), var(--color-gradient-end));
+  color: var(--color-white);
 }
 
 .action-item .el-icon {
@@ -305,71 +170,29 @@ onMounted(() => {
 }
 
 .action-item span {
-  font-size: 12px;
-  color: #606266;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-regular);
 }
 
 .action-item:hover span {
-  color: #fff;
+  color: var(--color-white);
 }
 
-/* 移动端响应式 */
 @media (max-width: 768px) {
-  .dashboard {
-    padding: 12px;
-  }
-
-  .stat-card {
-    margin-bottom: 12px;
-  }
-
-  .stat-content {
-    flex-direction: row;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .stat-icon-wrap {
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
-  }
-
-  .stat-number {
-    font-size: 20px;
-  }
-
-  .stat-label {
-    font-size: 12px;
-  }
-
-  .quick-actions {
-    margin-top: 16px;
-  }
-
   .action-grid {
     flex-direction: column;
   }
 
   .action-item {
     width: 100%;
+    flex-direction: row;
     justify-content: flex-start;
+    min-width: auto;
+    padding: var(--spacing-sm) var(--spacing-base);
   }
 
-  /* 调整移动端行间距 */
-  :deep(.el-row) {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-  }
-
-  :deep(.el-col) {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-
-  /* 调整统计卡片在移动端的布局 */
-  .stat-card :deep(.el-card__body) {
-    padding: 12px;
+  .action-item span {
+    font-size: var(--font-size-sm);
   }
 }
 </style>

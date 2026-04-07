@@ -29,7 +29,7 @@
       <el-table-column prop="status" label="状态" width="70">
         <template #default="{ row }">
           <el-tag :type="row.status === 1 ? 'success' : 'danger'">
-            {{ row.status === 1 ? '启用' : '禁用' }}
+            {{ formatStatus(row.status, ['禁用', '启用']) }}
           </el-tag>
         </template>
       </el-table-column>
@@ -65,7 +65,7 @@
         <div class="mobile-card-item">
           <span class="mobile-card-label">状态</span>
           <el-tag :type="row.status === 1 ? 'success' : 'danger'" size="small">
-            {{ row.status === 1 ? '启用' : '禁用' }}
+            {{ formatStatus(row.status, ['禁用', '启用']) }}
           </el-tag>
         </div>
         <div class="mobile-card-actions">
@@ -158,7 +158,7 @@
 import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import { ElMessage, ElMessageBox, type FormInstance, type FormRules } from 'element-plus'
 import { getGradeList, createGrade, updateGrade, deleteGrade } from '@/api/grade'
-import { exportToExcel, importFromExcel } from '@/utils/excel'
+import { exportToExcel, importFromExcel, formatStatus } from '@/utils/excel'
 
 const loading = ref(false)
 const isMobile = ref(window.innerWidth < 768)
@@ -288,7 +288,7 @@ const handleExport = () => {
     学生数: row.studentCount || 0,
     班级数: row.classCount || 0,
     描述: row.description || '',
-    状态: row.status === 1 ? '启用' : '禁用'
+    状态: formatStatus(row.status, ['禁用', '启用'])
   }))
   exportToExcel(exportData, '年级数据')
 }

@@ -1,7 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, Index } from 'typeorm'
 import { Grade } from './grade.entity'
 
 @Entity('class')
+@Index('idx_class_grade', ['gradeId'])
+@Index('idx_class_status', ['status'])
+@Index('idx_class_name', ['className'])
 export class Class {
   @PrimaryGeneratedColumn('increment', { type: 'int' })
   id!: number

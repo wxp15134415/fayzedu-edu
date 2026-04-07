@@ -1,7 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, Index } from 'typeorm'
 import { Class } from './class.entity'
 
 @Entity('student')
+@Index('idx_student_name', ['name'])
+@Index('idx_student_class', ['classId'])
+@Index('idx_student_status', ['status'])
+@Index('idx_student_phone', ['phone'])
 export class Student {
   @PrimaryGeneratedColumn('increment', { type: 'int' })
   id!: number
@@ -66,6 +70,12 @@ export class Student {
 
   @Column({ type: 'varchar', length: 100, nullable: true })
   address?: string
+
+  @Column({ type: 'varchar', length: 10, default: '否' })
+  leaveStatus!: string
+
+  @Column({ type: 'varchar', length: 10, default: '是' })
+  qualityAnalysis!: string
 
   @CreateDateColumn()
   createdAt!: Date

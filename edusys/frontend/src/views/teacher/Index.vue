@@ -35,7 +35,7 @@
       stripe
       :header-cell-style="{background: '#f5f7fa'}"
       @selection-change="handleSelectionChange"
-      :fit="false"
+      fit
       style="width: 100%"
     >
       <el-table-column type="selection" width="50" />
@@ -45,7 +45,7 @@
       <el-table-column prop="subject.name" label="任教科目" :width="columnWidth" />
       <el-table-column prop="gender" label="性别" width="60">
         <template #default="{ row }">
-          {{ row.gender === '1' || row.gender === '男' ? '男' : (row.gender === '2' || row.gender === '女' ? '女' : '-') }}
+          {{ formatGender(row.gender) }}
         </template>
       </el-table-column>
       <el-table-column prop="phone" label="手机号" :width="columnWidth" />
@@ -53,7 +53,7 @@
       <el-table-column prop="title" label="职称" :width="columnWidth" />
       <el-table-column prop="status" label="状态" width="60">
         <template #default="{ row }">
-          <el-tag :type="row.status === 1 ? 'success' : 'danger'">{{ row.status === 1 ? '在岗' : '离职' }}</el-tag>
+          <el-tag :type="row.status === 1 ? 'success' : 'danger'">{{ formatStatus(row.status, ['离职', '在岗']) }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="120" fixed="right">
@@ -83,7 +83,7 @@
         </div>
         <div class="mobile-card-item">
           <span class="mobile-card-label">性别</span>
-          <span class="mobile-card-value">{{ row.gender === '1' || row.gender === '男' ? '男' : (row.gender === '2' || row.gender === '女' ? '女' : '-') }}</span>
+          <span class="mobile-card-value">{{ formatGender(row.gender) }}</span>
         </div>
         <div class="mobile-card-item">
           <span class="mobile-card-label">手机号</span>
@@ -95,7 +95,7 @@
         </div>
         <div class="mobile-card-item">
           <span class="mobile-card-label">状态</span>
-          <el-tag :type="row.status === 1 ? 'success' : 'danger'" size="small">{{ row.status === 1 ? '在岗' : '离职' }}</el-tag>
+          <el-tag :type="row.status === 1 ? 'success' : 'danger'" size="small">{{ formatStatus(row.status, ['离职', '在岗']) }}</el-tag>
         </div>
         <div class="mobile-card-actions">
           <el-button type="primary" size="small" link @click="handleEdit(row)">编辑</el-button>
@@ -139,7 +139,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Search } from '@element-plus/icons-vue'
 import { getTeacherList, createTeacher, deleteTeacher, getSubjectList, batchDeleteTeacher, updateTeacherStatus } from '@/api/teacher'
-import { exportToExcel, importFromExcel } from '@/utils/excel'
+import { exportToExcel, importFromExcel, formatGender, formatStatus } from '@/utils/excel'
 
 const router = useRouter()
 const loading = ref(false)
@@ -186,7 +186,7 @@ const loadData = async () => {
       keyword: searchKeyword.value
     })
     // 防御性处理：确保返回的是数组
-    const list = res?.data?.list || res?.list || res || []
+    const list = res?.data?.data || res?.data || res?.list || []
     tableData.value = Array.isArray(list) ? list : []
     pagination.total = res?.data?.total || res?.total || 0
   }
@@ -256,7 +256,7 @@ const handleExport = () => {
     教工号: row.teacherId,
     姓名: row.name,
     任教科目: row.subject?.name || '',
-    性别: row.gender === '1' || row.gender === '男' ? '男' : '女',
+    性别: formatGender(row.gender),
     手机号: row.phone,
     邮箱: row.email,
     岗位: row.position || '',
@@ -265,7 +265,7 @@ const handleExport = () => {
     学位: row.degree || '',
     入职日期: row.hireDate || '',
     毕业院校: row.graduateSchool || '',
-    状态: row.status === 1 ? '在岗' : '离职'
+    状态: formatStatus(row.status, ['离职', '在岗'])
   }))
   exportToExcel(exportData, '教师数据')
 }

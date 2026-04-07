@@ -6,7 +6,7 @@
     </div>
 
     <!-- 桌面端树形表格 -->
-    <el-table v-if="!isMobile" :data="tableData" v-loading="loading" stripe :header-cell-style="{background: '#f5f7fa'}" row-key="id" :tree-props="{children: 'children'}">
+    <el-table v-if="!isMobile" :data="tableData" v-loading="loading" stripe :header-cell-style="{background: '#f5f7fa'}" row-key="id" :tree-props="{children: 'children'}" fit>
       <el-table-column prop="name" label="菜单名称" min-width="180" />
       <el-table-column prop="path" label="路由路径" min-width="150" />
       <el-table-column prop="icon" label="图标" width="100" />
@@ -15,7 +15,7 @@
       <el-table-column prop="status" label="状态" width="80">
         <template #default="{ row }">
           <el-tag :type="row.status === 1 ? 'success' : 'danger'" size="small">
-            {{ row.status === 1 ? '启用' : '禁用' }}
+            {{ formatStatus(row.status, ['禁用', '启用']) }}
           </el-tag>
         </template>
       </el-table-column>
@@ -36,7 +36,7 @@
         <div class="menu-card-header">
           <span class="menu-card-title">{{ row.name }}</span>
           <el-tag :type="row.status === 1 ? 'success' : 'danger'" size="small">
-            {{ row.status === 1 ? '启用' : '禁用' }}
+            {{ formatStatus(row.status, ['禁用', '启用']) }}
           </el-tag>
         </div>
         <div class="menu-card-info">
@@ -109,6 +109,7 @@ import { ref, reactive, onMounted, onUnmounted, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import { getMenuTree, createMenu, updateMenu, deleteMenu } from '@/api/menu'
+import { formatStatus } from '@/utils/excel'
 
 const loading = ref(false)
 const isMobile = ref(window.innerWidth < 768)

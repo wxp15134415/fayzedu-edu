@@ -150,27 +150,49 @@ export class ExamArrangementService {
   }
 
   async getAvailableStudents(examId: number, sessionId: number, gradeId?: number) {
-    // 获取已编排的学生ID
-    const arranged = await this.arrangementRepository.find({
-      where: { examId, sessionId },
-      select: ['studentId']
-    })
-    const arrangedStudentIds = arranged.map(a => a.studentId)
+    try {
+      // 获取已编排的学生ID
+      const arranged = await this.arrangementRepository.find({
+        where: { examId, sessionId },
+        select: ['studentId']
+      })
+      const arrangedStudentIds = arranged.map(a => a.studentId)
 
-    // 构建查询条件：状态为1，且不在已编排列表中
-    const whereCondition: any = { status: 1 }
-    if (gradeId) whereCondition.gradeId = gradeId
-    if (arrangedStudentIds.length > 0) {
-      whereCondition.id = Not(In(arrangedStudentIds))
+      // 构建查询
+      let students: Student[]
+
+      if (gradeId) {
+        // 通过班级关联年级查询
+        const query = this.studentRepository
+          .createQueryBuilder('student')
+          .leftJoin('student.class', 'class')
+          .where('class.gradeId = :gradeId', { gradeId })
+          .andWhere('student.status = :status', { status: 1 })
+
+        if (arrangedStudentIds.length > 0) {
+          query.andWhere('student.id NOT IN (:...arrangedIds)', {
+            arrangedIds: arrangedStudentIds
+          })
+        }
+
+        students = await query.orderBy('student.studentNo', 'ASC').getMany()
+      } else {
+        const whereCondition: any = { status: 1 }
+        if (arrangedStudentIds.length > 0) {
+          whereCondition.id = Not(In(arrangedStudentIds))
+        }
+        students = await this.studentRepository.find({
+          where: whereCondition,
+          relations: ['class'],
+          order: { studentNo: 'ASC' }
+        })
+      }
+
+      return students
+    } catch (error) {
+      console.error('getAvailableStudents error:', error)
+      return []
     }
-
-    const students = await this.studentRepository.find({
-      where: whereCondition,
-      relations: ['grade', 'class'],
-      order: { studentNo: 'ASC' }
-    })
-
-    return students
   }
 
   async getPrintData(examId: number, sessionId: number) {
@@ -284,12 +306,16 @@ export class ExamArrangementService {
           relations: ['grade', 'class']
         })
       } else {
-        // 获取该年级所有学生
+        // 获取该年级所有学生（通过班级关联年级）
         if ((exam as any).gradeId) {
-          eligibleStudents = await this.studentRepository.find({
-            where: { class: { gradeId: (exam as any).gradeId }, status: 1 },
-            relations: ['grade', 'class']
-          })
+          eligibleStudents = await this.studentRepository
+            .createQueryBuilder('student')
+            .leftJoin('student.class', 'class')
+            .where('class.gradeId = :gradeId', { gradeId: (exam as any).gradeId })
+            .andWhere('student.status = :status', { status: 1 })
+            .leftJoinAndSelect('student.class', 'c')
+            .leftJoinAndSelect('c.grade', 'g')
+            .getMany()
         } else {
           eligibleStudents = await this.studentRepository.find({
             where: { status: 1 },
